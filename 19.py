@@ -19,7 +19,7 @@ with open('input_19.txt') as replacements:
 				replacement_map[target] = [replacement]
 
 		elif len(r) > 0:
-			init_string = r
+			target_string = r
 
 print(replacement_map)
 
