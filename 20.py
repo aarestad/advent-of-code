@@ -6,7 +6,7 @@
 def divisors(n):
 	divs = [1, n]
 
-	for x in range (2, n/2 + 1):
+	for x in xrange(2, n/2 + 1):
 		if n % x == 0:
 			divs.append(x)
 
@@ -14,7 +14,7 @@ def divisors(n):
 
 max_sum = 0
 
-for n in xrange(458640, 20000000):
+for n in xrange(800000, 1000080):
 	divs = divisors(n)
 	sum_divisors = sum(divs)
 
