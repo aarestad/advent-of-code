@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 # To continue, please consult the code grid in the manual.  Enter the code at row 2947, column 3029.
 
 def next_code(prev_code):
@@ -18,4 +20,4 @@ while row != 2947 or col != 3029:
 		row -= 1
 		col += 1
 
-print row, col, first_code
+print(row, col, first_code)
