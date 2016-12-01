@@ -6,8 +6,6 @@ def solve_part_1(directions):
 
     currently_facing = 1 # 0 = E, 1, N, 2 = W, 3 = S (mod 4)
 
-    currently_visited = set((0, 0))
-
     for direction in directions:
         # turn right or left
         if direction[0] == 'R':
