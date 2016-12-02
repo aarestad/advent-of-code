@@ -9,9 +9,9 @@ def solve_part_1(lines):
                 current_pos -= 3
             elif char == 'D' and current_pos < 7:
                 current_pos += 3
-            elif char == 'L' and current_pos not in {1, 4, 7}:
+            elif char == 'L' and current_pos % 3 != 1:
                 current_pos -= 1
-            elif char == 'R' and current_pos not in {3, 6, 9}:
+            elif char == 'R' and current_pos % 3 != 0:
                 current_pos += 1
 
         code.append(current_pos)
@@ -25,7 +25,7 @@ def solve_part_2(lines):
 
     for line in lines:
         for char in line.strip():
-            print("move %s, %s->" % (char, current_pos), end=" ")
+            #print("move %s, %s->" % (char, current_pos), end=" ")
 
             if char == 'U' and current_pos not in {1, 2, 4, 5, 9}:
                 current_pos -= 2 if current_pos in {3, 13} else 4
@@ -36,9 +36,9 @@ def solve_part_2(lines):
             elif char == 'R' and current_pos not in {1, 4, 9, 12, 13}:
                 current_pos += 1
 
-            print(current_pos)
+            #print(current_pos)
 
-        print("stopping at %s" % current_pos)
+        #print("stopping at %s" % current_pos)
         code.append(current_pos)
 
     return code
