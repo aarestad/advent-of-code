@@ -35,23 +35,21 @@ def solve_part_2(door_id):
         digest = m.hexdigest()
 
         if digest[:5] == '00000':
+            password_idx = 9
+
             try:
                 password_idx = int(digest[5])
             except ValueError:
-                idx += 1
-                continue
+                pass
 
-            if password_idx > 7 or password[password_idx] is not None:
-                idx += 1
-                continue
-                
-            print('index ' + digest[5])
-            print('letter ' + digest[6])
-            password[password_idx] = digest[6]
+            if password_idx <= 7 and password[password_idx] is None:
+                print('index ' + digest[5])
+                print('letter ' + digest[6])
+                password[password_idx] = digest[6]
 
         idx += 1
 
     return ''.join(password)
 
-#print(solve_part_1('abbhdwsy'))
-print(solve_part_2('abbhdwsy'))
+print(solve_part_1(b'abbhdwsy'))
+#print(solve_part_2('abbhdwsy'))
