@@ -5,11 +5,6 @@ number_finder = re.compile(r'\d+')
 encrypted_name_finder = re.compile(r'^\D+')
 checksum_finder = re.compile(r'\[(\w+)\]')
 
-def sort_char_counts(a, b):
-    if a[1] != b[1]:
-        return (a[1] > b[1]) - (a[1] < b[1])
-
-
 def check_room_checksum(encrypted_name_with_checksum):
     char_counter = {}
 
