@@ -24,5 +24,6 @@ def solve(lines, reverse):
 
 with open('input_6.txt') as lines:
     message_lines = lines.readlines()
-    print(solve(message_lines, True))
-    print(solve(message_lines, False))
+    
+print(solve(message_lines, True))
+print(solve(message_lines, False))
