@@ -80,11 +80,10 @@ def print_screen(screen):
 def print_screen_curses(stdscr):
     for x in range(ROWS):
         for y in range(COLS):
-            ch = '#' if screen[x][y] else '.'
-            stdscr.addch(x, y, ch)
+            stdscr.addch(x, y, '#' if screen[x][y] else '.')
 
     stdscr.refresh()
-    time.sleep(.0416666666) # ~24 fps
+    time.sleep(.05)
 
 with open('input_8.txt') as commands:
     cmds = [c.strip() for c in commands.readlines()]
