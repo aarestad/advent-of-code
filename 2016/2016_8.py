@@ -56,14 +56,6 @@ def process_cmd(cmd, screen):
             row_shift = int(row_results.group(2))
             rotate_row(row_number, row_shift, screen)
 
-ROWS = 6
-COLS = 50
-
-screen = []
-
-for i in range(ROWS):
-    screen.append([False] * COLS)
-
 def print_screen(screen):
     for row in screen:
         for pixel in row:
@@ -79,19 +71,28 @@ def print_screen_curses(stdscr):
     stdscr.refresh()
     time.sleep(.05)
 
-with open('input_8.txt') as commands:
-    cmds = [c.strip() for c in commands.readlines()]
+if __name__ == '__main__':
+    ROWS = 6
+    COLS = 50
 
-curses.wrapper(print_screen_curses)
+    screen = []
 
-for cmd in cmds:
-    process_cmd(cmd, screen)
+    for i in range(ROWS):
+        screen.append([False] * COLS)
+
+    with open('input_8.txt') as commands:
+        cmds = [c.strip() for c in commands.readlines()]
+
     curses.wrapper(print_screen_curses)
 
-pixel_count = 0
+    for cmd in cmds:
+        process_cmd(cmd, screen)
+        curses.wrapper(print_screen_curses)
 
-for row in screen:
-    for c in row:
-        if c: pixel_count += 1
+    pixel_count = 0
 
-print('%d pixels lit up' % pixel_count)
+    for row in screen:
+        for c in row:
+            if c: pixel_count += 1
+
+    print('%d pixels lit up' % pixel_count)
