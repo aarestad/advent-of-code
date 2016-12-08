@@ -27,10 +27,7 @@ def process_cmd(cmd, screen):
             i = 0
 
             for cell in old_col:
-                if i + col_shift < len(new_col):
-                    new_col[i + col_shift] = old_col[i]
-                else:
-                    new_col[i + col_shift - len(new_col)] = old_col[i]
+                new_col[(i + col_shift) % len(new_col)] = old_col[i]
                 i += 1
 
             i = 0
@@ -50,10 +47,7 @@ def process_cmd(cmd, screen):
             i = 0
 
             for cell in old_row:
-                if i + row_shift < len(new_row):
-                    new_row[i + row_shift] = old_row[i]
-                else:
-                    new_row[i + row_shift - len(new_row)] = old_row[i]
+                new_row[(i + row_shift) % len(new_row)] = old_row[i]
                 i += 1
 
             i = 0
