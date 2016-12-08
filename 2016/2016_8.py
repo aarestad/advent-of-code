@@ -56,17 +56,17 @@ def process_cmd(cmd, screen):
             row_shift = int(row_results.group(2))
             rotate_row(row_number, row_shift, screen)
 
-def print_screen(screen):
-    for row in screen:
+def print_screen(scr):
+    for row in scr:
         for pixel in row:
             print('#' if pixel else '.', end='')
         print()
     print()
 
-def print_screen_curses(stdscr):
+def print_screen_curses(stdscr, scr):
     for y in range(ROWS):
         for x in range(COLS):
-            stdscr.addch(y, x, '#' if screen[y][x] else '.')
+            stdscr.addch(y, x, '#' if scr[y][x] else '.')
 
     stdscr.refresh()
     time.sleep(.05)
@@ -83,11 +83,11 @@ if __name__ == '__main__':
     with open('input_8.txt') as commands:
         cmds = [c.strip() for c in commands.readlines()]
 
-    curses.wrapper(print_screen_curses)
+    curses.wrapper(print_screen_curses, screen)
 
     for cmd in cmds:
         process_cmd(cmd, screen)
-        curses.wrapper(print_screen_curses)
+        curses.wrapper(print_screen_curses, screen)
 
     pixel_count = 0
 
