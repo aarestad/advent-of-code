@@ -1,14 +1,9 @@
 import re
+import curses
+import time
 
 col_matcher = re.compile(r'x=(\d+) by (\d+)')
 row_matcher = re.compile(r'y=(\d+) by (\d+)')
-
-def print_screen(screen):
-    for row in screen:
-        for pixel in row:
-            print('#' if pixel else '.', end='')
-        print()
-    print()
 
 def process_cmd(cmd, screen):
     cmd_toks = cmd.split()
@@ -67,8 +62,6 @@ def process_cmd(cmd, screen):
                 screen[row_number][i] = new_row[i]
                 i += 1
 
-    print_screen(screen)
-
 ROWS = 6
 COLS = 50
 
@@ -77,13 +70,30 @@ screen = []
 for i in range(ROWS):
     screen.append([False] * COLS)
 
-print_screen(screen)
+def print_screen(screen):
+    for row in screen:
+        for pixel in row:
+            print('#' if pixel else '.', end='')
+        print()
+    print()
+
+def print_screen_curses(stdscr):
+    for x in range(ROWS):
+        for y in range(COLS):
+            ch = '#' if screen[x][y] else '.'
+            stdscr.addch(x, y, ch)
+
+    stdscr.refresh()
+    time.sleep(.0416666666) # ~24 fps
 
 with open('input_8.txt') as commands:
     cmds = [c.strip() for c in commands.readlines()]
 
+curses.wrapper(print_screen_curses)
+
 for cmd in cmds:
     process_cmd(cmd, screen)
+    curses.wrapper(print_screen_curses)
 
 pixel_count = 0
 
@@ -91,4 +101,4 @@ for row in screen:
     for c in row:
         if c: pixel_count += 1
 
-print(pixel_count)
+print('%d pixels lit up' % pixel_count)
