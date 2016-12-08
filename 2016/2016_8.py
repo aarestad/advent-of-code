@@ -78,9 +78,9 @@ def print_screen(screen):
     print()
 
 def print_screen_curses(stdscr):
-    for x in range(ROWS):
-        for y in range(COLS):
-            stdscr.addch(x, y, '#' if screen[x][y] else '.')
+    for y in range(ROWS):
+        for x in range(COLS):
+            stdscr.addch(y, x, '#' if screen[y][x] else '.')
 
     stdscr.refresh()
     time.sleep(.05)
