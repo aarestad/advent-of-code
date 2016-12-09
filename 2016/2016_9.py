@@ -26,7 +26,7 @@ def decompress_string(compressed):
             active_marker[0] -= 1
 
             if active_marker[0] == 0:
-                for i in range(active_marker[1]):
+                for _ in range(active_marker[1]):
                     result += repeated_str
                 active_marker = None
                 repeated_str = ''
