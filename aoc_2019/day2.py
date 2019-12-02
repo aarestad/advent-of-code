@@ -1,16 +1,16 @@
+class IntcodeOp:
+    def __init__(self, params, op):
+        self.params = params
+        self.op = op
+
+
 class IntcodeMachine:
     def __init__(self, program):
         self.memory = [int(x) for x in program.split(',')]
         self.pc = 0
         self.ops = {
-            1: {  # ADD a, b, dest
-                'params': 3,
-                'op': lambda a, b: self.memory[a] + self.memory[b]
-            },
-            2: {  # MUL a, b, dest
-                'params': 3,
-                'op': lambda a, b: self.memory[a] * self.memory[b]
-            },
+            1: IntcodeOp(3, lambda a, b: self.memory[a] + self.memory[b]),  # ADD a, b, dest
+            2: IntcodeOp(3, lambda a, b: self.memory[a] * self.memory[b]),  # MUL a, b, dest
             99: None  # HLT
         }
 
@@ -24,8 +24,8 @@ class IntcodeMachine:
                 raise ValueError('invalid opcode: {}'.format(opcode))
 
             if op:
-                params = self.memory[self.pc + 1:self.pc + op['params'] + 1]
-                result = op['op'](*params[0:2])
+                params = self.memory[self.pc + 1:self.pc + op.params + 1]
+                result = op.op(*params[0:2])
                 self.memory[params[2]] = result
                 self.pc += 1 + len(params)
             else:
