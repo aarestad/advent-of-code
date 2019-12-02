@@ -23,9 +23,22 @@ class IntcodeMachine:
 
 if __name__ == '__main__':
     with open('02_input.txt') as program:
-        intcode_machine = IntcodeMachine(program.readline().strip())
+        program_text = program.readline().strip()
 
-    intcode_machine.memory[1] = 12
-    intcode_machine.memory[2] = 2
-    intcode_machine.run()
-    print(intcode_machine.memory[0])
+    for noun in range(100):
+        for verb in range(100):
+            intcode_machine = IntcodeMachine(program_text)
+
+            intcode_machine.memory[1] = noun
+            intcode_machine.memory[2] = verb
+            intcode_machine.run()
+
+            result = intcode_machine.memory[0]
+
+            if result == 19690720:
+                print(100 * noun + verb)
+                break
+        else:
+            continue
+
+        break
