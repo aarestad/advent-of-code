@@ -2,23 +2,34 @@ class IntcodeMachine:
     def __init__(self, program):
         self.memory = [int(x) for x in program.split(',')]
         self.pc = 0
+        self.ops = {
+            1: {
+                'params': 3,
+                'op': lambda x, y: self.memory[x] + self.memory[y]
+            },
+            2: {
+                'params': 3,
+                'op': lambda x, y: self.memory[x] * self.memory[y]
+            },
+            99: None
+        }
 
     def run(self):
         while True:
             opcode = self.memory[self.pc]
 
-            if opcode == 1:  # ADD
-                result = self.memory[self.memory[self.pc + 1]] + self.memory[self.memory[self.pc + 2]]
-                self.memory[self.memory[self.pc + 3]] = result
-                self.pc += 4
-            elif opcode == 2:  # MUL
-                result = self.memory[self.memory[self.pc + 1]] * self.memory[self.memory[self.pc + 2]]
-                self.memory[self.memory[self.pc + 3]] = result
-                self.pc += 4
-            elif opcode == 99:  # HALT
-                break
-            else:
+            try:
+                op = self.ops[opcode]
+            except KeyError:
                 raise ValueError('invalid opcode: {}'.format(opcode))
+
+            if op:
+                params = self.memory[self.pc + 1:self.pc + op['params'] + 1]
+                result = op['op'](*params[0:2])
+                self.memory[params[2]] = result
+                self.pc += 1 + len(params)
+            else:
+                break
 
 
 if __name__ == '__main__':
