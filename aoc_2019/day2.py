@@ -1,4 +1,4 @@
-from typing import NamedTuple, Callable, Dict
+from typing import NamedTuple, Callable, Dict, List
 
 
 class IntcodeOp(NamedTuple):
@@ -8,7 +8,7 @@ class IntcodeOp(NamedTuple):
 
 class IntcodeMachine:
     def __init__(self, program: str):
-        self.memory = [int(x) for x in program.split(',')]
+        self.memory: List[int] = [int(x) for x in program.split(',')]
         self.pc: int = 0
 
         self.ops: Dict[int, IntcodeOp] = {
