@@ -1,20 +1,23 @@
-class IntcodeOp:
-    def __init__(self, params, op):
-        self.params = params
-        self.op = op
+from typing import NamedTuple, Callable, Dict
+
+
+class IntcodeOp(NamedTuple):
+    params: int
+    op: Callable[[int, int], int]
 
 
 class IntcodeMachine:
-    def __init__(self, program):
+    def __init__(self, program: str):
         self.memory = [int(x) for x in program.split(',')]
-        self.pc = 0
-        self.ops = {
+        self.pc: int = 0
+
+        self.ops: Dict[int, IntcodeOp] = {
             1: IntcodeOp(3, lambda a, b: self.memory[a] + self.memory[b]),  # ADD a, b, dest
             2: IntcodeOp(3, lambda a, b: self.memory[a] * self.memory[b]),  # MUL a, b, dest
             99: None  # HLT
         }
 
-    def run(self):
+    def run(self) -> None:
         while True:
             opcode = self.memory[self.pc]
 
