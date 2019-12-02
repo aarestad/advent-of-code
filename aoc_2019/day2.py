@@ -3,15 +3,15 @@ class IntcodeMachine:
         self.memory = [int(x) for x in program.split(',')]
         self.pc = 0
         self.ops = {
-            1: {
+            1: {  # ADD a, b, dest
                 'params': 3,
                 'op': lambda x, y: self.memory[x] + self.memory[y]
             },
-            2: {
+            2: {  # MUL a, b, dest
                 'params': 3,
                 'op': lambda x, y: self.memory[x] * self.memory[y]
             },
-            99: None
+            99: None  # HLT
         }
 
     def run(self):
