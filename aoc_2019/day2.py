@@ -5,11 +5,11 @@ class IntcodeMachine:
         self.ops = {
             1: {  # ADD a, b, dest
                 'params': 3,
-                'op': lambda x, y: self.memory[x] + self.memory[y]
+                'op': lambda a, b: self.memory[a] + self.memory[b]
             },
             2: {  # MUL a, b, dest
                 'params': 3,
-                'op': lambda x, y: self.memory[x] * self.memory[y]
+                'op': lambda a, b: self.memory[a] * self.memory[b]
             },
             99: None  # HLT
         }
