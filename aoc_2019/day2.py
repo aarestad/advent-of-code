@@ -1,9 +1,10 @@
 from typing import NamedTuple, Callable, Dict, List
+from operator import setitem
 
 
 class IntcodeOp(NamedTuple):
     params: int
-    op: Callable[[int, int], int]
+    op: Callable[[int, int], None]
 
 
 class IntcodeMachine:
@@ -12,9 +13,12 @@ class IntcodeMachine:
         self.pc: int = 0
 
         self.ops: Dict[int, IntcodeOp] = {
-            1: IntcodeOp(3, lambda a, b: self.memory[a] + self.memory[b]),  # ADD a, b, dest
-            2: IntcodeOp(3, lambda a, b: self.memory[a] * self.memory[b]),  # MUL a, b, dest
-            99: None  # HLT
+            # ADD a, b, dest
+            1: IntcodeOp(3, lambda a, b, dest: setitem(self.memory, dest, self.memory[a] + self.memory[b])),
+            # MUL a, b, dest
+            2: IntcodeOp(3, lambda a, b, dest: setitem(self.memory, dest, self.memory[a] * self.memory[b])),
+            # HLT
+            99: None
         }
 
     def run(self) -> None:
@@ -28,8 +32,7 @@ class IntcodeMachine:
 
             if op:
                 params = self.memory[self.pc + 1:self.pc + op.params + 1]
-                result = op.op(*params[0:2])
-                self.memory[params[2]] = result
+                op.op(*params)
                 self.pc += 1 + len(params)
             else:
                 break
