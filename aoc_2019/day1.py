@@ -19,17 +19,19 @@ def part_1_module_fuel(mass):
 
 
 def part_2_module_fuel(mass):
-    total_fuel = part_1_module_fuel(mass)
+    total_module_fuel = part_1_module_fuel(mass)
 
-    additional_fuel = total_fuel
+    additional_fuel = total_module_fuel
 
     while True:
         additional_fuel = part_1_module_fuel(additional_fuel)
+
         if additional_fuel <= 0:
             break
-        total_fuel += additional_fuel
 
-    return total_fuel
+        total_module_fuel += additional_fuel
+
+    return total_module_fuel
 
 
 if __name__ == '__main__':
