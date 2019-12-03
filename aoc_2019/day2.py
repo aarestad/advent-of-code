@@ -4,7 +4,7 @@ from operator import setitem
 
 class IntcodeOp(NamedTuple):
     params: int
-    op: Callable[[int, int], None]
+    op: Callable[..., None]
 
 
 class IntcodeMachine:
