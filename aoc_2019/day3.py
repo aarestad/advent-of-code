@@ -6,8 +6,8 @@ if __name__ == '__main__':
         wire_1_dirs = wires.readline().strip().split(',')
         wire_2_dirs = wires.readline().strip().split(',')
 
-    wire_1_points_in_order = []
-    wire_1_points = set()
+    wire_1_points_in_order = [(0, 0)]
+    wire_1_points = set(wire_1_points_in_order)
     x = 0
     y = 0
 
@@ -52,7 +52,7 @@ if __name__ == '__main__':
             steps += 1
 
             if (x, y) in wire_1_points:
-                wire_1_point_steps = wire_1_points_in_order.index((x, y)) + 1
+                wire_1_point_steps = wire_1_points_in_order.index((x, y))
 
                 if smallest_intersection is None or steps + wire_1_point_steps < smallest_intersection[2]:
                     smallest_intersection = (x, y, steps + wire_1_point_steps)
