@@ -1,11 +1,12 @@
-from operator import add
 from typing import Tuple, Optional
+
 
 if __name__ == '__main__':
     with open('03_input.txt') as wires:
         wire_1_dirs = wires.readline().strip().split(',')
         wire_2_dirs = wires.readline().strip().split(',')
 
+    wire_1_points_in_order = []
     wire_1_points = set()
     x = 0
     y = 0
@@ -26,10 +27,12 @@ if __name__ == '__main__':
                 raise ValueError('unknown direction: {}'.format(direc))
 
             wire_1_points.add((x, y))
+            wire_1_points_in_order.append((x, y))
 
     smallest_intersection: Optional[Tuple] = None
     x = 0
     y = 0
+    steps = 0
 
     for dir_and_distance in wire_2_dirs:
         (direc, distance) = (dir_and_distance[0], int(dir_and_distance[1:]))
@@ -46,8 +49,12 @@ if __name__ == '__main__':
             else:
                 raise ValueError('unknown direction: {}'.format(direc))
 
+            steps += 1
+
             if (x, y) in wire_1_points:
-                if smallest_intersection is None or abs(x) + abs(y) < add(*[abs(c) for c in smallest_intersection]):
-                    smallest_intersection = (x, y)
+                wire_1_point_steps = wire_1_points_in_order.index((x, y)) + 1
+
+                if smallest_intersection is None or steps + wire_1_point_steps < smallest_intersection[2]:
+                    smallest_intersection = (x, y, steps + wire_1_point_steps)
 
     print(smallest_intersection)
