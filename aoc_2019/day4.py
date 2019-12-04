@@ -22,7 +22,7 @@ def has_a_discrete_pair_of_digits(n):
 
         if next_digit == prev_digit:
             num_seen += 1
-        else: # new digit
+        else:
             if num_seen == 2:
                 return True
             num_seen = 1
