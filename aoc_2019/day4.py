@@ -1,36 +1,16 @@
+import re
+
+has_two_same_adjacent_digits_re = re.compile(r'(\d)\1')
+has_a_discrete_pair_of_digits_re = re.compile(
+    '|'.join('(([^{}]|^){}{}(?!{}))'.format(n, n, n, n) for n in range(10)))
+
+
 def has_two_same_adjacent_digits(n):
-    prev_digit = -1
-
-    while n > 0:
-        next_digit = n % 10
-
-        if next_digit == prev_digit:
-            return True
-
-        prev_digit = next_digit
-        n //= 10
-
-    return False
+    return has_two_same_adjacent_digits_re.search(str(n))
 
 
 def has_a_discrete_pair_of_digits(n):
-    prev_digit = -1
-    num_seen = 0
-
-    while n > 0:
-        next_digit = n % 10
-
-        if next_digit == prev_digit:
-            num_seen += 1
-        else:
-            if num_seen == 2:
-                return True
-            num_seen = 1
-
-        prev_digit = next_digit
-        n //= 10
-
-    return num_seen == 2
+    return has_a_discrete_pair_of_digits_re.search(str(n))
 
 
 def digits_do_not_decrease(n):
@@ -49,7 +29,7 @@ def digits_do_not_decrease(n):
 
 
 def is_good_password(pw):
-    return has_a_discrete_pair_of_digits(pw) and digits_do_not_decrease(pw)
+    return has_two_same_adjacent_digits(pw) and digits_do_not_decrease(pw)
 
 
 if __name__ == '__main__':
