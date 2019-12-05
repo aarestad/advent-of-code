@@ -1,10 +1,5 @@
-from typing import NamedTuple, Callable, Dict, List
+from typing import Callable, Dict, List
 from enum import Enum
-
-
-class IntcodeOp(NamedTuple):
-    params: int
-    op: Callable[..., None]
 
 
 class ParamMode(Enum):
@@ -60,15 +55,15 @@ class IntcodeMachine:
             self.memory[c] = 1 if a_cmp == b_cmp else 0
             self.pc += 4
 
-        self.ops: Dict[int, IntcodeOp] = {
-            1: IntcodeOp(3, op_add),
-            2: IntcodeOp(3, op_mul),
-            3: IntcodeOp(1, op_input),
-            4: IntcodeOp(1, op_output),
-            5: IntcodeOp(2, op_jit),
-            6: IntcodeOp(2, op_jif),
-            7: IntcodeOp(3, op_lt),
-            8: IntcodeOp(3, op_eq),
+        self.ops: Dict[int, Callable] = {
+            1: op_add,
+            2: op_mul,
+            3: op_input,
+            4: op_output,
+            5: op_jit,
+            6: op_jif,
+            7: op_lt,
+            8: op_eq,
             99: None
         }
 
@@ -87,8 +82,10 @@ class IntcodeMachine:
                 raise ValueError('invalid opcode: {}'.format(opcode))
 
             if op:
-                params = self.memory[self.pc + 1:self.pc + op.params + 1]
-                op.op(ParamMode(a_mode), ParamMode(b_mode), ParamMode(c_mode), *params)
+                # noinspection PyUnresolvedReferences
+                num_params = op.__code__.co_argcount - 3
+                params = self.memory[self.pc + 1:self.pc + num_params + 1]
+                op(ParamMode(a_mode), ParamMode(b_mode), ParamMode(c_mode), *params)
             else:
                 break
 
