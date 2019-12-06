@@ -28,7 +28,7 @@ class OrbitingNode:
         return "OrbitingNode(label={})".format(self.label)
 
 
-def get_common_parent(node_1, node_2):
+def get_closest_common_parent(node_1, node_2):
     node_1_parents = node_1.parents()
     node_2_parents = node_2.parents()
 
@@ -61,7 +61,8 @@ if __name__ == '__main__':
 
     you = planets['YOU']
     santa = planets['SAN']
-    common_parent = get_common_parent(you, santa)
-    common_parent.parent = None
+    common_parent = get_closest_common_parent(you, santa)
 
+    # set this common parent as the root of a new subtree
+    common_parent.parent = None
     print(you.num_parents() + santa.num_parents() - 2)
