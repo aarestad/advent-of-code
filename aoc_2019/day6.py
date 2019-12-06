@@ -23,10 +23,6 @@ class OrbitingNode:
         return self.label == other.label
 
 
-def get_closest_common_parent(node_1, node_2):
-    return sorted([p for p in node_1.parents if p in node_2.parents], key=lambda p: len(p.parents))[-1]
-
-
 if __name__ == '__main__':
     planets = {
         'COM': OrbitingNode('COM', None, None)
