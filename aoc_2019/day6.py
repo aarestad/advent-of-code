@@ -8,6 +8,7 @@ class OrbitingNode:
         self.parent = parent
         self.children: 'List[OrbitingNode]' = []
 
+    @property
     def parents(self):
         def parent_impl(me, prev_parents):
             if not me.parent:
@@ -18,23 +19,12 @@ class OrbitingNode:
 
         return parent_impl(self, [])
 
-    def num_parents(self):
-        return 0 if not self.parent else self.parent.num_parents() + 1
-
     def __eq__(self, other):
         return self.label == other.label
 
-    def __repr__(self):
-        return "OrbitingNode(label={})".format(self.label)
-
 
 def get_closest_common_parent(node_1, node_2):
-    node_1_parents = node_1.parents()
-    node_2_parents = node_2.parents()
-
-    intersection = [p for p in node_1_parents if p in node_2_parents]
-
-    return sorted(intersection, key=lambda p: p.num_parents(), reverse=True)[0]
+    return sorted([p for p in node_1.parents if p in node_2.parents], key=lambda p: len(p.parents))[-1]
 
 
 if __name__ == '__main__':
@@ -59,10 +49,10 @@ if __name__ == '__main__':
                     p.parent = new_planet
                     new_planet.children.append(p)
 
-    you = planets['YOU']
-    santa = planets['SAN']
-    common_parent = get_closest_common_parent(you, santa)
+    common_parents = sorted([p1 for p1 in planets['YOU'].parents
+                             if p1 in planets['SAN'].parents],
+                            key=lambda p: len(p.parents))
 
-    # set this common parent as the root of a new subtree
-    common_parent.parent = None
-    print(you.num_parents() + santa.num_parents() - 2)
+    nearest_common_parent = common_parents[-1]
+    nearest_common_parent.parent = None  # set this common parent as the root of a new subtree
+    print(len(planets['YOU'].parents) + len(planets['SAN'].parents) - 2)
