@@ -34,7 +34,7 @@ def get_common_parent(node_1, node_2):
 
     intersection = [p for p in node_1_parents if p in node_2_parents]
 
-    return sorted(intersection, key=lambda p: p.num_parents() if p else 0, reverse=True)[0]
+    return sorted(intersection, key=lambda p: p.num_parents(), reverse=True)[0]
 
 
 if __name__ == '__main__':
