@@ -45,10 +45,10 @@ if __name__ == '__main__':
                     p.parent = new_planet
                     new_planet.children.append(p)
 
-    common_parents = sorted([p1 for p1 in planets['YOU'].parents
-                             if p1 in planets['SAN'].parents],
+    common_parents = sorted([p for p in planets['YOU'].parents
+                             if p in planets['SAN'].parents],
                             key=lambda p: len(p.parents))
 
-    nearest_common_parent = common_parents[-1]
-    nearest_common_parent.parent = None  # set this common parent as the root of a new subtree
+    # recompute parents relative to the closest common parents
+    common_parents[-1].parent = None
     print(len(planets['YOU'].parents) + len(planets['SAN'].parents) - 2)
