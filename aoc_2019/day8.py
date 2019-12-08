@@ -30,14 +30,11 @@ if __name__ == '__main__':
 
     image = [[], [], [], [], [], []]
 
-    for x in range(150):
-        for layer in layers:
-            pixel = layer[x // 25][x % 25]
-            if pixel == 2:
-                continue
-
-            image[x // 25].append(pixel)
-            break
+    for row in range(6):
+        for col in range(25):
+            pixel_layer = (layer[row][col] for layer in layers)
+            non_transparent_pixel_layer = filter(lambda p: p != 2, pixel_layer)
+            image[row].append(non_transparent_pixel_layer.__next__())
 
     for line in image:
         print(''.join(' ' if x == 0 else '*' for x in line))
