@@ -16,7 +16,8 @@ class IntcodeMachine:
         self.memory: List[int] = [int(x) for x in program.split(',')]
         self.pc: int = 0
         self.relative_base = 0
-        self.trace = False
+        self.trace = True
+        self.supertrace = False
         self.input = None
         self.output = None
         self.generator = self.run()
@@ -25,7 +26,7 @@ class IntcodeMachine:
         def debug_input(func):
             @functools.wraps(func)
             def debug_wrapper(*args, **kwargs):
-                if self.trace:
+                if self.supertrace:
                     print()
                     print('pc: {}'.format(self.pc))
                     print('mem: {}'.format(self.memory))
@@ -212,7 +213,7 @@ if __name__ == '__main__':
     with open('09_input.txt') as program:
         machine = IntcodeMachine(program.readline().strip())
 
-    machine.send(2)
+    machine.send(1)
 
     while True:
         output = machine.receive()
