@@ -22,9 +22,9 @@ class IntcodeMachine:
         def debug_input(func):
             @functools.wraps(func)
             def debug_wrapper(*args, **kwargs):
+                # print()
                 # print('pc: {}'.format(me.pc))
                 # print('mem: {}'.format(me.memory))
-                # print('aux_mem: {}'.format(me.aux_mem))
                 # print('relative base: {}'.format(me.relative_base))
                 # print('{}: {}'.format(func.__name__, args))
                 func(*args, **kwargs)
@@ -131,7 +131,7 @@ class IntcodeMachine:
         def op_arb(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int):
             a_new_base = fetch(a, a_mode)
             # print('ARB {}'.format(a_new_base))
-            self.relative_base = a_new_base
+            self.relative_base += a_new_base
             self.pc += 2
 
         self.ops: Dict[int, (Callable, int)] = {
@@ -172,7 +172,7 @@ class IntcodeMachine:
 
 
 if __name__ == '__main__':
-    # with open('09_input.txt') as program:
-    #     machine = IntcodeMachine(program.readline().strip())
-    machine = IntcodeMachine('109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99')
+    with open('09_input.txt') as program:
+        machine = IntcodeMachine(program.readline().strip())
+    # machine = IntcodeMachine('109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99')
     machine.run()
