@@ -11,21 +11,27 @@ class ParamMode(Enum):
 
 # noinspection PyUnusedLocal
 class IntcodeMachine:
-    def __init__(self, program: str):
+    def __init__(self, program: str, name='Intcode'):
+        self.name = name
         self.memory: List[int] = [int(x) for x in program.split(',')]
         self.pc: int = 0
         self.relative_base = 0
-
-        me = self
+        self.trace = False
+        self.input = None
+        self.output = None
+        self.generator = self.run()
+        next(self.generator)
 
         def debug_input(func):
             @functools.wraps(func)
             def debug_wrapper(*args, **kwargs):
-                # print()
-                # print('pc: {}'.format(me.pc))
-                # print('mem: {}'.format(me.memory))
-                # print('relative base: {}'.format(me.relative_base))
-                # print('{}: {}'.format(func.__name__, args))
+                if self.trace:
+                    print()
+                    print('pc: {}'.format(self.pc))
+                    print('mem: {}'.format(self.memory))
+                    print('relative base: {}'.format(self.relative_base))
+                    print('{}: {}'.format(func.__name__, args))
+
                 func(*args, **kwargs)
 
             return debug_wrapper
@@ -85,12 +91,13 @@ class IntcodeMachine:
 
         @debug_input
         def op_input(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int):
-            store(int(input('enter a number: ')), a, a_mode)
+            store(int(self.input), a, a_mode)
+            self.input = None
             self.pc += 2
 
         @debug_input
         def op_output(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int):
-            print(fetch(a, a_mode))
+            self.output = fetch(a, a_mode)
             self.pc += 2
 
         @debug_input
@@ -140,8 +147,34 @@ class IntcodeMachine:
             99: None
         }
 
-    def run(self) -> None:
+    def send(self, value):
+        try:
+            self.generator.send(value)
+        except StopIteration:
+            if self.trace:
+                print(f"{self.name}: 'send' hit StopIteration")
+
+    def receive(self):
+        try:
+            for output in self.generator:
+                if output is not None:
+                    next(self.generator)
+                    return output
+        except StopIteration:
+            if self.trace:
+                print(f"{self.name}: 'receive' hit StopIteration")
+            # noinspection PyUnboundLocalVariable
+            return output
+
+    def run(self):
         while True:
+            input = yield
+
+            if input is not None:
+                if self.trace:
+                    print(f"{self.name}: received {input}")
+                self.input = input
+
             opcode_and_modes = self.memory[self.pc]
 
             opcode = opcode_and_modes % 100
@@ -154,12 +187,23 @@ class IntcodeMachine:
             except KeyError:
                 raise ValueError('invalid opcode: {}'.format(opcode))
 
+            if opcode == 3 and self.input is None:
+                if self.trace:
+                    print("Waiting for input")
+                continue
+
             if op:
                 num_params = op[1]
                 params = self.memory[self.pc + 1:self.pc + num_params + 1]
                 # print('pc={}, original_op={}, args={}'.format(self.pc, opcode_and_modes, params))
 
                 op[0](a_mode, b_mode, c_mode, *params)
+
+                if self.output is not None:
+                    if self.trace:
+                        print(f"{self.name}: sent {self.output}")
+                    yield self.output
+                    self.output = None
             else:
                 break
 
@@ -168,4 +212,10 @@ if __name__ == '__main__':
     with open('09_input.txt') as program:
         machine = IntcodeMachine(program.readline().strip())
 
-    machine.run()
+    machine.send(2)
+
+    while True:
+        output = machine.receive()
+        if output is None:
+            break
+        print(output, end=",")
