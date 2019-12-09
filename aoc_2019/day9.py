@@ -13,7 +13,6 @@ class ParamMode(Enum):
 class IntcodeMachine:
     def __init__(self, program: str):
         self.memory: List[int] = [int(x) for x in program.split(',')]
-        self.memory += [0] * 100
         self.pc: int = 0
         self.relative_base = 0
 
@@ -53,16 +52,26 @@ class IntcodeMachine:
                 return arg
 
             address = adjust_address(arg, mode)
-            return self.memory[address]
+
+            try:
+                return self.memory[address]
+            except IndexError:
+                return 0
+
+        def store(val: int, raw_addr: int, mode: ParamMode):
+            address = adjust_address(raw_addr, mode)
+
+            try:
+                self.memory[address] = val
+            except IndexError:
+                self.memory.extend([0] * (address - len(self.memory) + 1))
+                self.memory[address] = val
 
         @debug_input
         def op_add(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int, c: int):
             addend_a = fetch(a, a_mode)
             addend_b = fetch(b, b_mode)
-            c_addr = adjust_address(c, c_mode)
-            # print('ADD {} {} {}'.format(addend_a, addend_b, c_addr))
-
-            self.memory[c_addr] = addend_a + addend_b
+            store(addend_a + addend_b, c, c_mode)
 
             self.pc += 4
 
@@ -70,49 +79,37 @@ class IntcodeMachine:
         def op_mul(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int, c: int):
             mul_a = fetch(a, a_mode)
             mul_b = fetch(b, b_mode)
-            c_addr = adjust_address(c, c_mode)
-            # print('MUL {} {} {}'.format(mul_a, mul_b, c_addr))
-
-            self.memory[c_addr] = mul_a * mul_b
+            store(mul_a * mul_b, c, c_mode)
 
             self.pc += 4
 
         @debug_input
         def op_input(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int):
-            a_addr = adjust_address(a, a_mode)
-            # print('INP {}'.format(a_addr))
-            self.memory[adjust_address(a, a_mode)] = int(input('enter a number: '))
+            store(int(input('enter a number: ')), a, a_mode)
             self.pc += 2
 
         @debug_input
         def op_output(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int):
-            a_val = fetch(a, a_mode)
-            # print('OUT {}'.format(a_val))
-            print(a_val)
+            print(fetch(a, a_mode))
             self.pc += 2
 
         @debug_input
         def op_jit(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int):
             target = fetch(a, a_mode)
             dest_addr = fetch(b, b_mode)
-            # print('JIT {} {}'.format(target, dest_addr))
             self.pc = dest_addr if target != 0 else self.pc + 3
 
         @debug_input
         def op_jif(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int):
             target = fetch(a, a_mode)
             dest_addr = fetch(b, b_mode)
-            # print('JIF {} {}'.format(target, dest_addr))
             self.pc = dest_addr if target == 0 else self.pc + 3
 
         @debug_input
         def op_lt(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int, c: int):
             a_cmp = fetch(a, a_mode)
             b_cmp = fetch(b, b_mode)
-            c_addr = adjust_address(c, c_mode)
-            # print('LT {} {} {}'.format(a_cmp, b_cmp, c_addr))
-
-            self.memory[c_addr] = 1 if a_cmp < b_cmp else 0
+            store(1 if a_cmp < b_cmp else 0, c, c_mode)
 
             self.pc += 4
 
@@ -120,17 +117,13 @@ class IntcodeMachine:
         def op_eq(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int, c: int):
             a_cmp = fetch(a, a_mode)
             b_cmp = fetch(b, b_mode)
-            c_addr = adjust_address(c, c_mode)
-            # print('EQ {} {} {}'.format(a_cmp, b_cmp, c_addr))
-
-            self.memory[c_addr] = 1 if a_cmp == b_cmp else 0
+            store(1 if a_cmp == b_cmp else 0, c, c_mode)
 
             self.pc += 4
 
         @debug_input
         def op_arb(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int):
             a_new_base = fetch(a, a_mode)
-            # print('ARB {}'.format(a_new_base))
             self.relative_base += a_new_base
             self.pc += 2
 
