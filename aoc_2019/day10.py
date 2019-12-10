@@ -1,4 +1,4 @@
-from itertools import chain
+from itertools import chain, cycle
 from typing import List, NamedTuple
 from fractions import Fraction
 from math import copysign, atan2, sqrt, pi as π
@@ -10,11 +10,13 @@ class Point(NamedTuple):
 
 
 def vector_from_90(origination: Point, dest: Point) -> float:
+    origination = Point(-origination.row, origination.col)
+    dest = Point(-dest.row, dest.col)
     translated_dest = Point(dest.row - origination.row, dest.col - origination.col)
     angle = atan2(translated_dest.row, translated_dest.col)
 
     adjusted_angle = angle - π / 2
-    return adjusted_angle if adjusted_angle >= 0 else angle + 3 * π / 2
+    return adjusted_angle if adjusted_angle > 0 else adjusted_angle + 2 * π
 
 
 def distance(p1: Point, p2: Point) -> float:
@@ -64,13 +66,12 @@ def visible_asteroids_from(asteroid: Point, maxima: Point, other_asteroids: List
     #         p = Point(row, col)
     #         print('.' if p not in blocked_spots else 'B' if p in blocked_spots else '@', end='')
     #     print()
-
-    return sum(1 for other in other_asteroids if other not in blocked_spots)
+    seen_asteroids = [other for other in other_asteroids if other not in blocked_spots]
+    # print('asteroid {} can see asteroids {}'.format(asteroid, seen_asteroids))
+    return len(seen_asteroids)
 
 
 if __name__ == '__main__':
-    print(vector_from_90(Point(0, 0), Point(0, 1)))
-
     with open('10_input.txt') as map_input:
         map = [line.strip() for line in map_input.readlines()]
 
@@ -78,10 +79,11 @@ if __name__ == '__main__':
                     for col in range(len(map[row]))
                     if map[row][col] == '#')
 
+
     maxima = Point(len(map), len(map[0]))
 
     best_num_visible = 0
-    best_location = None
+    base_location = None
 
     for row in range(maxima.row):
         for col in range(maxima.col):
@@ -95,17 +97,22 @@ if __name__ == '__main__':
 
             if num_visible > best_num_visible:
                 best_num_visible = num_visible
-                best_location = p
+                base_location = p
 
-            # print(str(num_visible), end='')
-        # print()
+    other_asteroids = [a for a in asteroids if a != base_location]
+    sorted_by_distance = sorted(other_asteroids, key=lambda a: distance(base_location, a))
 
-    print(best_num_visible)
-    print(best_location)
-    print('{} total asteroids'.format(len(asteroids)))
+    sorted_by_angle_and_distance = sorted(sorted_by_distance,
+                                          key=lambda a: vector_from_90(base_location, a),
+                                          reverse=True)
 
-    asteroids_sorted = sorted(
-        sorted(asteroids, key=lambda a: distance(best_location, a)),
-        key=lambda a: vector_from_90(best_location, a))
+    removed = set()
+    most_recent_angle = None
 
-    print(asteroids_sorted)
+    for a in cycle(sorted_by_angle_and_distance):
+        if a not in removed and vector_from_90(base_location, a) != most_recent_angle:
+            print('vaporizing {}'.format(a))
+            removed.add(a)
+            most_recent_angle = vector_from_90(base_location, a)
+            if len(removed) == 200:
+                break
