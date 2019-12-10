@@ -1,12 +1,22 @@
 from itertools import chain
 from typing import List, NamedTuple
 from fractions import Fraction
-from math import copysign
+from math import copysign, atan2, sqrt
 
 
 class Point(NamedTuple):
     row: int
     col: int
+
+
+def vector_from_90(origination: Point, dest: Point) -> float:
+    translated_dest = Point(dest.row - origination.row, dest.col - origination.col)
+    angle = atan2(translated_dest.row, translated_dest.col)
+
+
+def distance(p1: Point, p2: Point) -> float:
+    translated_p2 = Point(p2.row - p1.row, p2.col - p2.col)
+    return sqrt(translated_p2.row ** 2 + translated_p2.col ** 2)
 
 
 def compute_blocked_spots(source: Point, blocker: Point, maxima: Point) -> List[Point]:
@@ -88,3 +98,9 @@ if __name__ == '__main__':
     print(best_num_visible)
     print(best_location)
     print('{} total asteroids'.format(len(asteroids)))
+
+    asteroids_sorted = sorted(
+        sorted(asteroids, key=lambda a: distance(best_location, a)),
+        key=lambda a: vector(best_location, a))
+
+    print(asteroids_sorted)
