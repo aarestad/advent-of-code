@@ -41,8 +41,8 @@ def compute_blocked_spots(source: Point, blocker: Point, maxima: Point) -> List[
 
 
 def visible_asteroids_from(asteroid: Point, maxima: Point, other_asteroids: List[Point]) -> int:
-    blocked_spot_lists = list(compute_blocked_spots(asteroid, other, maxima) for other in other_asteroids)
-    blocked_spots = list(chain.from_iterable(blocked_spot_lists))
+    blocked_spots = set(chain.from_iterable(
+        compute_blocked_spots(asteroid, other, maxima) for other in other_asteroids))
 
     # print('point {} blocked:'.format(asteroid))
 
@@ -60,13 +60,14 @@ if __name__ == '__main__':
     with open('10_input.txt') as map_input:
         map = [line.strip() for line in map_input.readlines()]
 
-    asteroids = [Point(row, col) for row in range(len(map))
-                 for col in range(len(map[row]))
-                 if map[row][col] == '#']
+    asteroids = set(Point(row, col) for row in range(len(map))
+                    for col in range(len(map[row]))
+                    if map[row][col] == '#')
 
     maxima = Point(len(map), len(map[0]))
 
     best_num_visible = 0
+    best_location = None
 
     for row in range(maxima.row):
         for col in range(maxima.col):
@@ -80,8 +81,11 @@ if __name__ == '__main__':
 
             if num_visible > best_num_visible:
                 best_num_visible = num_visible
+                best_location = p
 
             # print(str(num_visible), end='')
         # print()
 
     print(best_num_visible)
+    print(best_location)
+    print('{} total asteroids'.format(len(asteroids)))
