@@ -101,6 +101,6 @@ if __name__ == '__main__':
 
     asteroids_sorted = sorted(
         sorted(asteroids, key=lambda a: distance(best_location, a)),
-        key=lambda a: vector(best_location, a))
+        key=lambda a: vector_from_90(best_location, a))
 
     print(asteroids_sorted)
