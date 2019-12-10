@@ -9,7 +9,7 @@ class Point(NamedTuple):
     col: int
 
 
-def vector_from_90(origination: Point, dest: Point) -> float:
+def angle_rotated_90_deg_clockwise(origination: Point, dest: Point) -> float:
     # up is down, black is white...
     origination = Point(-origination.row, origination.col)
     dest = Point(-dest.row, dest.col)
@@ -93,16 +93,16 @@ if __name__ == '__main__':
     sorted_by_distance = sorted(other_asteroids, key=lambda a: distance(base_location, a))
 
     sorted_by_angle_and_distance = sorted(sorted_by_distance,
-                                          key=lambda a: vector_from_90(base_location, a),
+                                          key=lambda a: angle_rotated_90_deg_clockwise(base_location, a),
                                           reverse=True)
 
     removed = set()
     most_recent_angle = None
 
     for a in cycle(sorted_by_angle_and_distance):
-        if a not in removed and vector_from_90(base_location, a) != most_recent_angle:
+        if a not in removed and angle_rotated_90_deg_clockwise(base_location, a) != most_recent_angle:
             print('vaporizing {}'.format(a))
             removed.add(a)
-            most_recent_angle = vector_from_90(base_location, a)
+            most_recent_angle = angle_rotated_90_deg_clockwise(base_location, a)
             if len(removed) == 200:
                 break
