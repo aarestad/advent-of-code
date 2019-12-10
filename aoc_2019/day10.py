@@ -18,9 +18,9 @@ def compute_blocked_spots(source: Point, blocker: Point, maxima: Point) -> List[
 
     # correct for same row/col (this avoids dividing by zero)
     if row_diff == 0:
-        col_diff = 1
+        col_diff = int(copysign(1, col_diff))
     elif col_diff == 0:
-        row_diff = 1
+        row_diff = int(copysign(1, row_diff))
     # otherwise, reduce x_diff/y_diff so they're relatively prime
     else:
         row_over_col = Fraction(row_diff, col_diff)
@@ -44,12 +44,20 @@ def visible_asteroids_from(asteroid: Point, maxima: Point, other_asteroids: List
     blocked_spot_lists = list(compute_blocked_spots(asteroid, other, maxima) for other in other_asteroids)
     blocked_spots = list(chain.from_iterable(blocked_spot_lists))
 
+    # print('point {} blocked:'.format(asteroid))
+
+    # for row in range(maxima.row):
+    #     for col in range(maxima.col):
+    #         p = Point(row, col)
+    #         print('.' if p not in blocked_spots else 'B' if p in blocked_spots else '@', end='')
+    #     print()
+
     seen_asteroids = list(other for other in other_asteroids if other not in blocked_spots)
     return len(seen_asteroids)
 
 
 if __name__ == '__main__':
-    with open('10_small_input.txt') as map_input:
+    with open('10_input.txt') as map_input:
         map = [line.strip() for line in map_input.readlines()]
 
     asteroids = [Point(row, col) for row in range(len(map))
@@ -58,8 +66,22 @@ if __name__ == '__main__':
 
     maxima = Point(len(map), len(map[0]))
 
+    best_num_visible = 0
+
     for row in range(maxima.row):
         for col in range(maxima.col):
             p = Point(row, col)
-            print('.' if p not in asteroids else str(visible_asteroids_from(p, maxima, [a for a in asteroids if a != p])), end='')
-        print()
+
+            if p not in asteroids:
+                # print('.', end='')
+                continue
+
+            num_visible = visible_asteroids_from(p, maxima, [a for a in asteroids if a != p])
+
+            if num_visible > best_num_visible:
+                best_num_visible = num_visible
+
+            # print(str(num_visible), end='')
+        # print()
+
+    print(best_num_visible)
