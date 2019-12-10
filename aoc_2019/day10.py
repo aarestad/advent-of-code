@@ -21,8 +21,7 @@ def vector_from_90(origination: Point, dest: Point) -> float:
 
 
 def distance(p1: Point, p2: Point) -> float:
-    translated_p2 = Point(p2.row - p1.row, p2.col - p2.col)
-    return sqrt(translated_p2.row ** 2 + translated_p2.col ** 2)
+    return sqrt((p2.row - p1.row) ** 2 + (p2.col - p1.col) ** 2)
 
 
 def compute_blocked_spots(source: Point, blocker: Point, maxima: Point) -> List[Point]:
