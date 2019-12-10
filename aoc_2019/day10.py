@@ -10,6 +10,7 @@ class Point(NamedTuple):
 
 
 def vector_from_90(origination: Point, dest: Point) -> float:
+    # up is down, black is white...
     origination = Point(-origination.row, origination.col)
     dest = Point(-dest.row, dest.col)
     translated_dest = Point(dest.row - origination.row, dest.col - origination.col)
@@ -59,15 +60,7 @@ def visible_asteroids_from(asteroid: Point, maxima: Point, other_asteroids: List
     blocked_spots = set(chain.from_iterable(
         compute_blocked_spots(asteroid, other, maxima) for other in other_asteroids))
 
-    # print('point {} blocked:'.format(asteroid))
-
-    # for row in range(maxima.row):
-    #     for col in range(maxima.col):
-    #         p = Point(row, col)
-    #         print('.' if p not in blocked_spots else 'B' if p in blocked_spots else '@', end='')
-    #     print()
     seen_asteroids = [other for other in other_asteroids if other not in blocked_spots]
-    # print('asteroid {} can see asteroids {}'.format(asteroid, seen_asteroids))
     return len(seen_asteroids)
 
 
@@ -79,7 +72,6 @@ if __name__ == '__main__':
                     for col in range(len(map[row]))
                     if map[row][col] == '#')
 
-
     maxima = Point(len(map), len(map[0]))
 
     best_num_visible = 0
@@ -90,7 +82,6 @@ if __name__ == '__main__':
             p = Point(row, col)
 
             if p not in asteroids:
-                # print('.', end='')
                 continue
 
             num_visible = visible_asteroids_from(p, maxima, [a for a in asteroids if a != p])
