@@ -71,41 +71,41 @@ def visible_asteroids_from(asteroid: Point, maxima: Point, other_asteroids: List
 if __name__ == '__main__':
     print(vector_from_90(Point(0, 0), Point(0, 1)))
 
-    # with open('10_input.txt') as map_inp` ut:
-    #     map = [line.strip() for line in map_input.readlines()]
-    #
-    # asteroids = set(Point(row, col) for row in range(len(map))
-    #                 for col in range(len(map[row]))
-    #                 if map[row][col] == '#')
-    #
-    # maxima = Point(len(map), len(map[0]))
-    #
-    # best_num_visible = 0
-    # best_location = None
-    #
-    # for row in range(maxima.row):
-    #     for col in range(maxima.col):
-    #         p = Point(row, col)
-    #
-    #         if p not in asteroids:
-    #             # print('.', end='')
-    #             continue
-    #
-    #         num_visible = visible_asteroids_from(p, maxima, [a for a in asteroids if a != p])
-    #
-    #         if num_visible > best_num_visible:
-    #             best_num_visible = num_visible
-    #             best_location = p
-    #
-    #         # print(str(num_visible), end='')
-    #     # print()
-    #
-    # print(best_num_visible)
-    # print(best_location)
-    # print('{} total asteroids'.format(len(asteroids)))
-    #
-    # asteroids_sorted = sorted(
-    #     sorted(asteroids, key=lambda a: distance(best_location, a)),
-    #     key=lambda a: vector_from_90(best_location, a))
-    #
-    # print(asteroids_sorted)
+    with open('10_input.txt') as map_input:
+        map = [line.strip() for line in map_input.readlines()]
+
+    asteroids = set(Point(row, col) for row in range(len(map))
+                    for col in range(len(map[row]))
+                    if map[row][col] == '#')
+
+    maxima = Point(len(map), len(map[0]))
+
+    best_num_visible = 0
+    best_location = None
+
+    for row in range(maxima.row):
+        for col in range(maxima.col):
+            p = Point(row, col)
+
+            if p not in asteroids:
+                # print('.', end='')
+                continue
+
+            num_visible = visible_asteroids_from(p, maxima, [a for a in asteroids if a != p])
+
+            if num_visible > best_num_visible:
+                best_num_visible = num_visible
+                best_location = p
+
+            # print(str(num_visible), end='')
+        # print()
+
+    print(best_num_visible)
+    print(best_location)
+    print('{} total asteroids'.format(len(asteroids)))
+
+    asteroids_sorted = sorted(
+        sorted(asteroids, key=lambda a: distance(best_location, a)),
+        key=lambda a: vector_from_90(best_location, a))
+
+    print(asteroids_sorted)
