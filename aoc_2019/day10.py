@@ -52,8 +52,7 @@ def visible_asteroids_from(asteroid: Point, maxima: Point, other_asteroids: List
     #         print('.' if p not in blocked_spots else 'B' if p in blocked_spots else '@', end='')
     #     print()
 
-    seen_asteroids = list(other for other in other_asteroids if other not in blocked_spots)
-    return len(seen_asteroids)
+    return sum(1 for other in other_asteroids if other not in blocked_spots)
 
 
 if __name__ == '__main__':
