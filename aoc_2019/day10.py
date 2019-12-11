@@ -1,7 +1,7 @@
-from itertools import chain, cycle
+from itertools import chain
 from typing import List, NamedTuple
 from fractions import Fraction
-from math import copysign, atan2, sqrt, pi as π
+from math import copysign, atan2, pi as π
 
 
 class Point(NamedTuple):
@@ -18,10 +18,6 @@ def angle_rotated_90_deg_clockwise(origination: Point, dest: Point) -> float:
 
     adjusted_angle = angle - π / 2
     return adjusted_angle if adjusted_angle > 0 else adjusted_angle + 2 * π
-
-
-def distance(p1: Point, p2: Point) -> float:
-    return sqrt((p2.row - p1.row) ** 2 + (p2.col - p1.col) ** 2)
 
 
 def compute_blocked_spots(source: Point, blocker: Point, maxima: Point) -> List[Point]:
@@ -55,12 +51,11 @@ def compute_blocked_spots(source: Point, blocker: Point, maxima: Point) -> List[
     return blocked_spots
 
 
-def visible_asteroids_from(asteroid: Point, maxima: Point, other_asteroids: List[Point]) -> int:
+def visible_asteroids_from(asteroid: Point, maxima: Point, other_asteroids: List[Point]) -> List[Point]:
     blocked_spots = set(chain.from_iterable(
         compute_blocked_spots(asteroid, other, maxima) for other in other_asteroids))
 
-    seen_asteroids = [other for other in other_asteroids if other not in blocked_spots]
-    return len(seen_asteroids)
+    return [other for other in other_asteroids if other not in blocked_spots]
 
 
 if __name__ == '__main__':
@@ -83,26 +78,25 @@ if __name__ == '__main__':
             if p not in asteroids:
                 continue
 
-            num_visible = visible_asteroids_from(p, maxima, [a for a in asteroids if a != p])
+            num_visible = len(visible_asteroids_from(p, maxima, [a for a in asteroids if a != p]))
 
             if num_visible > best_num_visible:
                 best_num_visible = num_visible
                 base_location = p
 
-    other_asteroids = [a for a in asteroids if a != base_location]
-    sorted_by_distance = sorted(other_asteroids, key=lambda a: distance(base_location, a))
-
-    sorted_by_angle_and_distance = sorted(sorted_by_distance,
-                                          key=lambda a: angle_rotated_90_deg_clockwise(base_location, a),
-                                          reverse=True)
-
     removed = set()
     most_recent_angle = None
 
-    for a in cycle(sorted_by_angle_and_distance):
-        if a not in removed and angle_rotated_90_deg_clockwise(base_location, a) != most_recent_angle:
+    while True:
+        other_asteroids = [a for a in asteroids if a != base_location and a not in removed]
+        visible_asteroids = visible_asteroids_from(base_location, maxima, other_asteroids)
+
+        for a in sorted(visible_asteroids,
+                        key=lambda a: angle_rotated_90_deg_clockwise(base_location, a),
+                        reverse=True):
             print('vaporizing {}'.format(a))
             removed.add(a)
             most_recent_angle = angle_rotated_90_deg_clockwise(base_location, a)
+
             if len(removed) == 200:
-                break
+                exit()
