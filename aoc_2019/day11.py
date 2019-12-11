@@ -63,16 +63,23 @@ if __name__ == '__main__':
         else:
             raise ValueError('unknown direction: {}'.format(current_orientation))
 
+    max_x = max(p.x for p in painted_tiles.keys())
+    min_x = min(p.x for p in painted_tiles.keys())
+    max_y = max(p.y for p in painted_tiles.keys())
+    min_y = min(p.y for p in painted_tiles.keys())
+
     canvas = []
 
-    for _ in range(6):
-        canvas.append(list(repeat(' ', 43)))
-
-    canvas[5][42] = '#'
+    for _ in range(max_y - min_y + 1):
+        canvas.append(list(repeat(' ', max_x - min_x + 1)))
 
     for tile, color in painted_tiles.items():
         if color == Color.WHITE:
-            canvas[tile.y + 5][tile.x + 42] = '#'
+            y = tile.y - min_y
+            x = tile.x - min_x
+            canvas[y][x] = '#'
+
+    canvas[-min_y][-min_x] = '@'
 
     # turn it upside down!
     for line in reversed(canvas):
