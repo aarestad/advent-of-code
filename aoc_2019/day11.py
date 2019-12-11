@@ -63,11 +63,6 @@ if __name__ == '__main__':
         else:
             raise ValueError('unknown direction: {}'.format(current_orientation))
 
-    max_x = max(p.x for p in painted_tiles.keys())
-    min_x = min(p.x for p in painted_tiles.keys())
-    max_y = max(p.y for p in painted_tiles.keys())
-    min_y = min(p.y for p in painted_tiles.keys())
-
     canvas = []
 
     for _ in range(6):
