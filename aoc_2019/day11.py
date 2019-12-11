@@ -79,5 +79,8 @@ if __name__ == '__main__':
         if color == Color.WHITE:
             canvas[tile.y + 5][tile.x + 42] = '#'
 
+    # turn it upside down!
+    canvas.reverse()
+
     for line in canvas:
-        print(''.join(line))
+        print(''.join(reversed(line)))
