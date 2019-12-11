@@ -80,7 +80,5 @@ if __name__ == '__main__':
             canvas[tile.y + 5][tile.x + 42] = '#'
 
     # turn it upside down!
-    canvas.reverse()
-
-    for line in canvas:
+    for line in reversed(canvas):
         print(''.join(reversed(line)))
