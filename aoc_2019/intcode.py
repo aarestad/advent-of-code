@@ -207,3 +207,59 @@ class IntcodeMachine:
                     self.output = None
             else:
                 break
+
+    def disassemble(self):
+        disassembly_pc = 0
+
+        ops = {
+            1: 'ADD',
+            2: 'MUL',
+            3: 'INP',
+            4: 'OTP',
+            5: 'JT',
+            6: 'JF',
+            7: 'LT',
+            8: 'EQ',
+            9: 'ARB',
+            99: 'HLT'
+        }
+
+        while disassembly_pc < len(self.memory):
+            opcode_and_modes = self.memory[disassembly_pc]
+
+            opcode = opcode_and_modes % 100
+            a_mode = ParamMode((opcode_and_modes // 100) % 10)
+            b_mode = ParamMode((opcode_and_modes // 1000) % 10)
+            c_mode = ParamMode((opcode_and_modes // 10000) % 10)
+
+            try:
+                op = self.ops[opcode]
+            except KeyError:
+                print('{}: invalid opcode: {}'.format(disassembly_pc, opcode))
+                num_params = 0
+            else:
+                if op is not None:
+                    num_params = op[1]
+                    params = self.memory[self.pc + 1:self.pc + num_params + 1]
+
+                    params_formatted = [
+                        str(params[0]) if a_mode == ParamMode.IMMEDIATE else '[{}]'.format(params[0])
+                    ]
+
+                    if len(params) > 1:
+                        params_formatted.append(str(params[1]) if b_mode == ParamMode.IMMEDIATE else '[{}]'.format(params[1]))
+
+                    if len(params) > 2:
+                        params_formatted.append(str(params[2]) if c_mode == ParamMode.IMMEDIATE else '[{}]'.format(params[2]))
+                else:
+                    params_formatted = []
+                    num_params = 0
+
+                print('{}: {} {}'.format(disassembly_pc, ops[opcode], ', '.join(params_formatted)))
+
+            disassembly_pc += 1 + num_params
+
+
+if __name__ == '__main__':
+    with open('11_input.txt') as program_file:
+        IntcodeMachine(program_file.readline()).disassemble()
