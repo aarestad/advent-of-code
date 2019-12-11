@@ -16,7 +16,7 @@ class IntcodeMachine:
         self.memory: List[int] = [int(x) for x in program.split(',')]
         self.pc: int = 0
         self.relative_base = 0
-        self.trace = True
+        self.trace = False
         self.supertrace = False
         self.input = None
         self.output = None
