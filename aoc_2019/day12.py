@@ -48,12 +48,6 @@ class Planet:
                           self.pos.z + self.vel.z
                           )
 
-    @property
-    def total_energy(self):
-        pot = abs(self.pos.x) + abs(self.pos.y) + abs(self.pos.z)
-        kin = abs(self.vel.x) + abs(self.vel.y) + abs(self.vel.z)
-        return pot * kin
-
 
 if __name__ == '__main__':
     planets = [
@@ -72,6 +66,7 @@ if __name__ == '__main__':
 
     for i in count(1):
         if i % 10000 == 0: print(i)
+
         for planet in planets:
             planet.time_step_vector(p for p in planets if p != planet)
         for planet in planets:
