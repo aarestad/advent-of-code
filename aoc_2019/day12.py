@@ -50,18 +50,24 @@ class Planet:
 
 
 if __name__ == '__main__':
+    # my input:
+    # <x=4, y=12, z=13>
+    # <x=-9, y=14, z=-3>
+    # <x=-7, y=-1, z=2>
+    # <x=-11, y=17, z=-1>
+
     planets = [
-        Planet(Vector(x=4, y=12, z=13), 'A'),
-        Planet(Vector(x=-9, y=14, z=-3), 'B'),
-        Planet(Vector(x=-7, y=-1, z=2), 'C'),
-        Planet(Vector(x=-11, y=17, z=-1), 'D'),
+        Planet(Vector(x=-1, y=0, z=2), 'A'),
+        Planet(Vector(x=2, y=-10, z=-7), 'B'),
+        Planet(Vector(x=4, y=-8, z=8), 'C'),
+        Planet(Vector(x=3, y=5, z=-1), 'D'),
     ]
 
     initial_state = {
-        'A': Planet(Vector(x=4, y=12, z=13), 'A'),
-        'B': Planet(Vector(x=-9, y=14, z=-3), 'B'),
-        'C': Planet(Vector(x=-7, y=-1, z=2), 'C'),
-        'D': Planet(Vector(x=-11, y=17, z=-1), 'D'),
+        'A': Planet(Vector(x=-1, y=0, z=2), 'A'),
+        'B': Planet(Vector(x=2, y=-10, z=-7), 'B'),
+        'C': Planet(Vector(x=4, y=-8, z=8), 'C'),
+        'D': Planet(Vector(x=3, y=5, z=-1), 'D'),
     }
 
     for i in count(1):
@@ -74,4 +80,4 @@ if __name__ == '__main__':
 
         if all(p.state_eq(initial_state[p.name]) for p in planets):
             print(i)
-            exit()
+            break
