@@ -4,6 +4,7 @@ from math import copysign
 
 from aoc_2019.intcode import IntcodeMachine
 from aoc_2019.utils import Point
+import curses
 
 
 class TileType(Enum):
@@ -14,8 +15,37 @@ class TileType(Enum):
     BALL = 4
 
 
+def paint_screen(max_x, max_y, current_score, tiles):
+    os.system('clear')
+
+    print('==== {:>6} ===='.format(current_score))
+
+    for y in range(max_y + 1):
+        for x in range(max_x + 1):
+            p = Point(x, y)
+
+            if p not in tiles:
+                print('🟨', end='')
+                continue
+
+            type = tiles[p]
+
+            if type == TileType.EMPTY:
+                print('🟨', end='')
+            elif type == TileType.WALL:
+                print('⬛️️', end='')
+            elif type == TileType.BLOCK:
+                print('🟥', end='')
+            elif type == TileType.PADDLE:
+                print('⬜️', end='')
+            elif type == TileType.BALL:
+                print('🟦', end='')
+
+        print()
+
+
 if __name__ == '__main__':
-    with open('13_input.txt') as intcode_input:
+    with open('aoc_2019/13_input.txt') as intcode_input:
         machine = IntcodeMachine(intcode_input.readline().strip())
 
     machine.memory[0] = 2
@@ -61,29 +91,5 @@ if __name__ == '__main__':
         if pos.y > max_y:
             max_y = pos.y
 
-        os.system('clear')
-
-        print('==== {:>6} ===='.format(current_score))
-
-        for y in range(max_y+1):
-            for x in range(max_x+1):
-                p = Point(x, y)
-
-                if p not in tiles:
-                    print('🟨', end='')
-                    continue
-
-                type = tiles[p]
-
-                if type == TileType.EMPTY:
-                    print('🟨', end='')
-                elif type == TileType.WALL:
-                    print('⬛️️', end='')
-                elif type == TileType.BLOCK:
-                    print('🟥', end='')
-                elif type == TileType.PADDLE:
-                    print('⬜️', end='')
-                elif type == TileType.BALL:
-                    print('🟦', end='')
-
-            print()
+        if max_x == 41 and max_y == 22:
+            paint_screen(max_x, max_y, current_score, tiles)
