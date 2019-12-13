@@ -21,7 +21,6 @@ class IntcodeMachine:
         self.input = None
         self.output = None
         self.generator = self.run()
-        next(self.generator)
 
         def debug_input(func):
             @functools.wraps(func)
@@ -147,6 +146,9 @@ class IntcodeMachine:
             9: (op_arb, 1),
             99: None
         }
+
+    def start(self):
+        next(self.generator)
 
     def send(self, value):
         try:
