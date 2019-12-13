@@ -1,3 +1,4 @@
+import os
 from enum import Enum
 from math import copysign
 
@@ -22,6 +23,12 @@ if __name__ == '__main__':
     current_ball_pos = None
     current_paddle_pos = None
 
+    tiles = {}
+
+    max_x = 0
+    max_y = 0
+    current_score = 0
+
     while True:
         if not (current_ball_pos and current_paddle_pos):
             machine.send(0)
@@ -35,7 +42,7 @@ if __name__ == '__main__':
             break
 
         if tile_x == -1 and tile_y == 0:
-            print('current score is {}'.format(tile_type))
+            current_score = tile_type
             continue
 
         pos = Point(tile_x, tile_y)
@@ -46,3 +53,37 @@ if __name__ == '__main__':
 
         if type == TileType.BALL:
             current_ball_pos = pos
+
+        tiles[pos] = type
+
+        if pos.x > max_x:
+            max_x = pos.x
+        if pos.y > max_y:
+            max_y = pos.y
+
+        os.system('clear')
+
+        print('==== {:>6} ===='.format(current_score))
+
+        for y in range(max_y+1):
+            for x in range(max_x+1):
+                p = Point(x, y)
+
+                if p not in tiles:
+                    print('🟨', end='')
+                    continue
+
+                type = tiles[p]
+
+                if type == TileType.EMPTY:
+                    print('🟨', end='')
+                elif type == TileType.WALL:
+                    print('⬛️️', end='')
+                elif type == TileType.BLOCK:
+                    print('🟥', end='')
+                elif type == TileType.PADDLE:
+                    print('⬜️', end='')
+                elif type == TileType.BALL:
+                    print('🟦', end='')
+
+            print()
