@@ -18,7 +18,6 @@ if __name__ == '__main__':
         machine = IntcodeMachine(intcode_input.readline().strip())
 
     machine.memory[0] = 2
-    machine.start()
 
     current_ball_pos = None
     current_paddle_pos = None
