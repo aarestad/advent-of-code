@@ -24,33 +24,28 @@ def paint_screen(current_score, tiles, window: curses.window):
             type = tiles.get(Point(x, y), TileType.EMPTY)
 
             if type == TileType.WALL:
-                # print('⬛️️', end='')
-                # window.attrset(curses.color_pair(curses.COLOR_BLACK))
-                window.addch(y + 1, x, '-' if y == 0 else '|')
+                window.addch(y + 1, x, '-' if y == 0 else '|', curses.color_pair(1))
             elif type == TileType.BLOCK:
-                # print('🟥', end='')
-                # window.attrset(curses.color_pair(curses.COLOR_RED))
-                window.addch(y + 1, x, '*')
+                window.addch(y + 1, x, '*', curses.color_pair(2))
             elif type == TileType.PADDLE:
-                # print('⬜️', end='')
-                # window.attrset(curses.color_pair(curses.COLOR_WHITE))
-                window.addch(y + 1, x, '_')
+                window.addch(y + 1, x, '_', curses.color_pair(3))
             elif type == TileType.BALL:
-                # print('🟦', end='')
-                # window.attrset(curses.color_pair(curses.COLOR_BLUE))
-                window.addch(y + 1, x, 'O')
+                window.addch(y + 1, x, 'O', curses.color_pair(4))
             else:
-                # print('🟨', end='')
-                # window.attrset(curses.color_pair(curses.COLOR_YELLOW))
                 window.addch(y + 1, x, ' ')
 
     window.refresh()
-    # time.sleep(1/250)
+    time.sleep(1/250)
 
 
 def main(stdscr):
     with open('aoc_2019/13_input.txt') as intcode_input:
         machine = IntcodeMachine(intcode_input.readline().strip())
+
+    curses.init_pair(1, curses.COLOR_WHITE, 0)
+    curses.init_pair(2, curses.COLOR_RED, 0)
+    curses.init_pair(3, curses.COLOR_YELLOW, 0)
+    curses.init_pair(4, curses.COLOR_CYAN, 0)
 
     machine.memory[0] = 2
 
@@ -98,7 +93,7 @@ def main(stdscr):
 
         tiles[pos] = type
 
-        if max_x == 41 and max_y == 22 and step % 10 == 0:
+        if max_x == 41 and max_y == 22:
             paint_screen(current_score, tiles, stdscr)
 
     return current_score, num_steps
