@@ -23,7 +23,7 @@ if __name__ == '__main__':
     current_paddle_pos = None
 
     while True:
-        if not current_ball_pos or not current_paddle_pos:
+        if not (current_ball_pos and current_paddle_pos):
             machine.send(0)
         else:
             paddle_ball_diff = current_ball_pos.x - current_paddle_pos.x
