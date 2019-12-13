@@ -1,4 +1,5 @@
 from enum import Enum
+from itertools import count
 from math import copysign
 
 from aoc_2019.intcode import IntcodeMachine
@@ -44,7 +45,7 @@ def paint_screen(current_score, tiles, window: curses.window):
                 window.addch(y + 1, x, ' ')
 
     window.refresh()
-    time.sleep(1/250)
+    # time.sleep(1/250)
 
 
 def main(stdscr):
@@ -61,8 +62,9 @@ def main(stdscr):
     current_score = 0
     max_x = 0
     max_y = 0
+    num_steps = 0
 
-    while True:
+    for step in count(1):
         if not (current_ball_pos and current_paddle_pos):
             machine.send(0)
         else:
@@ -72,6 +74,7 @@ def main(stdscr):
         (tile_x, tile_y, tile_type) = (machine.receive(), machine.receive(), machine.receive())
 
         if any((tile_x is None, tile_y is None, tile_type is None)):
+            num_steps = step
             break
 
         if tile_x == -1 and tile_y == 0:
@@ -95,9 +98,11 @@ def main(stdscr):
 
         tiles[pos] = type
 
-        if max_x == 41 and max_y == 22:
+        if max_x == 41 and max_y == 22 and step % 10 == 0:
             paint_screen(current_score, tiles, stdscr)
+
+    return current_score, num_steps
 
 
 if __name__ == '__main__':
-    curses.wrapper(main)
+    print('final score: {} ({} steps)'.format(*curses.wrapper(main)))
