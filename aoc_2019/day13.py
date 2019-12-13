@@ -1,4 +1,3 @@
-import os
 from enum import Enum
 from math import copysign
 
@@ -15,36 +14,38 @@ class TileType(Enum):
     BALL = 4
 
 
-def paint_screen(current_score, tiles):
-    os.system('clear')
-
-    print('==== {:>6} ===='.format(current_score))
+def paint_screen(current_score, tiles, window: curses.window):
+    window.addstr(0, 0, '==== {:>6} ===='.format(current_score))
 
     for y in range(23):
         for x in range(42):
-            p = Point(x, y)
+            type = tiles.get(Point(x, y), TileType.EMPTY)
 
-            if p not in tiles:
-                print('🟨', end='')
-                continue
-
-            type = tiles[p]
-
-            if type == TileType.EMPTY:
-                print('🟨', end='')
-            elif type == TileType.WALL:
-                print('⬛️️', end='')
+            if type == TileType.WALL:
+                # print('⬛️️', end='')
+                # window.attrset(curses.color_pair(curses.COLOR_BLACK))
+                window.addch(y + 1, x, '-' if y == 0 else '|')
             elif type == TileType.BLOCK:
-                print('🟥', end='')
+                # print('🟥', end='')
+                # window.attrset(curses.color_pair(curses.COLOR_RED))
+                window.addch(y + 1, x, '*')
             elif type == TileType.PADDLE:
-                print('⬜️', end='')
+                # print('⬜️', end='')
+                # window.attrset(curses.color_pair(curses.COLOR_WHITE))
+                window.addch(y + 1, x, '_')
             elif type == TileType.BALL:
-                print('🟦', end='')
+                # print('🟦', end='')
+                # window.attrset(curses.color_pair(curses.COLOR_BLUE))
+                window.addch(y + 1, x, 'O')
+            else:
+                # print('🟨', end='')
+                # window.attrset(curses.color_pair(curses.COLOR_YELLOW))
+                window.addch(y + 1, x, ' ')
 
-        print()
+    window.refresh()
 
 
-if __name__ == '__main__':
+def main(stdscr):
     with open('aoc_2019/13_input.txt') as intcode_input:
         machine = IntcodeMachine(intcode_input.readline().strip())
 
@@ -55,8 +56,6 @@ if __name__ == '__main__':
 
     tiles = {}
 
-    max_x = 0
-    max_y = 0
     current_score = 0
 
     while True:
@@ -86,4 +85,8 @@ if __name__ == '__main__':
 
         tiles[pos] = type
 
-        paint_screen(current_score, tiles)
+        paint_screen(current_score, tiles, stdscr)
+
+
+if __name__ == '__main__':
+    curses.wrapper(main)
