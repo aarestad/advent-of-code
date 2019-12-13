@@ -15,13 +15,13 @@ class TileType(Enum):
     BALL = 4
 
 
-def paint_screen(max_x, max_y, current_score, tiles):
+def paint_screen(current_score, tiles):
     os.system('clear')
 
     print('==== {:>6} ===='.format(current_score))
 
-    for y in range(max_y + 1):
-        for x in range(max_x + 1):
+    for y in range(23):
+        for x in range(42):
             p = Point(x, y)
 
             if p not in tiles:
@@ -86,10 +86,4 @@ if __name__ == '__main__':
 
         tiles[pos] = type
 
-        if pos.x > max_x:
-            max_x = pos.x
-        if pos.y > max_y:
-            max_y = pos.y
-
-        if max_x == 41 and max_y == 22:
-            paint_screen(max_x, max_y, current_score, tiles)
+        paint_screen(current_score, tiles)
