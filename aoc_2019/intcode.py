@@ -20,6 +20,8 @@ class IntcodeMachine:
         self.supertrace = False
         self.input = None
         self.output = None
+        self.generator = self.run()
+        next(self.generator)
 
         def debug_input(func):
             @functools.wraps(func)
