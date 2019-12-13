@@ -64,7 +64,7 @@ def main(stdscr):
             machine.send(0)
         else:
             paddle_ball_diff = current_ball_pos.x - current_paddle_pos.x
-            machine.send(0 if paddle_ball_diff == 0 else int(copysign(1, paddle_ball_diff)))
+            machine.send(0 if paddle_ball_diff == 0 else copysign(1, paddle_ball_diff))
 
         (tile_x, tile_y, tile_type) = (machine.receive(), machine.receive(), machine.receive())
 
