@@ -15,7 +15,7 @@ class TileType(Enum):
 
 
 def paint_screen(current_score, tiles, window: curses.window):
-    window.addstr(0, 0, '==== {:>6} ===='.format(current_score))
+    window.addstr(0, 0, '==== score: {:>5} ===='.format(current_score))
 
     for y in range(23):
         for x in range(42):
