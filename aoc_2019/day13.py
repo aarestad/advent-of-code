@@ -4,6 +4,7 @@ from math import copysign
 from aoc_2019.intcode import IntcodeMachine
 from aoc_2019.utils import Point
 import curses
+import time
 
 
 class TileType(Enum):
@@ -43,6 +44,7 @@ def paint_screen(current_score, tiles, window: curses.window):
                 window.addch(y + 1, x, ' ')
 
     window.refresh()
+    time.sleep(1/250)
 
 
 def main(stdscr):
@@ -57,6 +59,8 @@ def main(stdscr):
     tiles = {}
 
     current_score = 0
+    max_x = 0
+    max_y = 0
 
     while True:
         if not (current_ball_pos and current_paddle_pos):
@@ -73,6 +77,12 @@ def main(stdscr):
         if tile_x == -1 and tile_y == 0:
             current_score = tile_type
             continue
+        
+        if tile_x > max_x:
+            max_x = tile_x
+            
+        if tile_y > max_y:
+            max_y = tile_y
 
         pos = Point(tile_x, tile_y)
         type = TileType(tile_type)
@@ -85,7 +95,8 @@ def main(stdscr):
 
         tiles[pos] = type
 
-        paint_screen(current_score, tiles, stdscr)
+        if max_x == 41 and max_y == 22:
+            paint_screen(current_score, tiles, stdscr)
 
 
 if __name__ == '__main__':
