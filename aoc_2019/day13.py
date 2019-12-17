@@ -21,15 +21,15 @@ def paint_screen(current_score, tiles, window: curses.window):
 
     for y in range(23):
         for x in range(42):
-            type = tiles.get(Point(x, y), TileType.EMPTY)
+            tile_type = tiles.get(Point(x, y), TileType.EMPTY)
 
-            if type == TileType.WALL:
+            if tile_type == TileType.WALL:
                 window.addch(y + 1, x, '-' if y == 0 else '|', curses.color_pair(1))
-            elif type == TileType.BLOCK:
+            elif tile_type == TileType.BLOCK:
                 window.addch(y + 1, x, '*', curses.color_pair(2))
-            elif type == TileType.PADDLE:
+            elif tile_type == TileType.PADDLE:
                 window.addch(y + 1, x, '_', curses.color_pair(3))
-            elif type == TileType.BALL:
+            elif tile_type == TileType.BALL:
                 window.addch(y + 1, x, 'O', curses.color_pair(4))
             else:
                 window.addch(y + 1, x, ' ')
@@ -38,7 +38,7 @@ def paint_screen(current_score, tiles, window: curses.window):
     time.sleep(1/250)
 
 
-def main(stdscr):
+def main(std_scr):
     with open('aoc_2019/13_input.txt') as intcode_input:
         machine = IntcodeMachine(intcode_input.readline().strip())
 
@@ -83,18 +83,18 @@ def main(stdscr):
             max_y = tile_y
 
         pos = Point(tile_x, tile_y)
-        type = TileType(tile_type)
+        tile_type = TileType(tile_type)
 
-        if type == TileType.PADDLE:
+        if tile_type == TileType.PADDLE:
             current_paddle_pos = pos
 
-        if type == TileType.BALL:
+        if tile_type == TileType.BALL:
             current_ball_pos = pos
 
-        tiles[pos] = type
+        tiles[pos] = tile_type
 
         if max_x == 41 and max_y == 22:
-            paint_screen(current_score, tiles, stdscr)
+            paint_screen(current_score, tiles, std_scr)
 
     return current_score, num_steps
 
