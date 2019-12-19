@@ -8,12 +8,12 @@ if __name__ == '__main__':
     affected_points = 0
     answer = 0
 
-    for y in range(90, 120):
-        print(f"{y}: ", end='')
+    for y in range(1000, 1100):
+        print(f'{y}: ', end='')
         last_x_affected = None
         num_x_affected = 0
 
-        for x in range(100, 150):
+        for x in range(1100, 1500):
             machine = IntcodeMachine(prog)
 
             machine.send(0)
@@ -21,29 +21,28 @@ if __name__ == '__main__':
             machine.send(y)
 
             response = machine.receive()
-            print('#' if response else '.', end='')
 
             if response:
                 num_x_affected += 1
                 last_x_affected = x
 
-        if num_x_affected >= 10:
-            first_x_affected = last_x_affected - 9
+        if num_x_affected >= 199:
+            first_x_affected = last_x_affected - 99
             num_y_affected = 0
 
-            for double_check_y in range(y, y + 10):
+            for double_check_y in range(y, y + 100):
                 machine = IntcodeMachine(prog)
                 machine.send(0)
                 machine.send(first_x_affected)
                 machine.send(double_check_y)
                 num_y_affected += machine.receive()
 
-            if num_y_affected == 10:
+            print(f'{num_y_affected} affected')
+
+            if num_y_affected == 100:
                 answer = first_x_affected * 10_000 + y
                 print(answer)
                 exit()
         print()
-
-    print(answer)
 
 
