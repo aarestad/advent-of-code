@@ -18,7 +18,7 @@ class IntcodeMachine:
         self.relative_base = 0
         self.trace = False
         self.supertrace = False
-        self.input = None
+        self.input = []
         self.output = None
         self.generator = self.run()
         next(self.generator)
@@ -92,8 +92,7 @@ class IntcodeMachine:
 
         @debug_input
         def op_input(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int):
-            store(int(self.input), a, a_mode)
-            self.input = None
+            store(int(self.input.pop()), a, a_mode)
             self.pc += 2
 
         @debug_input
@@ -174,7 +173,7 @@ class IntcodeMachine:
             if input is not None:
                 if self.trace:
                     print(f"{self.name}: received {input}")
-                self.input = input
+                self.input.append(input)
 
             opcode_and_modes = self.memory[self.pc]
 
@@ -188,7 +187,7 @@ class IntcodeMachine:
             except KeyError:
                 raise ValueError('invalid opcode: {}'.format(opcode))
 
-            if opcode == 3 and self.input is None:
+            if opcode == 3 and not self.input:
                 if self.trace:
                     print("Waiting for input")
                 continue

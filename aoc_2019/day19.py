@@ -16,7 +16,6 @@ if __name__ == '__main__':
         for x in range(1100, 1500):
             machine = IntcodeMachine(prog)
 
-            machine.send(0)
             machine.send(x)
             machine.send(y)
 
