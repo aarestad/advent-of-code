@@ -31,7 +31,6 @@ if __name__ == '__main__':
 
             for double_check_y in range(y, y + 100):
                 machine = IntcodeMachine(prog)
-                machine.send(0)
                 machine.send(first_x_affected)
                 machine.send(double_check_y)
                 num_y_affected += machine.receive()
@@ -42,6 +41,3 @@ if __name__ == '__main__':
                 answer = first_x_affected * 10_000 + y
                 print(answer)
                 exit()
-        print()
-
-
