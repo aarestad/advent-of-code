@@ -243,14 +243,24 @@ class IntcodeMachine:
                     params = self.memory[self.pc + 1:self.pc + num_params + 1]
 
                     params_formatted = [
-                        str(params[0]) if a_mode == ParamMode.IMMEDIATE else '[{}]'.format(params[0])
+                        str(params[0]) if a_mode == ParamMode.IMMEDIATE
+                        else '[{}]'.format(params[0]) if a_mode == ParamMode.INDIRECT
+                        else '{{{}}}'.format(params[0])
                     ]
 
                     if len(params) > 1:
-                        params_formatted.append(str(params[1]) if b_mode == ParamMode.IMMEDIATE else '[{}]'.format(params[1]))
+                        params_formatted.append(
+                            str(params[1]) if b_mode == ParamMode.IMMEDIATE
+                            else '[{}]'.format(params[1]) if b_mode == ParamMode.INDIRECT
+                            else '{{{}}}'.format(params[1])
+                        )
 
                     if len(params) > 2:
-                        params_formatted.append(str(params[2]) if c_mode == ParamMode.IMMEDIATE else '[{}]'.format(params[2]))
+                        params_formatted.append(
+                            str(params[2]) if c_mode == ParamMode.IMMEDIATE
+                            else '[{}]'.format(params[2]) if c_mode == ParamMode.INDIRECT
+                            else '{{{}}}'.format(params[2])
+                        )
                 else:
                     params_formatted = []
                     num_params = 0
