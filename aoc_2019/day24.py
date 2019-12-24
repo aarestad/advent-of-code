@@ -28,40 +28,38 @@ def next_boards(boards):
                 # UP
                 if y == 0:
                     neighbors.append(outer_board[1][2])
-                elif y != 3 or x != 2:
-                    neighbors.append(current_board[y - 1][x])
-                else:
+                elif y == 3 and x == 2:
                     for inner_x in range(5):
                         neighbors.append(inner_board[4][inner_x])
+                else:
+                    neighbors.append(current_board[y - 1][x])
 
                 # DOWN
                 if y == 4:
                     neighbors.append(outer_board[3][2])
-                elif y != 1 or y != 2:
-                    neighbors.append(current_board[y + 1][x])
-                else:
+                elif y == 1 and x == 2:
                     for inner_x in range(5):
                         neighbors.append(inner_board[0][inner_x])
+                else:
+                    neighbors.append(current_board[y + 1][x])
 
                 # LEFT
                 if x == 0:
                     neighbors.append(outer_board[2][1])
-
-                elif y != 2 or x != 3:
-                    neighbors.append(current_board[y][x - 1])
-                else:
+                elif y == 2 and x == 3:
                     for inner_y in range(5):
                         neighbors.append(inner_board[inner_y][4])
+                else:
+                    neighbors.append(current_board[y][x - 1])
 
                 # RIGHT
                 if x == 4:
                     neighbors.append(outer_board[2][3])
-                elif y != 2 or x != 1:
-                    neighbors.append(current_board[y][x + 1])
+                elif y == 2 and x == 1:
+                    for inner_y in range(5):
+                        neighbors.append(inner_board[inner_y][0])
                 else:
-                    if x == 1:
-                        for inner_y in range(5):
-                            neighbors.append(inner_board[inner_y][0])
+                    neighbors.append(current_board[y][x + 1])
 
                 live_neighbors = sum(1 for n in neighbors if n == '#')
 
@@ -92,7 +90,9 @@ if __name__ == '__main__':
 
     total_bugs = 0
 
-    for b in boards:
+    for i, b in enumerate(boards):
+        print(f'board {i}')
+        print(b)
         board_in_line = ''.join(''.join(line) for line in b)
         total_bugs += sum(1 for c in board_in_line if c == '#')
 
