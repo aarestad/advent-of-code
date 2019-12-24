@@ -93,7 +93,7 @@ if __name__ == '__main__':
     total_bugs = 0
 
     for b in boards:
-        board_in_line = ''.join(''.join(l) for l in b)
+        board_in_line = ''.join(''.join(line) for line in b)
         total_bugs += sum(1 for c in board_in_line if c == '#')
 
     print(total_bugs)
