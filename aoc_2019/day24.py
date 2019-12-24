@@ -90,10 +90,7 @@ if __name__ == '__main__':
 
     total_bugs = 0
 
-    for i, b in enumerate(boards):
-        print(f'board {i}')
-        print(b)
-        board_in_line = ''.join(''.join(line) for line in b)
-        total_bugs += sum(1 for c in board_in_line if c == '#')
+    for board in boards:
+        total_bugs += sum(1 for line in board for c in line if c == '#')
 
     print(total_bugs)
