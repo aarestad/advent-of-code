@@ -15,14 +15,12 @@ if __name__ == '__main__':
             char_two = int(pw_match[2])
             password = pw_match[4]
 
+            # day 1:
             # char_count = sum(1 for c in password if c == char)
             #
             # if min_chars <= char_count <= max_chars:
             #     num_good_passwords += 1
             if (password[char_one-1] == char) ^ (password[char_two-1] == char):
-                print(f'good pw: {char_one+1} {char_two+1} {char} {password}')
                 num_good_passwords += 1
-            else:
-                print(f'bad pw: {char_one + 1} {char_two + 1} {char} {password}')
 
     print(num_good_passwords)
