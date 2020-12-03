@@ -1,37 +1,16 @@
-example = '''..##.......
-#...#...#..
-.#....#..#.
-..#.#...#.#
-.#...##..#.
-..#.##.....
-.#.#.#....#
-.#........#
-#.##...#...
-#...##....#
-.#..#...#.#'''
+def count_trees(rows, delta_x, delta_y):
+    row_length = len(rows[0])
 
-
-def count_trees(rows, x_diff, y_diff=1):
-    filtered_rows = rows[::y_diff]
-
-    row_length = len(filtered_rows[0])
-
-    trees = 0
-
-    for idx, row in enumerate(filtered_rows):
-        if row[((idx * x_diff) % row_length)] == '#':
-            trees += 1
-
-    return trees
+    return sum(1 for idx, row in enumerate(rows[::delta_y])
+               if row[((idx * delta_x) % row_length)] == '#')
 
 
 if __name__ == '__main__':
     with open('input/day3.txt') as input_rows:
         mountain_rows = [row.strip() for row in input_rows.readlines()]
-    # mountain_rows = example.split('\n')
 
-    print(count_trees(mountain_rows, 1) *
-          count_trees(mountain_rows, 3) *
-          count_trees(mountain_rows, 5) *
-          count_trees(mountain_rows, 7) *
+    print(count_trees(mountain_rows, 1, 1) *
+          count_trees(mountain_rows, 3, 1) *
+          count_trees(mountain_rows, 5, 1) *
+          count_trees(mountain_rows, 7, 1) *
           count_trees(mountain_rows, 1, 2))
