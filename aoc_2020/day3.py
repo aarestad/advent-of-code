@@ -26,7 +26,8 @@ def count_trees(rows, x_diff, y_diff=1):
 
 
 if __name__ == '__main__':
-    mountain_rows = [row.strip() for row in open('input/day3.txt').readlines()]
+    with open('input/day3.txt') as input_rows:
+        mountain_rows = [row.strip() for row in input_rows.readlines()]
     # mountain_rows = example.split('\n')
 
     print(count_trees(mountain_rows, 1) *
