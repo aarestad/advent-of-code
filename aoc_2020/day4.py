@@ -65,4 +65,4 @@ if __name__ == '__main__':
     # don't forget the last record
     records.append(current_record)
 
-    print(len(list(r for r in records if validate_record(r))))
+    print(sum(1 for r in records if validate_record(r)))
