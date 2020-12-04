@@ -18,7 +18,7 @@ valid_eye_colors = {
 
 def validate_height(hgt: str):
     try:
-        (amt, unit) = re.match(r'(\d+)(cm|in)', hgt).groups()
+        (amt, unit) = re.match(r'^(\d+)(cm|in)$', hgt).groups()
 
         if unit == 'cm':
             return 150 <= int(amt) <= 193
