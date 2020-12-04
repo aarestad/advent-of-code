@@ -30,7 +30,6 @@ def validate_height(hgt: str):
             return 150 <= int(amt) <= 193
         if unit == "in":
             return 59 <= int(amt) <= 76
-
     except (AttributeError, ValueError):
         pass
 
