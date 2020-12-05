@@ -1,10 +1,8 @@
 def count_trees(rows, delta_x, delta_y):
-    row_length = len(rows[0])
-
     return sum(
         1
         for idx, row in enumerate(rows[::delta_y])
-        if row[((idx * delta_x) % row_length)] == "#"
+        if row[((idx * delta_x) % len(row))] == "#"
     )
 
 
