@@ -30,16 +30,14 @@ if __name__ == "__main__":
     with open("input/day7.txt") as bag_rule_file:
         for rule in bag_rule_file:
             (bag_name, bag_contents) = rule.strip().split(" bags contain ")
-            elements = bag_contents.strip(".").split(", ")
 
             try:
-                bag_content_elements = [
-                    re.match(r"(\d+) ([\w\s]+) bag", c).groups() for c in elements
+                bag_rules[bag_name] = [
+                    re.match(r"(\d+) ([\w\s]+) bag", c).groups()
+                    for c in (bag_contents.strip(".").split(", "))
                 ]
             except AttributeError:  # "no other bags"
-                bag_content_elements = []
-
-            bag_rules[bag_name] = bag_content_elements
+                bag_rules[bag_name] = []
 
     print(format_bags("shiny gold"))
     print(sum(1 for bag in bag_rules.keys() if bag_can_contain_shiny_gold(bag)))
