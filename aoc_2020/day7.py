@@ -5,8 +5,7 @@ bag_rules = {}
 
 def bag_can_contain_shiny_gold(bag):
     return any(
-        c[1] == "shiny gold" or bag_can_contain_shiny_gold(c[1])
-        for c in (bag_rules[bag])
+        c[1] == "shiny gold" or bag_can_contain_shiny_gold(c[1]) for c in bag_rules[bag]
     )
 
 
@@ -24,7 +23,7 @@ def format_bags(bag, indent=0):
 
 
 def count_containing_bags(bag):
-    return sum(int(c[0]) * (1 + count_containing_bags(c[1])) for c in (bag_rules[bag]))
+    return sum(int(c[0]) * (1 + count_containing_bags(c[1])) for c in bag_rules[bag])
 
 
 if __name__ == "__main__":
