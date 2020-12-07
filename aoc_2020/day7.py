@@ -3,12 +3,6 @@ import re
 bag_rules = {}
 
 
-def bag_can_contain_shiny_gold(bag):
-    return any(
-        c[1] == "shiny gold" or bag_can_contain_shiny_gold(c[1]) for c in bag_rules[bag]
-    )
-
-
 def format_bags(bag, indent=0):
     contains = bag_rules[bag]
 
@@ -19,6 +13,12 @@ def format_bags(bag, indent=0):
             f'{"|" * indent}{c[0]} {c[1]}:\n' + format_bags(c[1], indent + 1)
             for c in contains
         )
+    )
+
+
+def bag_can_contain_shiny_gold(bag):
+    return any(
+        c[1] == "shiny gold" or bag_can_contain_shiny_gold(c[1]) for c in bag_rules[bag]
     )
 
 
