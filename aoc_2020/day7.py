@@ -34,7 +34,7 @@ if __name__ == "__main__":
             try:
                 bag_rules[bag_name] = [
                     re.match(r"(\d+) ([\w\s]+) bag", c).groups()
-                    for c in (bag_contents.strip(".").split(", "))
+                    for c in bag_contents.strip(".").split(", ")
                 ]
             except AttributeError:  # "no other bags"
                 bag_rules[bag_name] = []
