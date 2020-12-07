@@ -27,7 +27,7 @@ def count_containing_bags(bag):
     if len(contains) == 0:
         return 0
 
-    return sum(int(c[0]) * (1+count_containing_bags(c[1])) for c in contains)
+    return sum(int(c[0]) * (1 + count_containing_bags(c[1])) for c in contains)
 
 
 if __name__ == "__main__":
