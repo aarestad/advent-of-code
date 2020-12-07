@@ -4,10 +4,9 @@ bag_rules = {}
 
 
 def bag_can_contain_shiny_gold(bag):
-    contains = bag_rules[bag]
-
-    return len(contains) > 0 and any(
-        c[1] == "shiny gold" or bag_can_contain_shiny_gold(c[1]) for c in contains
+    return any(
+        c[1] == "shiny gold" or bag_can_contain_shiny_gold(c[1])
+        for c in (bag_rules[bag])
     )
 
 
