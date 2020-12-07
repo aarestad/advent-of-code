@@ -48,9 +48,6 @@ if __name__ == "__main__":
             except AttributeError:  # "no other bags"
                 bag_content_elements = []
 
-            if bag_name in bag_rules:
-                raise ValueError(f"duplicate rule for {bag_name}")
-
             bag_rules[bag_name] = bag_content_elements
 
     good_bags = 0
