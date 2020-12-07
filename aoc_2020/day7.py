@@ -4,22 +4,12 @@ bag_rules = {}
 
 
 def bag_can_contain_shiny_gold(bag):
-    try:
-        contains = bag_rules[bag]
-    except KeyError:
-        print(f'unknown bag: {bag}')
-        return False
+    contains = bag_rules[bag]
 
     if len(contains) == 0:
         return False
 
-    for c in contains:
-        if c[1] == 'shiny gold':
-            return True
-        if bag_can_contain_shiny_gold(c[1]):
-            return True
-
-    return False
+    return any(c[1] == 'shiny gold' or bag_can_contain_shiny_gold(c[1]) for c in contains)
 
 
 def format_bags(bag, indent=0):
