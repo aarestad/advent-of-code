@@ -18,7 +18,7 @@ def format_bags(bag, indent=0):
     if len(contains) == 0:
         return f'{" " * (indent + 1)}nothing\n'
 
-    return ''.join(f'{" " * (indent + 1)}{c[0]} {c[1]}:\n' + format_bags(c[1], indent+1) for c in contains)
+    return ''.join(f'{" " * indent}{c[0]} {c[1]}:\n' + format_bags(c[1], indent+1) for c in contains)
 
 
 def count_containing_bags(bag):
