@@ -6,10 +6,7 @@ bag_rules = {}
 def bag_can_contain_shiny_gold(bag):
     contains = bag_rules[bag]
 
-    if len(contains) == 0:
-        return False
-
-    return any(
+    return len(contains) > 0 and any(
         c[1] == "shiny gold" or bag_can_contain_shiny_gold(c[1]) for c in contains
     )
 
@@ -17,22 +14,18 @@ def bag_can_contain_shiny_gold(bag):
 def format_bags(bag, indent=0):
     contains = bag_rules[bag]
 
-    if len(contains) == 0:
-        return f'{"|" * (indent-1)} nothing\n'
-
-    return "".join(
-        f'{"|" * indent}{c[0]} {c[1]}:\n' + format_bags(c[1], indent + 1)
-        for c in contains
+    return (
+        f'{"|" * (indent-1)} nothing\n'
+        if len(contains) == 0
+        else "".join(
+            f'{"|" * indent}{c[0]} {c[1]}:\n' + format_bags(c[1], indent + 1)
+            for c in contains
+        )
     )
 
 
 def count_containing_bags(bag):
-    contains = bag_rules[bag]
-
-    if len(contains) == 0:
-        return 0
-
-    return sum(int(c[0]) * (1 + count_containing_bags(c[1])) for c in contains)
+    return sum(int(c[0]) * (1 + count_containing_bags(c[1])) for c in (bag_rules[bag]))
 
 
 if __name__ == "__main__":
@@ -50,12 +43,6 @@ if __name__ == "__main__":
 
             bag_rules[bag_name] = bag_content_elements
 
-    good_bags = 0
-
-    for bag in bag_rules.keys():
-        if bag_can_contain_shiny_gold(bag):
-            good_bags += 1
-
     print(format_bags("shiny gold"))
-    print(good_bags)
+    print(sum(1 for bag in bag_rules.keys() if bag_can_contain_shiny_gold(bag)))
     print(count_containing_bags("shiny gold"))
