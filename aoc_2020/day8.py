@@ -23,6 +23,7 @@ if __name__ == "__main__":
 
         # deep copy of program
         program_copy = [oper[:] for oper in program]
+
         program_copy[mutator_index][0] = (
             Oper.NOP if program_copy[mutator_index][0] == Oper.JMP else Oper.JMP
         )
