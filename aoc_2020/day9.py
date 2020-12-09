@@ -9,11 +9,9 @@ if __name__ == "__main__":
     for x in range(25, len(encrypted_numbers)):
         target_number = encrypted_numbers[x]
 
-        if not (
-            any(
-                sum(combo) == target_number
-                for combo in combinations(encrypted_numbers[x - 25 : x], 2)
-            )
+        if all(
+            sum(combo) != target_number
+            for combo in combinations(encrypted_numbers[x - 25 : x], 2)
         ):
             break
 
