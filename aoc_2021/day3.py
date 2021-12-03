@@ -38,36 +38,42 @@ for i in range(bits):
 
 print(int(gamma_rate, 2) * int(epsilon_rate, 2))
 
-o2_diags = diags[:]
+o2_prefix = ""
 
 for i in range(bits):
-    if len(o2_diags) == 1:
+    o2_diags = [diag for diag in diags if diag.startswith(o2_prefix)]
+    num_diags = len(o2_diags)
+
+    if num_diags == 1:
+        o2_prefix = o2_diags[0]
         break
 
-    digits = [diag[i] for diag in o2_diags]
-    num_ones = sum(1 for d in digits if d == "1")
+    num_ones = sum(1 for d in (diag[i] for diag in o2_diags) if d == "1")
 
-    if num_ones >= len(digits) / 2:
-        o2_diags = [d for d in o2_diags if d[i] == "1"]
+    if num_ones >= num_diags / 2:
+        o2_prefix += "1"
     else:
-        o2_diags = [d for d in o2_diags if d[i] == "0"]
+        o2_prefix += "0"
 
-o2_gen = int(o2_diags[0], 2)
+o2_gen = int(o2_prefix, 2)
 
-co2_diags = diags[:]
+co2_prefix = ""
 
 for i in range(bits):
-    if len(co2_diags) == 1:
+    co2_diags = [diag for diag in diags if diag.startswith(co2_prefix)]
+    num_diags = len(co2_diags)
+
+    if num_diags == 1:
+        co2_prefix = co2_diags[0]
         break
 
-    digits = [diag[i] for diag in co2_diags]
-    num_ones = sum(1 for d in digits if d == "1")
+    num_ones = sum(1 for d in (diag[i] for diag in co2_diags) if d == "1")
 
-    if num_ones < len(digits) / 2:
-        co2_diags = [d for d in co2_diags if d[i] == "1"]
+    if num_ones < num_diags / 2:
+        co2_prefix += "1"
     else:
-        co2_diags = [d for d in co2_diags if d[i] == "0"]
+        co2_prefix += "0"
 
-co2_scrub = int(co2_diags[0], 2)
+co2_scrub = int(co2_prefix, 2)
 
 print(o2_gen * co2_scrub)
