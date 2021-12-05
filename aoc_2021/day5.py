@@ -17,19 +17,6 @@ with open("input/day5.txt") as input:
     problem_input = [i.strip() for i in input.readlines()]
 
 
-def point_in_line(line: ((int, int), (int, int)), point: (int, int)) -> bool:
-    vertical = line[0][0] == line[1][0]
-
-    if vertical:
-        return point[0] == line[0][0] and (
-            line[0][1] <= point[1] <= line[1][1] or line[0][1] >= point[1] >= line[1][1]
-        )
-    else:
-        return point[1] == line[0][1] and (
-            line[0][0] <= point[0] <= line[1][0] or line[0][0] >= point[0] >= line[1][0]
-        )
-
-
 if __name__ == "__main__":
     cloud_lines = []
 
