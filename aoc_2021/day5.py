@@ -48,10 +48,7 @@ if __name__ == "__main__":
         ys.append(line[0][1])
         ys.append(line[1][1])
 
-    min_x = min(xes)
     max_x = max(xes)
-
-    min_y = min(ys)
     max_y = max(ys)
 
     field: list[list[int]] = []
