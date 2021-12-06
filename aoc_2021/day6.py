@@ -7,7 +7,6 @@ with open("input/day6.txt") as input:
 
 if __name__ == "__main__":
     fish_timers = [int(t) for t in problem_input[0].split(",")]
-    print(fish_timers)
 
     num_fish_by_timer = {}
 
@@ -34,10 +33,7 @@ if __name__ == "__main__":
                 else:
                     new_fish_timers[6] += num_fish
 
-                if 8 not in new_fish_timers:
-                    new_fish_timers[8] = num_fish
-                else:
-                    new_fish_timers[8] += num_fish
+                new_fish_timers[8] = num_fish
 
-        print(f"{sum(v for v in new_fish_timers.values())} fish after {d+1} days")
+        print(f"{sum(new_fish_timers.values())} fish after {d+1} days")
         num_fish_by_timer = new_fish_timers
