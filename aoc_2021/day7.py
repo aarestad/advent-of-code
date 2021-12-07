@@ -21,7 +21,7 @@ if __name__ == "__main__":
 
         for p in other_positions:
             diff = abs(p - position)
-            total_fuel += (diff * (diff + 1)) / 2
+            total_fuel += (diff * (diff + 1)) / 2  # for part 1, += diff
 
         if best_fuel is None or total_fuel < best_fuel:
             best_position = position
