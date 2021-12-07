@@ -15,11 +15,9 @@ if __name__ == "__main__":
     best_fuel: Optional[int] = None
 
     for position in range(positions[-1] + 1):
-        other_positions = positions[:]
-
         total_fuel = 0
 
-        for p in other_positions:
+        for p in positions:
             diff = abs(p - position)
             total_fuel += (diff * (diff + 1)) / 2  # for part 1, += diff
 
