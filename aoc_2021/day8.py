@@ -83,7 +83,7 @@ gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
         for digit in output.split():
             for d, p in enumerate(identified_patterns):
                 perms = list("".join(perm) for perm in itertools.permutations(p))
-                if digit in list(perms):
+                if digit in perms:
                     number += str(d)
 
         numbers.append(int(number))
