@@ -20,7 +20,7 @@ gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
     numbers = []
 
     for line in problem_input:
-        pattern_map = {num: "" for num in range(1, 10)}
+        identified_patterns = [""] * 10
         length_5_patterns = []
         length_6_patterns = []
 
@@ -30,52 +30,58 @@ gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
 
         for pattern in patterns.split():
             if len(pattern) == 2:
-                pattern_map[1] = pattern
+                identified_patterns[1] = pattern
             elif len(pattern) == 3:
-                pattern_map[7] = pattern
+                identified_patterns[7] = pattern
             elif len(pattern) == 4:
-                pattern_map[4] = pattern
+                identified_patterns[4] = pattern
             elif len(pattern) == 5:
                 length_5_patterns.append(pattern)
             elif len(pattern) == 6:
                 length_6_patterns.append(pattern)
             elif len(pattern) == 7:
-                pattern_map[8] = pattern
+                identified_patterns[8] = pattern
             else:
                 raise ValueError(f"unexpected length for {pattern}")
 
-        one_letters = [c for c in pattern_map[1]]
+        one_letters = [c for c in identified_patterns[1]]
 
         for pattern in length_5_patterns:  # 2, 3, 5
             if all(letter in pattern for letter in one_letters):
-                pattern_map[3] = pattern
+                identified_patterns[3] = pattern
 
-        top_left_element = [c for c in pattern_map[4] if c not in pattern_map[3]][0]
+        top_left_element = [
+            c for c in identified_patterns[4] if c not in identified_patterns[3]
+        ][0]
 
         for pattern in length_5_patterns:  # 2, 5
             if top_left_element in pattern:
-                pattern_map[5] = pattern
-            elif pattern != pattern_map[3]:
-                pattern_map[2] = pattern
+                identified_patterns[5] = pattern
+            elif pattern != identified_patterns[3]:
+                identified_patterns[2] = pattern
 
         middle_element = [
-            c for c in pattern_map[4] if c in pattern_map[2] and c in pattern_map[5]
+            c
+            for c in identified_patterns[4]
+            if c in identified_patterns[2] and c in identified_patterns[5]
         ][0]
 
-        top_right_element = [c for c in pattern_map[1] if c not in pattern_map[5]][0]
+        top_right_element = [
+            c for c in identified_patterns[1] if c not in identified_patterns[5]
+        ][0]
 
         for pattern in length_6_patterns:  # 0, 6, 9
             if middle_element not in pattern:
-                pattern_map[0] = pattern
+                identified_patterns[0] = pattern
             elif top_right_element in pattern:
-                pattern_map[9] = pattern
+                identified_patterns[9] = pattern
             else:
-                pattern_map[6] = pattern
+                identified_patterns[6] = pattern
 
         number = ""
 
         for digit in output.split():
-            for d, p in pattern_map.items():
+            for d, p in enumerate(identified_patterns):
                 perms = list("".join(perm) for perm in itertools.permutations(p))
                 if digit in list(perms):
                     number += str(d)
