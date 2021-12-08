@@ -46,8 +46,6 @@ gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
 
         one_letters = [c for c in pattern_map[1]]
 
-        top_element = [c for c in pattern_map[7] if c not in pattern_map[1]][0]
-
         for pattern in length_5_patterns:  # 2, 3, 5
             if all(letter in pattern for letter in one_letters):
                 pattern_map[3] = pattern
@@ -61,9 +59,7 @@ gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
                 pattern_map[2] = pattern
 
         middle_element = [
-            c
-            for c in pattern_map[4]
-            if c in pattern_map[2] and c in pattern_map[4] and c in pattern_map[5]
+            c for c in pattern_map[4] if c in pattern_map[2] and c in pattern_map[5]
         ][0]
 
         top_right_element = [c for c in pattern_map[1] if c not in pattern_map[5]][0]
