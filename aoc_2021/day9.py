@@ -1,3 +1,115 @@
+def find_up(
+    map: list[list[int]], row: int, col: int, seen_points: set[int]
+) -> list[int, int]:
+    low_points = []
+
+    if (
+        row < 0
+        or row >= len(map)
+        or col < 0
+        or col >= len(map[0])
+        or (row, col) in seen_points
+        or map[row][col] == 9
+    ):
+        return low_points
+
+    low_points.append((row, col))
+    seen_points.add(row, col)
+
+    if col > 0:
+        low_points.extend(find_left(map, row, col - 1, seen_points))
+    if row > 0:
+        low_points.extend(find_up(map, row - 1, col, seen_points))
+    if col < len(map[row]) - 1:
+        low_points.extend(find_right(map, row, col + -1, seen_points))
+
+    return low_points
+
+
+def find_down(
+    map: list[list[int]], row: int, col: int, seen_points: set[int]
+) -> list[int, int]:
+    low_points = []
+
+    if (
+        row < 0
+        or row >= len(map)
+        or col < 0
+        or col >= len(map[0])
+        or (row, col) in seen_points
+        or map[row][col] == 9
+    ):
+        return low_points
+
+    low_points.append((row, col))
+    seen_points.add((row, col))
+
+    if col > 0:
+        low_points.extend(find_left(map, row, col - 1, seen_points))
+    if col < len(map[row]) - 1:
+        low_points.extend(find_right(map, row, col + 1, seen_points))
+    if row < len(map) - 1:
+        low_points.extend(find_down(map, row + 1, col, seen_points))
+
+    return low_points
+
+
+def find_left(
+    map: list[list[int]], row: int, col: int, seen_points: set[int]
+) -> list[int, int]:
+    low_points = []
+
+    if (
+        row < 0
+        or row >= len(map)
+        or col < 0
+        or col >= len(map[0])
+        or (row, col) in seen_points
+        or map[row][col] == 9
+    ):
+        return low_points
+
+    low_points.append((row, col))
+    seen_points.add(row, col)
+
+    if row < len(map) - 1:
+        low_points.extend(find_down(map, row + 1, col, seen_points))
+    if col > 0:
+        low_points.extend(find_left(map, row, col - 1, seen_points))
+    if row > 0:
+        low_points.extend(find_up(map, row - 1, col, seen_points))
+
+    return low_points
+
+
+def find_right(
+    map: list[list[int]], row: int, col: int, seen_points: set[int]
+) -> list[int, int]:
+    low_points = []
+
+    if (
+        row < 0
+        or row >= len(map)
+        or col < 0
+        or col >= len(map[0])
+        or (row, col) in seen_points
+        or map[row][col] == 9
+    ):
+        return low_points
+
+    low_points.append((row, col))
+    seen_points.add((row, col))
+
+    if row > 0:
+        low_points.extend(find_up(map, row - 1, col, seen_points))
+    if col < len(map[row]) - 1:
+        low_points.extend(find_right(map, row, col + 1, seen_points))
+    if row < len(map) - 1:
+        low_points.extend(find_down(map, row + 1, col, seen_points))
+
+    return low_points
+
+
 if __name__ == "__main__":
     example = """2199943210
 3987894921
@@ -35,16 +147,29 @@ if __name__ == "__main__":
 
     print(risk_level)
 
-    seen_points = {}
-    largest_basins = []
+    seen_points = set()
+    basin_sizes = []
 
-    for row_num, line in enumerate(map):
-        for col_num, height in enumerate(line):
+    for row, line in enumerate(map):
+        for col, height in enumerate(line):
+            if (row, col) in seen_points:
+                continue
+
+            seen_points.add((row, col))
+
             if height == 9:
                 continue
 
-            # get lower points up, down, left, right
-            # recurse on up to up/left/right
-            # recurse on down to down/left/right
-            # recurse on left to left/up/down
-            # recurse on right to right/up/down
+            points_in_basin = {row, col}
+            points_in_basin.update(find_up(map, row, col, seen_points))
+            points_in_basin.update(find_down(map, row, col, seen_points))
+            points_in_basin.update(find_left(map, row, col, seen_points))
+            points_in_basin.update(find_right(map, row, col, seen_points))
+
+            basin_sizes.append(len(points_in_basin))
+            seen_points.update(points_in_basin)
+
+    basin_sizes.sort(reverse=True)
+
+    print(basin_sizes)
+    print(basin_sizes[0] * basin_sizes[1] * basin_sizes[2])
