@@ -14,14 +14,14 @@ def find_up(
         return low_points
 
     low_points.append((row, col))
-    seen_points.add(row, col)
+    seen_points.add((row, col))
 
     if col > 0:
         low_points.extend(find_left(map, row, col - 1, seen_points))
     if row > 0:
         low_points.extend(find_up(map, row - 1, col, seen_points))
     if col < len(map[row]) - 1:
-        low_points.extend(find_right(map, row, col + -1, seen_points))
+        low_points.extend(find_right(map, row, col + 1, seen_points))
 
     return low_points
 
@@ -70,7 +70,7 @@ def find_left(
         return low_points
 
     low_points.append((row, col))
-    seen_points.add(row, col)
+    seen_points.add((row, col))
 
     if row < len(map) - 1:
         low_points.extend(find_down(map, row + 1, col, seen_points))
@@ -124,7 +124,7 @@ if __name__ == "__main__":
 
     map = []
 
-    for line in example_input:
+    for line in problem_input:
         map.append([int(d) for d in line])
 
     risk_level = 0
@@ -160,12 +160,13 @@ if __name__ == "__main__":
             if height == 9:
                 continue
 
-            points_in_basin = {row, col}
-            points_in_basin.update(find_up(map, row, col, seen_points))
-            points_in_basin.update(find_down(map, row, col, seen_points))
-            points_in_basin.update(find_left(map, row, col, seen_points))
-            points_in_basin.update(find_right(map, row, col, seen_points))
+            points_in_basin = {(row, col)}
+            points_in_basin.update(find_up(map, row - 1, col, seen_points))
+            points_in_basin.update(find_down(map, row + 1, col, seen_points))
+            points_in_basin.update(find_left(map, row, col - 1, seen_points))
+            points_in_basin.update(find_right(map, row, col + 1, seen_points))
 
+            print(points_in_basin)
             basin_sizes.append(len(points_in_basin))
             seen_points.update(points_in_basin)
 
