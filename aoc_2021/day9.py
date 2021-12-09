@@ -1,4 +1,4 @@
-def find_up(
+def find_up_and_down_and_left_and_right(
     map: list[list[int]], row: int, col: int, seen_points: set[int]
 ) -> list[int, int]:
     low_points = []
@@ -17,95 +17,21 @@ def find_up(
     seen_points.add((row, col))
 
     if col > 0:
-        low_points.extend(find_left(map, row, col - 1, seen_points))
-    if row > 0:
-        low_points.extend(find_up(map, row - 1, col, seen_points))
+        low_points.extend(
+            find_up_and_down_and_left_and_right(map, row, col - 1, seen_points)
+        )
     if col < len(map[row]) - 1:
-        low_points.extend(find_right(map, row, col + 1, seen_points))
-
-    return low_points
-
-
-def find_down(
-    map: list[list[int]], row: int, col: int, seen_points: set[int]
-) -> list[int, int]:
-    low_points = []
-
-    if (
-        row < 0
-        or row >= len(map)
-        or col < 0
-        or col >= len(map[0])
-        or (row, col) in seen_points
-        or map[row][col] == 9
-    ):
-        return low_points
-
-    low_points.append((row, col))
-    seen_points.add((row, col))
-
-    if col > 0:
-        low_points.extend(find_left(map, row, col - 1, seen_points))
-    if col < len(map[row]) - 1:
-        low_points.extend(find_right(map, row, col + 1, seen_points))
-    if row < len(map) - 1:
-        low_points.extend(find_down(map, row + 1, col, seen_points))
-
-    return low_points
-
-
-def find_left(
-    map: list[list[int]], row: int, col: int, seen_points: set[int]
-) -> list[int, int]:
-    low_points = []
-
-    if (
-        row < 0
-        or row >= len(map)
-        or col < 0
-        or col >= len(map[0])
-        or (row, col) in seen_points
-        or map[row][col] == 9
-    ):
-        return low_points
-
-    low_points.append((row, col))
-    seen_points.add((row, col))
-
-    if row < len(map) - 1:
-        low_points.extend(find_down(map, row + 1, col, seen_points))
-    if col > 0:
-        low_points.extend(find_left(map, row, col - 1, seen_points))
+        low_points.extend(
+            find_up_and_down_and_left_and_right(map, row, col + 1, seen_points)
+        )
     if row > 0:
-        low_points.extend(find_up(map, row - 1, col, seen_points))
-
-    return low_points
-
-
-def find_right(
-    map: list[list[int]], row: int, col: int, seen_points: set[int]
-) -> list[int, int]:
-    low_points = []
-
-    if (
-        row < 0
-        or row >= len(map)
-        or col < 0
-        or col >= len(map[0])
-        or (row, col) in seen_points
-        or map[row][col] == 9
-    ):
-        return low_points
-
-    low_points.append((row, col))
-    seen_points.add((row, col))
-
-    if row > 0:
-        low_points.extend(find_up(map, row - 1, col, seen_points))
-    if col < len(map[row]) - 1:
-        low_points.extend(find_right(map, row, col + 1, seen_points))
+        low_points.extend(
+            find_up_and_down_and_left_and_right(map, row - 1, col, seen_points)
+        )
     if row < len(map) - 1:
-        low_points.extend(find_down(map, row + 1, col, seen_points))
+        low_points.extend(
+            find_up_and_down_and_left_and_right(map, row + 1, col, seen_points)
+        )
 
     return low_points
 
@@ -161,10 +87,19 @@ if __name__ == "__main__":
                 continue
 
             points_in_basin = {(row, col)}
-            points_in_basin.update(find_up(map, row - 1, col, seen_points))
-            points_in_basin.update(find_down(map, row + 1, col, seen_points))
-            points_in_basin.update(find_left(map, row, col - 1, seen_points))
-            points_in_basin.update(find_right(map, row, col + 1, seen_points))
+
+            points_in_basin.update(
+                find_up_and_down_and_left_and_right(map, row - 1, col, seen_points)
+            )
+            points_in_basin.update(
+                find_up_and_down_and_left_and_right(map, row + 1, col, seen_points)
+            )
+            points_in_basin.update(
+                find_up_and_down_and_left_and_right(map, row, col - 1, seen_points)
+            )
+            points_in_basin.update(
+                find_up_and_down_and_left_and_right(map, row, col + 1, seen_points)
+            )
 
             print(points_in_basin)
             basin_sizes.append(len(points_in_basin))
