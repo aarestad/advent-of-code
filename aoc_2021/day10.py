@@ -12,12 +12,8 @@ def corrupting_char(line: str) -> str:
             if (
                 last_char == "("
                 and c != ")"
-                or last_char == "["
-                and c != "]"
-                or last_char == "{"
-                and c != "}"
-                or last_char == "<"
-                and c != ">"
+                or last_char in ["[", "{", "<"]
+                and ord(last_char) + 2 != ord(c)
             ):
                 return c
 
