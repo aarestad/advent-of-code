@@ -59,14 +59,14 @@ if __name__ == "__main__":
 
     corrupting_chars = [corrupting_char(l) for l in problem_input]
 
-    score = {
+    part_1_score = {
         ")": 3,
         "]": 57,
         "}": 1197,
         ">": 25137,
     }
 
-    print(sum(score[c] for c in corrupting_chars if c in score))
+    print(sum(part_1_score[c] for c in corrupting_chars if c in part_1_score))
 
     incomplete_lines = [l for l in problem_input if corrupting_char(l) == ""]
 
