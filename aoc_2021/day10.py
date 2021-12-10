@@ -1,22 +1,22 @@
 import math
 
 
+brackets = {
+    "(": ")",
+    "[": "]",
+    "{": "}",
+    "<": ">",
+}
+
+
 def corrupting_char(line: str) -> str:
     open_chunks = []
 
     for c in line:
-        if c in ["(", "[", "{", "<"]:
+        if c in brackets:
             open_chunks.append(c)
-        else:
-            last_char = open_chunks.pop()
-
-            if (
-                last_char == "("
-                and c != ")"
-                or last_char in ["[", "{", "<"]
-                and ord(last_char) + 2 != ord(c)
-            ):
-                return c
+        elif brackets[open_chunks.pop()] != c:
+            return c
 
     return ""
 
@@ -25,20 +25,12 @@ def completing_chars(line: str) -> str:
     open_chunks = []
 
     for c in line:
-        if c in ["(", "[", "{", "<"]:
+        if c in brackets:
             open_chunks.append(c)
         else:
             open_chunks.pop()
 
-    completion = ""
-
-    for c in reversed(open_chunks):
-        if c == "(":
-            completion += ")"
-        else:
-            completion += chr(ord(c) + 2)
-
-    return completion
+    return "".join(brackets[c] for c in reversed(open_chunks))
 
 
 if __name__ == "__main__":
