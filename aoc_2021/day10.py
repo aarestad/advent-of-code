@@ -9,6 +9,7 @@ def corrupting_char(line: str) -> str:
             open_chunks.append(c)
         else:
             last_char = open_chunks.pop()
+
             if (
                 last_char == "("
                 and c != ")"
