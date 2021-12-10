@@ -2,7 +2,7 @@ import math
 
 
 def find_basin(
-    map: list[list[int]], row: int, col: int, seen_points: set[int]
+    map: list[list[int]], row: int, col: int, seen_points: set[(int, int)]
 ) -> list[int, int]:
     low_points = []
 
