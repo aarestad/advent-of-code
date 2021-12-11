@@ -50,9 +50,9 @@ gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
             if all(letter in pattern for letter in one_letters):
                 identified_patterns[3] = pattern
 
-        top_left_element = [
+        top_left_element = next(
             c for c in identified_patterns[4] if c not in identified_patterns[3]
-        ][0]
+        )
 
         for pattern in length_5_patterns:  # 2, 5
             if top_left_element in pattern:
@@ -60,15 +60,15 @@ gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
             elif pattern != identified_patterns[3]:
                 identified_patterns[2] = pattern
 
-        middle_element = [
+        middle_element = next(
             c
             for c in identified_patterns[4]
             if c in identified_patterns[2] and c in identified_patterns[5]
-        ][0]
+        )
 
-        top_right_element = [
+        top_right_element = next(
             c for c in identified_patterns[1] if c not in identified_patterns[5]
-        ][0]
+        )
 
         for pattern in length_6_patterns:  # 0, 6, 9
             if middle_element not in pattern:
@@ -87,6 +87,5 @@ gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
                     number += str(d)
 
         numbers.append(int(number))
-        print(number)
 
     print(sum(numbers))
