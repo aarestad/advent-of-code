@@ -30,14 +30,15 @@ if __name__ == "__main__":
                 octopi[row][col] += 1
 
         while True:
-            flashed_this_turn = set()
+            num_flashed_this_loop = 0
 
             for row, line in enumerate(octopi):
                 for col, octopus in enumerate(line):
                     if octopus > 9:
                         octopi[row][col] = 0
-                        flashed_this_turn.add((row, col))
+                        num_flashed_this_loop += 1
 
+                        # yuck!
                         if row > 0:
                             if col > 0 and octopi[row - 1][col - 1] > 0:
                                 octopi[row - 1][col - 1] += 1
@@ -61,10 +62,10 @@ if __name__ == "__main__":
                             if col <= len(line) - 2 and octopi[row + 1][col + 1] > 0:
                                 octopi[row + 1][col + 1] += 1
 
-            if len(flashed_this_turn) == 0:
+            if num_flashed_this_loop == 0:
                 break
 
-            num_flashes += len(flashed_this_turn)
+            num_flashes += num_flashed_this_loop
 
         if step == 100:
             print(f"{num_flashes} flashes after 100 steps")
