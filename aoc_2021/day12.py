@@ -1,4 +1,5 @@
 import re
+import itertools
 
 
 def find_paths(connections: list[(str, str)], path: list[str]) -> list[list[str]]:
@@ -13,8 +14,22 @@ def find_paths(connections: list[(str, str)], path: list[str]) -> list[list[str]
             continue
         elif next_node == "end":
             new_paths.append(path + ["end"])
-        elif not next_node.islower() or next_node not in path:
-            new_paths.extend(find_paths(connections, path + [next_node]))
+        else:
+            new_path = path + [next_node]
+            sorted_path = sorted(new_path)
+
+            small_cave_visited_twice = False
+
+            for node, occurrences in itertools.groupby(sorted_path):
+                o_list = list(occurrences)
+
+                if node.islower():
+                    if len(o_list) == 2 and not small_cave_visited_twice:
+                        small_cave_visited_twice = True
+                    elif len(o_list) > 1:
+                        break
+            else:
+                new_paths.extend(find_paths(connections, new_path))
 
     return new_paths
 
