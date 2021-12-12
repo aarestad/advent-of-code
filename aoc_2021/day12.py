@@ -2,7 +2,29 @@ import re
 import itertools
 
 
-def find_paths(connections: list[(str, str)], path: list[str]) -> list[list[str]]:
+def find_paths_part_1(
+    connections: list[(str, str)], path: list[str]
+) -> list[list[str]]:
+    new_paths = []
+
+    possible_connections = [c for c in connections if path[-1] in c]
+
+    for connection in possible_connections:
+        next_node = connection[0] if connection[1] == path[-1] else connection[1]
+
+        if next_node == "start":
+            continue
+        elif next_node == "end":
+            new_paths.append(path + ["end"])
+        elif not next_node.islower() or next_node not in path:
+            new_paths.extend(find_paths_part_1(connections, path + [next_node]))
+
+    return new_paths
+
+
+def find_paths_part_2(
+    connections: list[(str, str)], path: list[str]
+) -> list[list[str]]:
     new_paths = []
 
     possible_connections = [c for c in connections if path[-1] in c]
@@ -29,7 +51,7 @@ def find_paths(connections: list[(str, str)], path: list[str]) -> list[list[str]
                     elif len(o_list) > 1:
                         break
             else:
-                new_paths.extend(find_paths(connections, new_path))
+                new_paths.extend(find_paths_part_2(connections, new_path))
 
     return new_paths
 
@@ -54,9 +76,5 @@ b-end"""
         connection = re.match(r"(\w+)-(\w+)", line)
         connections.append((connection[1], connection[2]))
 
-    paths = find_paths(connections, ["start"])
-
-    for p in paths:
-        print(p)
-
-    print(len(paths))
+    print(len(find_paths_part_1(connections, ["start"])))
+    print(len(find_paths_part_2(connections, ["start"])))
