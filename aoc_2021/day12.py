@@ -9,7 +9,9 @@ def find_paths(connections: list[(str, str)], path: list[str]) -> list[list[str]
     for connection in possible_connections:
         next_node = connection[0] if connection[1] == path[-1] else connection[1]
 
-        if next_node == "end" and path + ["end"] not in new_paths:
+        if next_node == "start":
+            continue
+        elif next_node == "end":
             new_paths.append(path + ["end"])
         elif not next_node.islower() or next_node not in path:
             new_paths.extend(find_paths(connections, path + [next_node]))
