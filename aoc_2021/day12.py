@@ -43,12 +43,12 @@ def find_paths_part_2(
             small_cave_visited_twice = False
 
             for node, occurrences in itertools.groupby(sorted_path):
-                o_list = list(occurrences)
-
                 if node.islower():
-                    if len(o_list) == 2 and not small_cave_visited_twice:
+                    o_count = sum(1 for _ in occurrences)
+
+                    if o_count == 2 and not small_cave_visited_twice:
                         small_cave_visited_twice = True
-                    elif len(o_list) > 1:
+                    elif o_count > 1:
                         break
             else:
                 new_paths.extend(find_paths_part_2(connections, new_path))
