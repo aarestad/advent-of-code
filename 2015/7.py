@@ -1,50 +1,89 @@
-# This year, Santa brought little Bobby Tables a set of wires and bitwise logic gates! Unfortunately, little Bobby is a
-# little under the recommended age range, and he needs help assembling the circuit.
-#
-# Each wire has an identifier (some lowercase letters) and can carry a 16-bit signal (a number from 0 to 65535). A
-# signal is provided to each wire by a gate, another wire, or some specific value. Each wire can only get a signal
-# from one source, but can provide its signal to multiple destinations. A gate provides no signal until all of its
-# inputs have a signal.
-#
-# The included instructions booklet describes how to connect the parts together: x AND y -> z means to connect wires x
-# and y to an AND gate, and then connect its output to wire z.
-#
-# For example:
-#
-#     123 -> x means that the signal 123 is provided to wire x.
-class PassthroughGate:
-    pass
+import re
 
+if __name__ == "__main__":
+    example = """123 -> x
+456 -> y
+x AND y -> d
+x OR y -> e
+x LSHIFT 2 -> f
+y RSHIFT 2 -> g
+NOT x -> h
+NOT y -> i
+"""
 
-#     x AND y -> z means that the bitwise AND of wire x and wire y is provided to wire z.
-#     p LSHIFT 2 -> q means that the value from wire p is left-shifted by 2 and then provided to wire q.
-#     NOT e -> f means that the bitwise complement of the value from wire e is provided to wire f.
-#
-# Other possible gates include OR (bitwise OR) and RSHIFT (right-shift). If, for some reason, you'd like to emulate the
-# circuit instead, almost all programming languages (for example, C, JavaScript, or Python) provide operators for
-# these gates.
-#
-# For example, here is a simple circuit:
-#
-# 123 -> x
-# 456 -> y
-# x AND y -> d
-# x OR y -> e
-# x LSHIFT 2 -> f
-# y RSHIFT 2 -> g
-# NOT x -> h
-# NOT y -> i
-#
-# After it is run, these are the signals on the wires:
-#
-# d: 72
-# e: 507
-# f: 492
-# g: 114
-# h: 65412
-# i: 65079
-# x: 123
-# y: 456
-#
-# In little Bobby's kit's instructions booklet (provided as your puzzle input), what signal is ultimately provided
-# to wire a?
+    example_input = example.split("\n")
+
+    with open("input_7.txt") as input:
+        problem_input = [i.strip() for i in input.readlines()]
+
+    wires = problem_input[:]
+    values = {'b': 3176}
+
+    while len(wires):
+        skipped_wires = []
+
+        for wire in wires:
+            if not wire:
+                continue
+
+            if m := re.match(r"(\w+) -> (\w+)", wire):
+                arg1 = m[1]
+                dest = m[2]
+                operation = "PASS"
+            elif m := re.match(r"NOT (\w+) -> (\w+)", wire):
+                arg1 = m[1]
+                dest = m[2]
+                operation = "NOT"
+            elif m := re.match(r"(\w+) (\w+) (\w+) -> (\w+)", wire):
+                arg1 = m[1]
+                arg2 = m[3]
+                dest = m[4]
+                operation = m[2]
+            else:
+                raise ValueError(f"unrecognized connection: {wire}")
+
+            if dest == 'b':  # b is hard-wired for part 2
+                continue
+
+            match operation:
+                case "PASS":
+                    if arg1.isdigit():
+                        values[dest] = int(arg1)
+                    elif arg1 in values:
+                        values[dest] = values[arg1]
+                    else:
+                        skipped_wires.append(wire)
+                case "AND":
+                    if arg1.isdigit() and arg2 in values:
+                        values[dest] = int(arg1) & values[arg2]
+                    elif arg1 in values and arg2 in values:
+                        values[dest] = values[arg1] & values[arg2]
+                    else:
+                        skipped_wires.append(wire)
+                case "OR":
+                    if arg1 in values and arg2 in values:
+                        values[dest] = values[arg1] | values[arg2]
+                    else:
+                        skipped_wires.append(wire)
+                case "NOT":
+                    if arg1 in values:
+                        values[dest] = 65535 & ~values[arg1]
+                    else:
+                        skipped_wires.append(wire)
+                case "LSHIFT":
+                    if arg1 in values:
+                        values[dest] = 65535 & (values[arg1] << int(arg2))
+                    else:
+                        skipped_wires.append(wire)
+                case "RSHIFT":
+                    if arg1 in values:
+                        values[dest] = 65535 & (values[arg1] >> int(arg2))
+                    else:
+                        skipped_wires.append(wire)
+                case _:
+                    raise ValueError(f"unrecognized operation: {operation}")
+
+        wires = skipped_wires
+
+    print(values)
+    print(values.get("a"))
