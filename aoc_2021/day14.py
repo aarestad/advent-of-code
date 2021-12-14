@@ -1,4 +1,5 @@
 import re
+import collections
 
 if __name__ == "__main__":
     example = """NNCB
@@ -33,32 +34,39 @@ CN -> C"""
         rule_match = re.match(r"(\w\w) -> (\w)", insertion_rule)
         insertion_rules[rule_match[1]] = rule_match[2]
 
-    current_polymer = template
+    current_polymer: dict[str, int] = collections.defaultdict(int)
 
-    for step in range(10):
-        new_str_pairs = [
-            current_polymer[i : i + 2] for i in range(len(current_polymer) - 1)
-        ]
+    for i in range(len(template) - 1):
+        current_polymer[template[i : i + 2]] += 1
 
-        for i in range(len(current_polymer) - 1):
-            atom_pair = current_polymer[i : i + 2]
+    for step in range(40):
+        new_polymer: dict[str, int] = collections.defaultdict(int)
 
+        # for i in range(len(current_polymer) - 1):
+        for atom_pair, count in current_polymer.items():
             if atom_pair in insertion_rules:
-                new_str_pairs[i] = (
-                    atom_pair[0] + insertion_rules[atom_pair] + atom_pair[1]
-                )
+                new_atom = insertion_rules[atom_pair]
+                new_polymer[atom_pair[0] + new_atom] += count
+                new_polymer[new_atom + atom_pair[1]] += count
+            else:
+                new_polymer[atom_pair] += count
 
-        current_polymer = "".join(
-            [new_str_pairs[0]] + [pair[1:] for pair in new_str_pairs[1:]]
-        )
+        current_polymer = new_polymer
 
-    char_counts: dict[str, int] = {}
+    char_counts: dict[str, int] = collections.defaultdict(int)
 
-    for c in current_polymer:
-        if c not in char_counts:
-            char_counts[c] = 1
-        else:
-            char_counts[c] += 1
+    for atom_pair, count in current_polymer.items():
+        char_counts[atom_pair[0]] += count
+        char_counts[atom_pair[1]] += count
+
+    # Correct for double-counting
+    # First, ensure the first and last character are "correctly" double-counted
+    char_counts[template[0]] += 1
+    char_counts[template[-1]] += 1
+
+    # Then halve the counts for each char
+    for atom in char_counts:
+        char_counts[atom] //= 2
 
     char_count_items: list[(str, int)] = list(char_counts.items())
     char_count_items.sort(key=lambda i: i[1])
