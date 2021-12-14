@@ -42,7 +42,6 @@ CN -> C"""
     for step in range(40):
         new_polymer: dict[str, int] = collections.defaultdict(int)
 
-        # for i in range(len(current_polymer) - 1):
         for atom_pair, count in current_polymer.items():
             if atom_pair in insertion_rules:
                 new_atom = insertion_rules[atom_pair]
