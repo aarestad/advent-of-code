@@ -36,7 +36,6 @@ CN -> C"""
     current_polymer = template
 
     for step in range(10):
-        print(f"step {step}")
         new_str_pairs = [
             current_polymer[i : i + 2] for i in range(len(current_polymer) - 1)
         ]
@@ -61,6 +60,6 @@ CN -> C"""
         else:
             char_counts[c] += 1
 
-    char_count_items = list(char_counts.items())
+    char_count_items: list[(str, int)] = list(char_counts.items())
     char_count_items.sort(key=lambda i: i[1])
     print(char_count_items[-1][1] - char_count_items[0][1])
