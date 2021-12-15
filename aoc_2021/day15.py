@@ -1,5 +1,5 @@
 from scipy.sparse import lil_matrix
-from scipy.sparse.csgraph import dijkstra
+from scipy.sparse.csgraph import shortest_path
 import numpy as np
 
 
@@ -73,5 +73,5 @@ if __name__ == "__main__":
                     map[row, col + 1]
                 )
 
-    result = dijkstra(map_matrix, directed=True, indices=0, min_only=True)
+    result = shortest_path(map_matrix, directed=True, indices=0)
     print(result[-1])
