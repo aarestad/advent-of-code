@@ -74,4 +74,4 @@ if __name__ == "__main__":
                 )
 
     result = dijkstra(map_matrix, directed=True, indices=0, min_only=True)
-    print(result)
+    print(result[-1])
