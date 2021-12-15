@@ -1,5 +1,6 @@
-from scipy.sparse import dok_matrix
+from scipy.sparse import lil_matrix
 from scipy.sparse.csgraph import dijkstra
+import numpy as np
 
 if __name__ == "__main__":
     example = """1163751742
@@ -18,13 +19,13 @@ if __name__ == "__main__":
     with open("input/day15.txt") as input:
         problem_input = [i.strip() for i in input.readlines()]
 
-    map = example_input
+    map = problem_input
 
     num_rows = len(map)
     num_cols = len(map[0])
     array_size = num_rows * num_cols
 
-    map_matrix = dok_matrix((array_size, array_size), "B")
+    map_matrix = lil_matrix((array_size, array_size), dtype=np.int8)
 
     for r in range(num_rows):
         for c in range(num_cols):
@@ -49,5 +50,5 @@ if __name__ == "__main__":
                     map[row][col + 1]
                 )
 
-    result = dijkstra(map_matrix, directed=True, min_only=True)
-    print(result)
+    result = dijkstra(map_matrix, directed=True, indices=0, min_only=True)
+    print(result[-1])
