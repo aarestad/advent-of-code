@@ -42,8 +42,10 @@ if __name__ == "__main__":
 
     map = ExtendedMap(problem_input)
 
-    num_rows = len(problem_input) * 5
-    num_cols = len(problem_input[0]) * 5
+    tile_array_size = 5
+
+    num_rows = len(problem_input) * tile_array_size
+    num_cols = len(problem_input[0]) * tile_array_size
     array_size = num_rows * num_cols
 
     map_matrix = lil_matrix((array_size, array_size), dtype=np.int8)
