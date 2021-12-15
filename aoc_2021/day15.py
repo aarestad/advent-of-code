@@ -2,6 +2,27 @@ from scipy.sparse import lil_matrix
 from scipy.sparse.csgraph import dijkstra
 import numpy as np
 
+
+class ExtendedMap:
+    def __init__(self, map_corner):
+        self.map_corner = map_corner
+
+    def __getitem__(self, coord):
+        corner_row = coord[0] % len(self.map_corner)
+        corner_col = coord[1] % len(self.map_corner[0])
+        tile_row = coord[0] // len(self.map_corner)
+        tile_col = coord[1] // len(self.map_corner[0])
+
+        corner_val = int(self.map_corner[corner_row][corner_col])
+        corner_val += tile_row
+        corner_val += tile_col
+
+        if corner_val > 9:
+            corner_val -= 9
+
+        return corner_val
+
+
 if __name__ == "__main__":
     example = """1163751742
 1381373672
@@ -19,10 +40,10 @@ if __name__ == "__main__":
     with open("input/day15.txt") as input:
         problem_input = [i.strip() for i in input.readlines()]
 
-    map = problem_input
+    map = ExtendedMap(problem_input)
 
-    num_rows = len(map)
-    num_cols = len(map[0])
+    num_rows = len(problem_input) * 5
+    num_cols = len(problem_input[0]) * 5
     array_size = num_rows * num_cols
 
     map_matrix = lil_matrix((array_size, array_size), dtype=np.int8)
@@ -35,20 +56,20 @@ if __name__ == "__main__":
 
             if row > 0:
                 map_matrix[map_matrix_row_idx, (row - 1) * num_rows + col] = int(
-                    map[row - 1][col]
+                    map[row - 1, col]
                 )
             if row < num_rows - 1:
                 map_matrix[map_matrix_row_idx, (row + 1) * num_rows + col] = int(
-                    map[row + 1][col]
+                    map[row + 1, col]
                 )
             if col > 0:
                 map_matrix[map_matrix_row_idx, row * num_rows + col - 1] = int(
-                    map[row][col - 1]
+                    map[row, col - 1]
                 )
             if col < num_cols - 1:
                 map_matrix[map_matrix_row_idx, row * num_rows + col + 1] = int(
-                    map[row][col + 1]
+                    map[row, col + 1]
                 )
 
     result = dijkstra(map_matrix, directed=True, indices=0, min_only=True)
-    print(result[-1])
+    print(result)
