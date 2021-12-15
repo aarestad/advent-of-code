@@ -49,5 +49,5 @@ if __name__ == "__main__":
                     map[row][col + 1]
                 )
 
-    result = dijkstra(map_matrix, directed=False, min_only=True)
+    result = dijkstra(map_matrix, directed=True, min_only=True)
     print(result)
