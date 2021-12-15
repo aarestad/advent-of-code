@@ -1,3 +1,6 @@
+from scipy.sparse import dok_matrix
+from scipy.sparse.csgraph import dijkstra
+
 if __name__ == "__main__":
     example = """1163751742
 1381373672
@@ -16,33 +19,35 @@ if __name__ == "__main__":
         problem_input = [i.strip() for i in input.readlines()]
 
     map = example_input
-    best_score = 9999999999
-    best_path = []
 
-    for run in range(2 ** ((len(map) - 1) * 2)):
-        if run % 1000 == 0:
-            print(run)
-        current_loc = [0, 0]
-        current_path = []
+    num_rows = len(map)
+    num_cols = len(map[0])
+    array_size = num_rows * num_cols
 
-        for bit in range((len(map) - 1) * 2):
-            if run & (1 << bit):
-                if current_loc[0] < len(map) - 1:
-                    current_loc[0] += 1
-                else:
-                    current_loc[1] += 1
-            else:
-                if current_loc[1] < len(map) - 1:
-                    current_loc[1] += 1
-                else:
-                    current_loc[0] += 1
+    map_matrix = dok_matrix((array_size, array_size), "B")
 
-            current_path.append(int(example_input[current_loc[1]][current_loc[0]]))
+    for r in range(num_rows):
+        for c in range(num_cols):
+            row = int(r)
+            col = int(c)
+            map_matrix_row_idx = row * num_rows + col
 
-        score = sum(current_path)
-        if score < best_score:
-            best_score = score
-            best_path = current_path
+            if row > 0:
+                map_matrix[map_matrix_row_idx, (row - 1) * num_rows + col] = int(
+                    map[row - 1][col]
+                )
+            if row < num_rows - 1:
+                map_matrix[map_matrix_row_idx, (row + 1) * num_rows + col] = int(
+                    map[row + 1][col]
+                )
+            if col > 0:
+                map_matrix[map_matrix_row_idx, row * num_rows + col - 1] = int(
+                    map[row][col - 1]
+                )
+            if col < num_cols - 1:
+                map_matrix[map_matrix_row_idx, row * num_rows + col + 1] = int(
+                    map[row][col + 1]
+                )
 
-    print(best_path)
-    print(best_score)
+    result = dijkstra(map_matrix, directed=False, min_only=True)
+    print(result)
