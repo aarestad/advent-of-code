@@ -7,13 +7,13 @@ def binary_list_to_int(binary_list: list[int]) -> int:
     return result
 
 
-def parse_packet(binary_list: list[int]) -> int:
-    version_number_sum = 0
+def parse_message(binary_list: list[int]) -> (int, list[int]):
+    """Parse a packet from the front of a binary_list. Return the result of this packet and the rest of the unparsed list"""
+    value = 0
 
     packet_version = binary_list_to_int(binary_list[0:3])
     packet_type = binary_list_to_int(binary_list[3:6])
-
-    version_number_sum += packet_version
+    value += packet_version
 
     match packet_type:
         case 4:
@@ -28,26 +28,27 @@ def parse_packet(binary_list: list[int]) -> int:
                 current_start += 5
 
             print(f"literal value: {binary_list_to_int(literal_value_binary_list)}")
-
-            rest_of_packet = binary_list[current_start:]
-
-            if len(rest_of_packet) >= 8 or not all(d == 0 for d in rest_of_packet):
-                version_number_sum += parse_packet(rest_of_packet)
+            rest_of_message = binary_list[current_start:]
         case _:
             length_type = binary_list[6]
 
             if length_type:
                 num_subpackets = binary_list_to_int(binary_list[7:18])
-                version_number_sum += parse_packet(binary_list[18:])
+                rest_of_message = binary_list[18:]
             else:
                 total_length = binary_list_to_int(binary_list[7:22])
-                version_number_sum += parse_packet(binary_list[22:])
+                rest_of_message = binary_list[22:]
 
-    return version_number_sum
+    if len(rest_of_message) >= 8 or not all(d == 0 for d in rest_of_message):
+        while not all(d == 0 for d in rest_of_message):
+            packet_value, rest_of_message = parse_message(rest_of_message)
+            value += packet_value
+
+    return value, rest_of_message
 
 
 if __name__ == "__main__":
-    example = """C200B40A82"""
+    example = """A0016C880162017C3686B18A3D4780"""
 
     example_input = example.split("\n")
 
@@ -62,4 +63,4 @@ if __name__ == "__main__":
         for n in range(3, -1, -1):
             decoded_bits.append(1 if (1 << n) & d else 0)
 
-    print(parse_packet(decoded_bits))
+    print(parse_message(decoded_bits)[0])
