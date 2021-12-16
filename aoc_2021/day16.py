@@ -31,7 +31,7 @@ def parse_packet(binary_list: list[int]) -> int:
 
             rest_of_packet = binary_list[current_start:]
 
-            if not all(d == 0 for d in rest_of_packet):
+            if len(rest_of_packet) >= 8 or not all(d == 0 for d in rest_of_packet):
                 version_number_sum += parse_packet(rest_of_packet)
         case _:
             length_type = binary_list[6]
