@@ -48,14 +48,14 @@ def parse_message(binary_list: list[int]) -> (int, list[int]):
 
 
 if __name__ == "__main__":
-    example = """A0016C880162017C3686B18A3D4780"""
+    example = """9C0141080250320F1802104A08"""
 
     example_input = example.split("\n")
 
     with open("input/day16.txt") as input:
         problem_input = [i.strip() for i in input.readlines()]
 
-    decoded_input = [int(c, 16) for c in problem_input[0]]
+    decoded_input = [int(c, 16) for c in example_input[0]]
 
     decoded_bits = []
 
