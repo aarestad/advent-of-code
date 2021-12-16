@@ -27,9 +27,7 @@ def parse_packet(binary_list: list[int]) -> int:
     match packet_type := binary_list_to_int(binary_list[3:6]):
         case 0:
             print("sum packet")
-            value = sum(
-                parse_packet(packet) for packet in get_subpackets(binary_list)
-            )
+            value = sum(parse_packet(packet) for packet in get_subpackets(binary_list))
         case 1:
             print("product packet")
             value = math.prod(
@@ -37,14 +35,10 @@ def parse_packet(binary_list: list[int]) -> int:
             )
         case 2:
             print("min packet")
-            value = min(
-                parse_packet(packet) for packet in get_subpackets(binary_list)
-            )
+            value = min(parse_packet(packet) for packet in get_subpackets(binary_list))
         case 3:
             print("max packet")
-            value = max(
-                parse_packet(packet) for packet in get_subpackets(binary_list)
-            )
+            value = max(parse_packet(packet) for packet in get_subpackets(binary_list))
         case 4:
             print("literal packet")
             literal_value_binary_list = []
