@@ -11,7 +11,7 @@ def binary_list_to_int(binary_list: list[int]) -> int:
 
 
 def get_subpackets(binary_list: list[int]) -> list[list[int]]:
-    length_type = binary_list[0]
+    length_type = binary_list[6]
 
     if length_type:
         num_subpackets = binary_list_to_int(binary_list[1:12])
@@ -28,22 +28,22 @@ def parse_packet(binary_list: list[int]) -> int:
         case 0:
             print("sum packet")
             value = sum(
-                parse_packet(packet) for packet in get_subpackets(binary_list[6:])
+                parse_packet(packet) for packet in get_subpackets(binary_list)
             )
         case 1:
             print("product packet")
             value = math.prod(
-                parse_packet(packet) for packet in get_subpackets(binary_list[6:])
+                parse_packet(packet) for packet in get_subpackets(binary_list)
             )
         case 2:
             print("min packet")
             value = min(
-                parse_packet(packet) for packet in get_subpackets(binary_list[6:])
+                parse_packet(packet) for packet in get_subpackets(binary_list)
             )
         case 3:
             print("max packet")
             value = max(
-                parse_packet(packet) for packet in get_subpackets(binary_list[6:])
+                parse_packet(packet) for packet in get_subpackets(binary_list)
             )
         case 4:
             print("literal packet")
@@ -97,7 +97,7 @@ def parse_packet(binary_list: list[int]) -> int:
 
 
 if __name__ == "__main__":
-    example = """D8005AC2A8F0"""
+    example = """C200B40A82"""
 
     example_input = example.split("\n")
 
