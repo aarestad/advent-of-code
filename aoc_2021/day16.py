@@ -15,7 +15,6 @@ def parse_packet(binary_list: list[int]) -> (int, int, list[int]):
     packet_type = binary_list_to_int(binary_list[3:6])
 
     if packet_type == 4:
-        print("literal packet")
         literal_value_binary_list = []
         current_start = 6
         not_last_group = 1
@@ -27,7 +26,6 @@ def parse_packet(binary_list: list[int]) -> (int, int, list[int]):
             current_start += 5
 
         literal_value = binary_list_to_int(literal_value_binary_list)
-        print(f"literal value: {literal_value}")
         packet_value = literal_value
         rest_of_packet = binary_list[current_start:]
     else:
@@ -55,41 +53,22 @@ def parse_packet(binary_list: list[int]) -> (int, int, list[int]):
 
         match packet_type:
             case 0:
-                print("sum packet")
                 packet_value = sum(subpacket_values)
             case 1:
-                print("product packet")
                 packet_value = math.prod(subpacket_values)
             case 2:
-                print("min packet")
                 packet_value = min(subpacket_values)
             case 3:
-                print("max packet")
                 packet_value = max(subpacket_values)
             case 5:
-                print("gt packet")
-
-                if len(subpacket_values) != 2:
-                    raise ValueError("gt packet has != 2 subpackets")
-
                 left_value = subpacket_values[0]
                 right_value = subpacket_values[1]
                 packet_value = 1 if left_value > right_value else 0
             case 6:
-                print("lt packet")
-
-                if len(subpacket_values) != 2:
-                    raise ValueError("lt packet has != 2 subpackets")
-
                 left_value = subpacket_values[0]
                 right_value = subpacket_values[1]
                 packet_value = 1 if left_value < right_value else 0
             case 7:
-                print("eq packet")
-
-                if len(subpacket_values) != 2:
-                    raise ValueError("eq packet has != 2 subpackets")
-
                 left_value = subpacket_values[0]
                 right_value = subpacket_values[1]
                 packet_value = 1 if left_value == right_value else 0
