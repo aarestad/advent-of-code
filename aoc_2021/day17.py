@@ -18,22 +18,19 @@ if __name__ == "__main__":
 
     num_hit_velocities = 0
 
-    # min = target_y_range[0], max = ??? (73 found by experiment)
-    for dy in range(-74, 74):
-        # min = smallest n s.t. nth triangle number >= target_x_range[0], max = target_x_range[1]
-        for dx in range(24, 312):
+    # max = ??? (73 found by experiment)
+    for dy in range(target_y_range[0], 74):
+        # min = smallest n s.t. nth triangle number >= target_x_range[0]
+        for dx in range(24, target_x_range[1] + 1):
             current_pos = (0, 0)
             velocity = (dx, dy)
-            highest_for_shot = 0
+            highest_for_shot = 0 if dy <= 0 else (dy * (dy + 1)) // 2
 
             while True:
                 current_pos = (
                     current_pos[0] + velocity[0],
                     current_pos[1] + velocity[1],
                 )
-
-                if highest_for_shot < current_pos[1]:
-                    highest_for_shot = current_pos[1]
 
                 if (
                     target_x_range[0] <= current_pos[0] <= target_x_range[1]
