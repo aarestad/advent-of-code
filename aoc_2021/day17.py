@@ -9,7 +9,7 @@ if __name__ == "__main__":
         problem_input = [i.strip() for i in input.readlines()]
 
     parsed_input = re.match(
-        r"target area: x=(\d+)\.\.(\d+), y=(-?\d+)..(-?\d+)", problem_input[0]
+        r"target area: x=(\d+)\.\.(\d+), y=(-?\d+)\.\.(-?\d+)", problem_input[0]
     )
     target_x_range = (int(parsed_input[1]), int(parsed_input[2]))
     target_y_range = (int(parsed_input[3]), int(parsed_input[4]))
