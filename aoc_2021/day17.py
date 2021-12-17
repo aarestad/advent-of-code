@@ -24,7 +24,6 @@ if __name__ == "__main__":
         for dx in range(24, target_x_range[1] + 1):
             current_pos = (0, 0)
             velocity = (dx, dy)
-            highest_for_shot = 0 if dy <= 0 else (dy * (dy + 1)) // 2
 
             while True:
                 current_pos = (
@@ -37,6 +36,7 @@ if __name__ == "__main__":
                     and target_y_range[0] <= current_pos[1] <= target_y_range[1]
                 ):
                     num_hit_velocities += 1
+                    highest_for_shot = 0 if dy <= 0 else (dy * (dy + 1)) // 2
 
                     if best_y < highest_for_shot:
                         best_y = highest_for_shot
