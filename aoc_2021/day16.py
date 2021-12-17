@@ -25,8 +25,7 @@ def parse_packet(binary_list: list[int]) -> (int, int, list[int]):
             literal_value_binary_list.extend(chunk[1:])
             current_start += 5
 
-        literal_value = binary_list_to_int(literal_value_binary_list)
-        packet_value = literal_value
+        packet_value = binary_list_to_int(literal_value_binary_list)
         rest_of_packet = binary_list[current_start:]
     else:
         subpacket_values = []
@@ -61,17 +60,11 @@ def parse_packet(binary_list: list[int]) -> (int, int, list[int]):
             case 3:
                 packet_value = max(subpacket_values)
             case 5:
-                left_value = subpacket_values[0]
-                right_value = subpacket_values[1]
-                packet_value = 1 if left_value > right_value else 0
+                packet_value = 1 if subpacket_values[0] > subpacket_values[1] else 0
             case 6:
-                left_value = subpacket_values[0]
-                right_value = subpacket_values[1]
-                packet_value = 1 if left_value < right_value else 0
+                packet_value = 1 if subpacket_values[0] < subpacket_values[1] else 0
             case 7:
-                left_value = subpacket_values[0]
-                right_value = subpacket_values[1]
-                packet_value = 1 if left_value == right_value else 0
+                packet_value = 1 if subpacket_values[0] == subpacket_values[1] else 0
             case _:
                 raise ValueError(f"bad packet type: {packet_type}")
 
