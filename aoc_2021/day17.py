@@ -18,10 +18,17 @@ if __name__ == "__main__":
 
     num_hit_velocities = 0
 
-    # max = ??? (73 found by experiment)
+    for x in range(100):
+        if (x * (x + 1)) / 2 >= target_x_range[0]:
+            min_x = x
+            break
+    else:
+        raise ValueError("min_x is >= 100?")
+
+    # TODO max = ??? (73 found by experiment)
     for dy in range(target_y_range[0], 74):
-        # min = smallest n s.t. nth triangle number >= target_x_range[0]
-        for dx in range(24, target_x_range[1] + 1):
+        # TODO this range can be tightened based on dy
+        for dx in range(min_x, target_x_range[1] + 1):
             current_pos = (0, 0)
             velocity = (dx, dy)
 
