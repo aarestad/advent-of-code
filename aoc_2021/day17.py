@@ -50,7 +50,10 @@ if __name__ == "__main__":
 
                     break
 
-                if target_y_range[0] > current_pos[1]:
+                if (
+                    target_x_range[1] < current_pos[0]
+                    or target_y_range[0] > current_pos[1]
+                ):
                     break
 
                 # else still on its way; adjust velocity
