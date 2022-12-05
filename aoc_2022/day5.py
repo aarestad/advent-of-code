@@ -45,9 +45,7 @@ move 1 from 1 to 2"""
 
     for line in instructions:
         instruction_match = instruction_matcher.search(line)
-        if not instruction_match:
-            print(f"{line} didn't match?")
-            continue
+
         (num_to_move, target_stack, dest_stack) = (
             int(g) for g in instruction_match.groups()
         )
