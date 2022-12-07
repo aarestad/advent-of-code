@@ -64,6 +64,20 @@ def calculate_dir_size_under_100k(
     return total_under_100k
 
 
+def get_best_dir_to_delete(
+    unused_space: int, current_dir: Directory = root, best_so_far: int = 99999999999
+):
+    current_dir_size = current_dir.dir_size()
+
+    if unused_space + current_dir_size > 30_000_000 and current_dir_size < best_so_far:
+        best_so_far = current_dir_size
+
+    for subdir in current_dir.subdirs.values():
+        best_so_far = get_best_dir_to_delete(unused_space, subdir, best_so_far)
+
+    return best_so_far
+
+
 if __name__ == "__main__":
     example = """$ cd /
 $ ls
@@ -117,11 +131,11 @@ $ ls
             (size_or_type, name) = line.split()
 
             if size_or_type == "dir":
-                # print(f"adding directory {name} to {current_dir.name}")
                 current_dir.subdirs[name] = Directory(name)
             else:
-                # print( f"adding file {name} of size {size_or_type} to {current_dir.name}")
                 current_dir.files[name] = File(name, int(size_or_type))
 
-    print(root)
-    print(calculate_dir_size_under_100k())
+    print(f"part 1: total of <= 100k dirs = {calculate_dir_size_under_100k()}")
+    print(
+        f"part 2: size of best dir to delete = {get_best_dir_to_delete(70_000_000 - root.dir_size())}"
+    )
