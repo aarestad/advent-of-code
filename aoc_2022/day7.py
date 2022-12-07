@@ -69,7 +69,7 @@ def get_best_dir_to_delete(
 ):
     current_dir_size = current_dir.dir_size()
 
-    if unused_space + current_dir_size > 30_000_000 and current_dir_size < best_so_far:
+    if unused_space + current_dir_size >= 30_000_000 and current_dir_size < best_so_far:
         best_so_far = current_dir_size
 
     for subdir in current_dir.subdirs.values():
