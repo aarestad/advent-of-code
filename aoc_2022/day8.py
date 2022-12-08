@@ -27,6 +27,7 @@ if __name__ == "__main__":
             tree_col = tree_cols[col]
             tree = tree_map[row][col]
 
+            # Part 1
             visible_from_left = all(t < tree for t in tree_row[0:col])
             visible_from_right = all(t < tree for t in tree_row[col + 1 :])
             visible_from_top = all(t < tree for t in tree_col[0:row])
@@ -42,6 +43,7 @@ if __name__ == "__main__":
             ):
                 visible_trees += 1
 
+            # Part 2
             left_score = 0
 
             for t in tree_row[col - 1 :: -1]:
@@ -75,5 +77,5 @@ if __name__ == "__main__":
             if scenic_score > best_scenic_score:
                 best_scenic_score = scenic_score
 
-    print(f"visible trees: {visible_trees}")
-    print(f"best scenic score: {best_scenic_score}")
+    print(f"part 1: visible trees: {visible_trees}")
+    print(f"part 2: best scenic score: {best_scenic_score}")
