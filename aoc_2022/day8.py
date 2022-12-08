@@ -61,7 +61,6 @@ if __name__ == "__main__":
 
             for t in tree_row[col + 1 :]:
                 right_score += 1
-
                 if t >= tree:
                     break
 
@@ -69,7 +68,6 @@ if __name__ == "__main__":
 
             for t in tree_col[row - 1 :: -1]:
                 up_score += 1
-
                 if t >= tree:
                     break
 
@@ -77,7 +75,6 @@ if __name__ == "__main__":
 
             for t in tree_col[row + 1 :]:
                 down_score += 1
-
                 if t >= tree:
                     break
 
