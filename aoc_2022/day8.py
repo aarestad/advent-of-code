@@ -11,9 +11,11 @@ if __name__ == "__main__":
         problem_input = [i.strip() for i in input.readlines()]
 
     tree_map = [[int(t) for t in line] for line in problem_input]
-
     num_rows = len(tree_map)
     num_cols = len(tree_map[0])
+
+    # precompute the columns
+    tree_cols = [[tree_map[r][c] for r in range(num_rows)] for c in range(num_cols)]
 
     visible_trees = 2 * num_rows + 2 * num_cols - 4  # de-double-count the corners
 
@@ -47,7 +49,7 @@ if __name__ == "__main__":
         tree_row = tree_map[row]
 
         for col in range(num_cols):
-            tree_col = [tree_map[r][col] for r in range(num_rows)]
+            tree_col = tree_cols[col]
             tree = tree_map[row][col]
 
             left_score = 0
