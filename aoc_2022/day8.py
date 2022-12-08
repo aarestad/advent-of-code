@@ -23,7 +23,7 @@ if __name__ == "__main__":
         tree_row = tree_map[row]
 
         for col in range(1, num_cols - 1):
-            tree_col = [tree_map[r][col] for r in range(num_rows)]
+            tree_col = tree_cols[col]
             tree = tree_map[row][col]
 
             visible_from_left = all(t < tree for t in tree_row[0:col])
@@ -45,10 +45,10 @@ if __name__ == "__main__":
 
     best_scenic_score = 0
 
-    for row in range(num_rows):
+    for row in range(1, num_rows - 1):
         tree_row = tree_map[row]
 
-        for col in range(num_cols):
+        for col in range(1, num_cols - 1):
             tree_col = tree_cols[col]
             tree = tree_map[row][col]
 
