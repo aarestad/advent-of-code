@@ -18,8 +18,9 @@ if __name__ == "__main__":
     visible_trees = 2 * num_rows + 2 * num_cols - 4  # de-double-count the corners
 
     for row in range(1, num_rows - 1):
+        tree_row = tree_map[row]
+
         for col in range(1, num_cols - 1):
-            tree_row = tree_map[row]
             tree_col = [tree_map[r][col] for r in range(num_rows)]
             tree = tree_map[row][col]
 
@@ -28,16 +29,61 @@ if __name__ == "__main__":
             visible_from_top = all(t < tree for t in tree_col[0:row])
             visible_from_bottom = all(t < tree for t in tree_col[row + 1 :])
 
-            tree_visible = any(
+            if any(
                 (
                     visible_from_left,
                     visible_from_right,
                     visible_from_top,
                     visible_from_bottom,
                 )
-            )
-
-            if tree_visible:
+            ):
                 visible_trees += 1
 
     print(f"visible trees: {visible_trees}")
+
+    best_scenic_score = 0
+
+    for row in range(num_rows):
+        tree_row = tree_map[row]
+
+        for col in range(num_cols):
+            tree_col = [tree_map[r][col] for r in range(num_rows)]
+            tree = tree_map[row][col]
+
+            left_score = 0
+
+            for t in tree_row[col - 1 :: -1]:
+                left_score += 1
+                if t >= tree:
+                    break
+
+            right_score = 0
+
+            for t in tree_row[col + 1 :]:
+                right_score += 1
+
+                if t >= tree:
+                    break
+
+            up_score = 0
+
+            for t in tree_col[row - 1 :: -1]:
+                up_score += 1
+
+                if t >= tree:
+                    break
+
+            down_score = 0
+
+            for t in tree_col[row + 1 :]:
+                down_score += 1
+
+                if t >= tree:
+                    break
+
+            scenic_score = left_score * right_score * up_score * down_score
+
+            if scenic_score > best_scenic_score:
+                best_scenic_score = scenic_score
+
+    print(f"best scenic score: {best_scenic_score}")
