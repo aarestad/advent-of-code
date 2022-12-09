@@ -23,7 +23,6 @@ R 2"""
         distance = int(distance)
 
         while distance > 0:
-            print(f"moving {dir}")
             distance -= 1
 
             if dir == "U":
@@ -38,10 +37,10 @@ R 2"""
             delta_r = current_head[0] - current_tail[0]
             delta_c = current_head[1] - current_tail[1]
 
-            primary_move = (delta_r == 0 and delta_c > 1) or (
-                delta_r > 1 and delta_c == 0
+            primary_move = (delta_r == 0 and abs(delta_c) > 1) or (
+                abs(delta_r) > 1 and delta_c == 0
             )
-            secondary_move = abs(delta_r) > 1 or abs(delta_c) > 1
+            secondary_move = not primary_move and (abs(delta_r) > 1 or abs(delta_c) > 1)
 
             if primary_move:
                 if dir == "U":
@@ -73,8 +72,6 @@ R 2"""
                         current_tail[0] + (1 if delta_r > 0 else -1),
                         current_tail[1] - 1,
                     )
-
-            print(f"head={current_head}, tail={current_tail}")
 
             tail_locations.add(current_tail)
     print(len(tail_locations))
