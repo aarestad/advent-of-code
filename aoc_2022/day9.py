@@ -1,3 +1,5 @@
+import math
+
 if __name__ == "__main__":
     example = """R 4
 U 4
@@ -52,17 +54,13 @@ U 20"""
                 delta_r = prev_knot[0] - current_knot[0]
                 delta_c = prev_knot[1] - current_knot[1]
 
-                if delta_r < -1 or (delta_r == -1 and abs(delta_c) > 1):
-                    r_move = -1
-                elif delta_r > 1 or (delta_r == 1 and abs(delta_c) > 1):
-                    r_move = 1
+                if abs(delta_r) > 1 or (abs(delta_r) == 1 and abs(delta_c) > 1):
+                    r_move = math.copysign(1, delta_r)
                 else:
                     r_move = 0
 
-                if delta_c < -1 or (delta_c == -1 and abs(delta_r) > 1):
-                    c_move = -1
-                elif delta_c > 1 or (delta_c == 1 and abs(delta_r) > 1):
-                    c_move = 1
+                if abs(delta_c) > 1 or (abs(delta_c) == 1 and abs(delta_r) > 1):
+                    c_move = math.copysign(1, delta_c)
                 else:
                     c_move = 0
 
