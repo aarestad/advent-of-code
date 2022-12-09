@@ -23,7 +23,7 @@ R 2"""
         distance = int(distance)
 
         while distance > 0:
-            # print(f"moving {dir}")
+            print(f"moving {dir}")
             distance -= 1
 
             if dir == "U":
@@ -74,7 +74,7 @@ R 2"""
                         current_tail[1] - 1,
                     )
 
-            # print(f"head={current_head}, tail={current_tail}")
+            print(f"head={current_head}, tail={current_tail}")
 
             tail_locations.add(current_tail)
     print(len(tail_locations))
