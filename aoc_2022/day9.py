@@ -25,6 +25,7 @@ U 20"""
 
     tail_locations = set()
     tail_locations.add((0, 0))
+    # part 1: knots = [(0, 0)] * 2
     knots = [(0, 0)] * 10
 
     for line in problem_input:
@@ -44,44 +45,28 @@ U 20"""
             elif dir == "L":
                 knots[0] = (current_head[0], current_head[1] - 1)
 
-            # print(f"head moved from {current_head} to {knots[0]}")
-
             for i in range(1, len(knots)):
-                debug = False
-
                 current_knot = knots[i]
                 prev_knot = knots[i - 1]
-                if debug:
-                    print(f"{i}={current_knot} {i-1}={prev_knot}")
 
                 delta_r = prev_knot[0] - current_knot[0]
                 delta_c = prev_knot[1] - current_knot[1]
 
-                secondary_move = abs(delta_r) > 1 or abs(delta_c) > 1
-
-                if debug:
-                    print(f"delta_r={delta_r} delta_c={delta_c}")
-
-                if delta_r < -1 or (delta_r == -1 and secondary_move):
+                if delta_r < -1 or (delta_r == -1 and abs(delta_c) > 1):
                     r_move = -1
-                elif delta_r > 1 or (delta_r == 1 and secondary_move):
+                elif delta_r > 1 or (delta_r == 1 and abs(delta_c) > 1):
                     r_move = 1
                 else:
                     r_move = 0
 
-                if delta_c < -1 or (delta_c == -1 and secondary_move):
+                if delta_c < -1 or (delta_c == -1 and abs(delta_r) > 1):
                     c_move = -1
-                elif delta_c > 1 or (delta_c == 1 and secondary_move):
+                elif delta_c > 1 or (delta_c == 1 and abs(delta_r) > 1):
                     c_move = 1
                 else:
                     c_move = 0
 
                 knots[i] = (current_knot[0] + r_move, current_knot[1] + c_move)
-                if debug:
-                    if knots[i] == current_knot:
-                        print(f"no move for {i}")
-                    else:
-                        print(f"{i}: {current_knot} -> {knots[i]}")
 
             tail_locations.add(knots[-1])
 
