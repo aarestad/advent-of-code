@@ -47,50 +47,32 @@ U 20"""
             elif dir == "L":
                 knots[0] = (current_head[0], current_head[1] - 1)
 
+            print(f"head moved from {current_head} to {knots[0]}")
+
             for i in range(1, len(knots)):
                 current_knot = knots[i]
                 prev_knot = knots[i - 1]
+                print(f"{i}={current_knot} {i-1}={prev_knot}")
 
                 delta_r = prev_knot[0] - current_knot[0]
                 delta_c = prev_knot[1] - current_knot[1]
+                print(f"delta_r={delta_r} delta_c={delta_c}")
 
-                primary_move = (delta_r == 0 and abs(delta_c) > 1) or (
-                    abs(delta_r) > 1 and delta_c == 0
-                )
-                secondary_move = not primary_move and (
-                    abs(delta_r) > 1 or abs(delta_c) > 1
-                )
+                if abs(delta_r) > 1:
+                    r_move = -1 if delta_r < 0 else 1
+                else:
+                    r_move = 0
 
-                if primary_move:
-                    if dir == "U":
-                        knots[i] = (current_knot[0] + 1, current_knot[1])
-                    elif dir == "D":
-                        knots[i] = (current_knot[0] - 1, current_knot[1])
-                    elif dir == "R":
-                        knots[i] = (current_knot[0], current_knot[1] + 1)
-                    elif dir == "L":
-                        knots[i] = (current_knot[0], current_knot[1] - 1)
-                elif secondary_move:
-                    if dir == "U":
-                        knots[i] = (
-                            current_knot[0] + 1,
-                            current_knot[1] + (1 if delta_c > 0 else -1),
-                        )
-                    elif dir == "D":
-                        knots[i] = (
-                            current_knot[0] - 1,
-                            current_knot[1] + (1 if delta_c > 0 else -1),
-                        )
-                    elif dir == "R":
-                        knots[i] = (
-                            current_knot[0] + (1 if delta_r > 0 else -1),
-                            current_knot[1] + 1,
-                        )
-                    elif dir == "L":
-                        knots[i] = (
-                            current_knot[0] + (1 if delta_r > 0 else -1),
-                            current_knot[1] - 1,
-                        )
+                if abs(delta_c) > 1:
+                    c_move = -1 if delta_c < 0 else 1
+                else:
+                    c_move = 0
+
+                knots[i] = (current_knot[0] + r_move, current_knot[1] + c_move)
+                if knots[i] == current_knot:
+                    print(f"no move for {i}")
+                else:
+                    print(f"{i}: {current_knot} -> {knots[i]}")
 
             tail_locations.add(knots[-1])
 
