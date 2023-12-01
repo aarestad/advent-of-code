@@ -19,12 +19,10 @@ def parse_input(lines):
     calibration_values = []
 
     for line in lines:
-        print(line + ":")
         first_digit = None
         most_recent_digit = None
 
-        i = 0
-        while i < len(line):
+        for i in range(len(line)):
             num = None
 
             for w in words_to_numbers:
@@ -35,8 +33,6 @@ def parse_input(lines):
                 if line[i].isdigit():
                     num = line[i]
 
-            i += 1
-
             if num is None:
                 continue
 
@@ -44,11 +40,8 @@ def parse_input(lines):
                 first_digit = num
 
             most_recent_digit = num
-            print(f"i={i-1}, num={num}", end=None)
 
         val = int(first_digit + most_recent_digit)
-        print(val)
-        print()
         calibration_values.append(val)
 
     return calibration_values
