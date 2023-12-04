@@ -44,9 +44,13 @@ def part1(cards):
 
 
 def part2(cards):
+    total_cards = 0
+
     for c in cards:
         for prev_card in cards[: c.id - 1]:
             if prev_card.num_winners + prev_card.id >= c.id:
                 c.num_copies += prev_card.num_copies
 
-    return sum(c.num_copies for c in cards)
+        total_cards += c.num_copies
+
+    return total_cards
