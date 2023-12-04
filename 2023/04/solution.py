@@ -44,9 +44,6 @@ def part1(cards):
 
 
 def part2(cards):
-    won_card_ids = []
-    cards = list(cards)
-
     for c in cards:
         for prev_card in cards[: c.id - 1]:
             if prev_card.num_winners + prev_card.id >= c.id:
