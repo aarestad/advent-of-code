@@ -46,11 +46,13 @@ def parse_input(lines):
 
 def part1(cards):
     """Compute part 1 solution"""
+
     return sum(c.point_value() for c in cards)
 
 
 def part2(cards):
     """Compute part 1 solution"""
+
     total_cards = 0
 
     for c in cards:
