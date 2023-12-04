@@ -3,20 +3,24 @@
 ## day 04
 
 from dataclasses import dataclass
+from functools import cached_property
+from typing import Optional
 import re
 
 
 @dataclass
 class ScratchCard:
     id: int
+    num_copies: int
     winning_numbers: [int]
     my_numbers: [int]
 
+    @cached_property
     def num_winners(self):
         return len(list(n for n in self.my_numbers if n in self.winning_numbers))
 
     def point_value(self):
-        num_winners = self.num_winners()
+        num_winners = self.num_winners
         return 2 ** (num_winners - 1) if num_winners > 0 else 0
 
 
@@ -31,7 +35,7 @@ def parse_input(lines):
         id = int(card_match[1])
         winning_numbers = [int(n) for n in card_match[2].strip().split()]
         my_numbers = [int(n) for n in card_match[3].strip().split()]
-        cards.append(ScratchCard(id, winning_numbers, my_numbers))
+        cards.append(ScratchCard(id, 1, winning_numbers, my_numbers))
 
     return cards
 
@@ -44,26 +48,11 @@ def part2(cards):
     won_card_ids = []
     cards = list(cards)
 
-    total_cards = len(cards)
+    total_cards = 0
 
     for c in cards:
-        num_winners = c.num_winners()
-        won_card_ids.extend([n for n in range(c.id + 1, c.id + num_winners + 1)])
+        for prev_card in cards[: c.id - 1]:
+            if prev_card.num_winners + prev_card.id >= c.id:
+                c.num_copies += prev_card.num_copies
 
-    # this is really stupid inefficient, but it completes in a few seconds at least :)
-    while won_card_ids:
-        total_cards += len(won_card_ids)
-        new_won_card_ids = []
-
-        for card_id in won_card_ids:
-            c = cards[card_id - 1]
-            num_winners = c.num_winners()
-
-            new_won_card_ids.extend(
-                [n for n in range(c.id + 1, c.id + num_winners + 1)]
-            )
-
-        won_card_ids = new_won_card_ids
-
-    print(total_cards)
-    return total_cards
+    return sum(c.num_copies for c in cards)
