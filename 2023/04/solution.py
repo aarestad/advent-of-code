@@ -20,8 +20,7 @@ class ScratchCard:
         return len(list(n for n in self.my_numbers if n in self.winning_numbers))
 
     def point_value(self):
-        num_winners = self.num_winners
-        return 2 ** (num_winners - 1) if num_winners > 0 else 0
+        return 2 ** (self.num_winners - 1) if self.num_winners > 0 else 0
 
 
 def parse_input(lines):
