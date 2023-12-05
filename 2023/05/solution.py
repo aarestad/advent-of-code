@@ -22,7 +22,6 @@ class Map:
             if src in m.src_range:
                 return src + m.src_dest_delta
 
-        # TODO deal with out of range srces?
         return src
 
 
