@@ -8,7 +8,6 @@ import concurrent.futures
 
 @dataclass
 class Mapping:
-    dest_range: range
     src_range: range
     src_dest_delta: int
 
@@ -61,9 +60,7 @@ def parse_input(lines):
 
         (dest, src, delta) = [int(n) for n in line.split()]
 
-        mp.mappings.append(
-            Mapping(range(dest, dest + delta), range(src, src + delta), dest - src)
-        )
+        mp.mappings.append(Mapping(range(src, src + delta), dest - src))
 
     almanac.maps[mp.name] = mp
     return almanac
