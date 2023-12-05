@@ -3,6 +3,7 @@
 ## day 05
 
 from dataclasses import dataclass
+import concurrent.futures
 
 
 @dataclass
@@ -86,24 +87,38 @@ def part1(almanac):
     return lowest_location
 
 
+def seed_to_location(almanac, seed) -> int:
+    soil = almanac["seed-to-soil"].map_src_to_dest(seed)
+    fertilizer = almanac["soil-to-fertilizer"].map_src_to_dest(soil)
+    water = almanac["fertilizer-to-water"].map_src_to_dest(fertilizer)
+    light = almanac["water-to-light"].map_src_to_dest(water)
+    temperature = almanac["light-to-temperature"].map_src_to_dest(light)
+    humidity = almanac["temperature-to-humidity"].map_src_to_dest(temperature)
+    return almanac["humidity-to-location"].map_src_to_dest(humidity)
+
+
 def part2(almanac):
     lowest_location = None
+    num_iters = 0
 
-    # num_seeds = sum(r.stop - r.start for r in almanac.seed_ranges)
-    # print(f"part2: num_seeds={num_seeds}")
+    total_iters = sum(r.stop - r.start for r in almanac.seed_ranges)
+    print(f"part2: total_iters={total_iters}")
 
-    # heat-death-of-universe algorithm (will require about 2 billion iterations :o)
-    # for seed_range in almanac.seed_ranges:
-    #     for seed in seed_range:
-    #         soil = almanac["seed-to-soil"].map_src_to_dest(seed)
-    #         fertilizer = almanac["soil-to-fertilizer"].map_src_to_dest(soil)
-    #         water = almanac["fertilizer-to-water"].map_src_to_dest(fertilizer)
-    #         light = almanac["water-to-light"].map_src_to_dest(water)
-    #         temperature = almanac["light-to-temperature"].map_src_to_dest(light)
-    #         humidity = almanac["temperature-to-humidity"].map_src_to_dest(temperature)
-    #         location = almanac["humidity-to-location"].map_src_to_dest(humidity)
+    with concurrent.futures.ProcessPoolExecutor(max_workers=16) as executor:
+        for seed_range in almanac.seed_ranges:
+            # heat-death-of-universe algorithm (will require about 2 billion iterations :o)
+            # TODO actually use the executor
+            for seed in seed_range:
+                num_iters += 1
+                if num_iters % 1_000_000 == 0:
+                    print(
+                        f"{num_iters // 1_000_000} million iterations done out of {total_iters / 1_000_000} million"
+                    )
 
-    #         if lowest_location is None or location < lowest_location:
-    #             lowest_location = location
+                location = seed_to_location(almanac, seed)
+
+                if lowest_location is None or location < lowest_location:
+                    print(f"new lowest location={location}")
+                    lowest_location = location
 
     return lowest_location
