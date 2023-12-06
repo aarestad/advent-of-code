@@ -14,7 +14,11 @@ class Race:
     distance: int
 
     def num_ways_to_win(self) -> int:
-        return int(sqrt(self.time**2 - 4 * self.distance)) - 1
+        return (
+            self.time
+            - 2 * int((-self.time + sqrt(self.time**2 - 4 * self.distance)) / -2)
+            - 1
+        )
 
 
 def parse_input(lines):
