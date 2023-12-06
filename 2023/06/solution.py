@@ -13,13 +13,9 @@ class Race:
     distance: int
 
     def num_ways_to_win(self) -> int:
-        num_ways = 0
-
-        for t in range(1, self.time):
-            if t * (self.time - t) > self.distance:
-                num_ways += 1
-
-        return num_ways
+        return sum(
+            1 for t in range(1, self.time) if t * (self.time - t) > self.distance
+        )
 
 
 def parse_input(lines):
