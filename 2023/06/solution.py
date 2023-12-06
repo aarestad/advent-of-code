@@ -5,7 +5,7 @@
 from dataclasses import dataclass
 from functools import reduce
 from operator import mul
-from math import factorial
+from math import sqrt
 
 
 @dataclass
@@ -14,12 +14,7 @@ class Race:
     distance: int
 
     def num_ways_to_win(self) -> int:
-        for t in range(1, self.time):
-            if t * (self.time - t) > self.distance:
-                to_skip = t - 1
-                break
-
-        return self.time - 2 * to_skip - 1
+        return int(sqrt(self.time**2 - 4 * self.distance)) - 1
 
 
 def parse_input(lines):
