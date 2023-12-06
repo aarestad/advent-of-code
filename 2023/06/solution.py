@@ -5,6 +5,7 @@
 from dataclasses import dataclass
 from functools import reduce
 from operator import mul
+from math import factorial
 
 
 @dataclass
@@ -13,9 +14,12 @@ class Race:
     distance: int
 
     def num_ways_to_win(self) -> int:
-        return sum(
-            1 for t in range(1, self.time) if t * (self.time - t) > self.distance
-        )
+        for t in range(1, self.time):
+            if t * (self.time - t) > self.distance:
+                to_skip = t - 1
+                break
+
+        return self.time - 2 * to_skip - 1
 
 
 def parse_input(lines):
