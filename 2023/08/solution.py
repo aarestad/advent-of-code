@@ -58,17 +58,13 @@ def part1(instructions, nodes):
 
     while current_node.name != "ZZZ":
         for inst in instructions:
-            if current_node.name == "ZZZ":
-                break
+            if current_node.name != "ZZZ":
+                if inst == "L":
+                    current_node = current_node.left
+                else:
+                    current_node = current_node.right
 
-            if inst == "L":
-                current_node = current_node.left
-            else:
-                current_node = current_node.right
-
-            step_count += 1
-        else:
-            continue
+                step_count += 1
 
     return step_count
 
@@ -81,24 +77,19 @@ def part2(instructions, nodes):
         for inst in instructions:
             for idx, node in enumerate(current_nodes):
                 if inst == "L":
-                    current_nodes[idx] = node.left
+                    new_node = node.left
                 else:
-                    current_nodes[idx] = node.right
+                    new_node = node.right
 
                 loop_count, loop_end = loop_counts[idx]
 
                 if not loop_end:
                     loop_count += 1
 
-                if current_nodes[idx].name.endswith("Z"):
+                if new_node.name.endswith("Z"):
                     loop_end = True
 
+                current_nodes[idx] = new_node
                 loop_counts[idx] = (loop_count, loop_end)
-
-            if all(c[1] for c in loop_counts):
-                break
-
-        else:
-            continue
 
     return reduce(lcm, (c[0] for c in loop_counts))
