@@ -66,7 +66,6 @@ class Card(enum.Enum):
 @dataclass
 @total_ordering
 class Hand:
-    raw_hand: str
     cards: [Card]
     bid: int
 
@@ -123,7 +122,7 @@ def parse_input(lines) -> [Hand]:
 
     for l in lines:
         hand, bid = l.split()
-        hands.append(Hand(hand, [Card.card_for_label(c) for c in hand], int(bid)))
+        hands.append(Hand([Card.card_for_label(c) for c in hand], int(bid)))
 
     return hands
 
