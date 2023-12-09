@@ -75,68 +75,38 @@ class Hand:
         return "".join(c.label for c in self.cards)
 
     @cached_property
-    def hand_type(self) -> (HandType, [Card]):
+    def hand_type(self) -> HandType:
         card_counts = Counter(self.cards)
 
         if len(card_counts) == 1:
-            return HandType.FIVE_OF_KIND, self.cards[0:1]
+            return HandType.FIVE_OF_KIND
 
         if len(card_counts) == 2:
-            # four of a kind or full house
             if 4 in card_counts.values():
-                four_of_kind_card = [c for c, n in card_counts.items() if n == 4]
-                single_card = [c for c, n in card_counts.items() if n == 1]
-                return HandType.FOUR_OF_KIND, four_of_kind_card + single_card
+                return HandType.FOUR_OF_KIND
 
-            three_of_kind_card = [c for c, n in card_counts.items() if n == 3]
-            pair_card = [c for c, n in card_counts.items() if n == 2]
-            return HandType.FULL_HOUSE, three_of_kind_card + pair_card
+            return HandType.FULL_HOUSE
 
         if len(card_counts) == 3:
             if 3 in card_counts.values():
-                three_of_kind_card = [c for c, n in card_counts.items() if n == 3]
-                single_cards = sorted(
-                    [c for c, n in card_counts.items() if n == 1], reverse=True
-                )
-                return HandType.THREE_OF_KIND, three_of_kind_card + single_cards
+                return HandType.THREE_OF_KIND
 
-            pair_cards = sorted(
-                [c for c, n in card_counts.items() if n == 2], reverse=True
-            )
-
-            single_card = [c for c, n in card_counts.items() if n == 1]
-
-            return HandType.TWO_PAIR, pair_cards + single_card
+            return HandType.TWO_PAIR
 
         if len(card_counts) == 4:
-            pair_cards = sorted(
-                [c for c, n in card_counts.items() if n == 2], reverse=True
-            )
-
-            single_cards = sorted(
-                [c for c, n in card_counts.items() if n == 1], reverse=True
-            )
-
-            return HandType.ONE_PAIR, pair_cards + single_cards
+            return HandType.ONE_PAIR
 
         # high card
-        return HandType.HIGH_CARD, sorted(self.cards, reverse=True)
+        return HandType.HIGH_CARD
 
     def __lt__(self, other: "Hand") -> bool:
-        sht = self.hand_type
-        oht = other.hand_type
-
-        if sht[0] != oht[0]:
-            return sht[0] < oht[0]
+        if self.hand_type != other.hand_type:
+            return self.hand_type < other.hand_type
 
         # compare card _places_!
         for sc, oc in zip(self.cards, other.cards):
             if sc != oc:
                 return sc < oc
-
-        # for sc, oc in zip(sht[1], oht[1]):
-        #     if sc != oc:
-        #         return sc < oc
 
         # they are equal
         return False
