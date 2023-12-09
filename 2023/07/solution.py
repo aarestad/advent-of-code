@@ -129,26 +129,7 @@ def parse_input(lines) -> [Hand]:
 
 
 def part1(hands):
-    sorted_hands = sorted(hands)
-
-    total_winnings = 0
-
-    print("\t".join(["cards", "bid", "rank", "win", "total"]))
-    for i, h in enumerate(sorted_hands):
-        winnings = (i + 1) * h.bid
-        total_winnings += winnings
-        print(
-            "\t".join(
-                [
-                    "".join(c.label for c in h.cards),
-                    str(h.bid),
-                    str(i + 1),
-                    str(winnings),
-                    str(total_winnings),
-                ]
-            )
-        )
-    return sum((i + 1) * h.bid for i, h in enumerate(sorted_hands))
+    return sum((i + 1) * h.bid for i, h in enumerate(sorted(hands)))
 
 
 def part2(hands):
