@@ -3,12 +3,14 @@
 ## day 07
 
 from dataclasses import dataclass
-from functools import total_ordering, cached_property
+from functools import total_ordering, cached_property, reduce
 from collections import Counter
+from operator import mul
 import enum
 
 
-class HandTypeEnum(enum.Enum):
+@total_ordering
+class HandType(enum.Enum):
     UNKNOWN = 0
     HIGH_CARD = enum.auto()
     ONE_PAIR = enum.auto()
@@ -18,7 +20,11 @@ class HandTypeEnum(enum.Enum):
     FOUR_OF_KIND = enum.auto()
     FIVE_OF_KIND = enum.auto()
 
+    def __lt__(self, other: "HandType") -> bool:
+        return self.value < other.value
 
+
+@total_ordering
 class Card(enum.Enum):
     UNKNOWN = (0, "?")
     TWO = (1, "2")
@@ -47,24 +53,99 @@ class Card(enum.Enum):
 
         return Card.UNKNOWN
 
+    def __hash__(self):
+        return hash(self.rank) * hash(self.label)
+
+    def __lt__(self, other: "Card") -> bool:
+        return self.rank < other.rank
+
+    def __eq__(self, other: "Card") -> bool:
+        return self.rank == other.rank
+
 
 @dataclass
 @total_ordering
 class Hand:
+    raw_hand: str
     cards: [Card]
     bid: int
 
+    @property
+    def cards_str(self) -> str:
+        return "".join(c.label for c in self.cards)
+
     @cached_property
-    def hand_type(self) -> HandTypeEnum:
+    def hand_type(self) -> (HandType, [Card]):
         card_counts = Counter(self.cards)
-        print(card_counts)
-        return HandTypeEnum.UNKNOWN
+
+        if len(card_counts) == 1:
+            return HandType.FIVE_OF_KIND, self.cards[0:1]
+
+        if len(card_counts) == 2:
+            # four of a kind or full house
+            if 4 in card_counts.values():
+                four_of_kind_card = [c for c, n in card_counts.items() if n == 4]
+                single_card = [c for c, n in card_counts.items() if n == 1]
+                return HandType.FOUR_OF_KIND, four_of_kind_card + single_card
+
+            three_of_kind_card = [c for c, n in card_counts.items() if n == 3]
+            pair_card = [c for c, n in card_counts.items() if n == 2]
+            return HandType.FULL_HOUSE, three_of_kind_card + pair_card
+
+        if len(card_counts) == 3:
+            if 3 in card_counts.values():
+                three_of_kind_card = [c for c, n in card_counts.items() if n == 3]
+                single_cards = sorted(
+                    [c for c, n in card_counts.items() if n == 1], reverse=True
+                )
+                return HandType.THREE_OF_KIND, three_of_kind_card + single_cards
+
+            pair_cards = sorted(
+                [c for c, n in card_counts.items() if n == 2], reverse=True
+            )
+
+            single_card = [c for c, n in card_counts.items() if n == 1]
+
+            return HandType.TWO_PAIR, pair_cards + single_card
+
+        if len(card_counts) == 4:
+            pair_cards = sorted(
+                [c for c, n in card_counts.items() if n == 2], reverse=True
+            )
+
+            single_cards = sorted(
+                [c for c, n in card_counts.items() if n == 1], reverse=True
+            )
+
+            return HandType.ONE_PAIR, pair_cards + single_cards
+
+        # high card
+        return HandType.HIGH_CARD, sorted(self.cards, reverse=True)
 
     def __lt__(self, other: "Hand") -> bool:
-        return self.hand_type < other.hand_type
+        sht = self.hand_type
+        oht = other.hand_type
+
+        if sht[0] != oht[0]:
+            return sht[0] < oht[0]
+
+        # compare card _places_!
+        for sc, oc in zip(self.cards, other.cards):
+            if sc != oc:
+                return sc < oc
+
+        # for sc, oc in zip(sht[1], oht[1]):
+        #     if sc != oc:
+        #         return sc < oc
+
+        # they are equal
+        return False
 
     def __eq__(self, other: "Hand") -> bool:
-        return self.hand_type == other.hand_type
+        return all(sc == oc for sc, oc in zip(self.cards, other.cards))
+
+    def __hash__(self) -> int:
+        return reduce(mul, (hash(c) for c in self.cards)) * hash(self.bid)
 
 
 def parse_input(lines) -> [Hand]:
@@ -72,13 +153,32 @@ def parse_input(lines) -> [Hand]:
 
     for l in lines:
         hand, bid = l.split()
-        hands.append(Hand([Card.card_for_label(c) for c in hand], int(bid)))
+        hands.append(Hand(hand, [Card.card_for_label(c) for c in hand], int(bid)))
 
     return hands
 
 
 def part1(hands):
-    print(hands[0].hand_type)
+    sorted_hands = sorted(hands)
+
+    total_winnings = 0
+
+    print("\t".join(["cards", "bid", "rank", "win", "total"]))
+    for i, h in enumerate(sorted_hands):
+        winnings = (i + 1) * h.bid
+        total_winnings += winnings
+        print(
+            "\t".join(
+                [
+                    "".join(c.label for c in h.cards),
+                    str(h.bid),
+                    str(i + 1),
+                    str(winnings),
+                    str(total_winnings),
+                ]
+            )
+        )
+    return sum((i + 1) * h.bid for i, h in enumerate(sorted_hands))
 
 
 def part2(hands):
