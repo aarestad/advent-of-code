@@ -220,4 +220,4 @@ def part1(pipe_map, start_row, start_col):
 
 
 def part2(pipe_map, start_row, start_col):
-    pass
+    loop_tiles = tiles_in_loop(pipe_map, start_row, start_col)
