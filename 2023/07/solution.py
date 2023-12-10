@@ -26,6 +26,7 @@ class HandType(enum.Enum):
 
 @total_ordering
 class Card(enum.Enum):
+    JOKER = (-1, "J")  # part 2
     UNKNOWN = (0, "?")
     TWO = (1, "2")
     THREE = (2, "3")
@@ -36,7 +37,7 @@ class Card(enum.Enum):
     EIGHT = (7, "8")
     NINE = (8, "9")
     TEN = (9, "T")
-    JACK = (10, "J")
+    # JACK = (10, "J") # part 1
     QUEEN = (11, "Q")
     KING = (12, "K")
     ACE = (13, "A")
@@ -98,9 +99,78 @@ class Hand:
         # high card
         return HandType.HIGH_CARD
 
+    @cached_property
+    def hand_type_part_2(self) -> HandType:
+        card_counts = Counter(self.cards)
+
+        if Card.JOKER in card_counts:
+            del card_counts[Card.JOKER]
+
+        if len(card_counts) == 0 or len(card_counts) == 1:
+            # 0 (5), 1 (4), 2 (3), 3 (2), 4 (1), 5 (0)
+            return HandType.FIVE_OF_KIND
+
+        non_joker_counts = sorted(card_counts.values())
+
+        if len(card_counts) == 2:
+            larger_non_joker_amt = non_joker_counts[-1]
+
+            if larger_non_joker_amt == 4:
+                # 4/1 (1)
+                return HandType.FOUR_OF_KIND
+
+            smaller_non_joker_amt = non_joker_counts[0]
+
+            if larger_non_joker_amt == 3:
+                if smaller_non_joker_amt == 1:
+                    # 3/1 (1)
+                    return HandType.FOUR_OF_KIND
+
+                # 3/2 (0)
+                return HandType.FULL_HOUSE
+
+            if larger_non_joker_amt == 2:
+                if smaller_non_joker_amt == 2:
+                    # 2/2 (1)
+                    return HandType.FULL_HOUSE
+
+                # 2/1 (2)
+                return HandType.FOUR_OF_KIND
+
+            # 1/1 (3)
+            return HandType.FOUR_OF_KIND
+
+        if len(card_counts) == 3:
+            larger_non_joker_amt = non_joker_counts[-1]
+
+            if larger_non_joker_amt == 3:
+                # 3/1/1 (0)
+                return HandType.THREE_OF_KIND
+
+            if larger_non_joker_amt == 2:
+                next_smallest_non_j_amt = non_joker_counts[-2]
+
+                if next_smallest_non_j_amt == 2:
+                    # 2/2/1 (0)
+                    return HandType.TWO_PAIR
+
+                # 2/1/1 (1)
+                return HandType.THREE_OF_KIND
+
+            # 1/1/1 (2)
+            return HandType.THREE_OF_KIND
+
+        if len(card_counts) == 4:
+            # 2/1/1/1 (0), 1/1/1/1 (1)
+            return HandType.ONE_PAIR
+
+        # 1/1/1/1/1 (0)
+        return HandType.HIGH_CARD
+
     def __lt__(self, other: "Hand") -> bool:
-        if self.hand_type != other.hand_type:
-            return self.hand_type < other.hand_type
+        # part 1
+        if self.hand_type_part_2 != other.hand_type_part_2:
+            return self.hand_type_part_2 < other.hand_type_part_2
 
         # compare card _places_!
         for sc, oc in zip(self.cards, other.cards):
@@ -132,4 +202,4 @@ def part1(hands):
 
 
 def part2(hands):
-    pass
+    return sum((i + 1) * h.bid for i, h in enumerate(sorted(hands)))
