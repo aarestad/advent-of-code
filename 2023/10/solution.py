@@ -214,9 +214,9 @@ def tiles_in_loop(pipe_map, start_row, start_col) -> set((int, int)):
 
 
 def part1(pipe_map, start_row, start_col):
-    loop_tipes = tiles_in_loop(pipe_map, start_row, start_col)
+    loop_tiles = tiles_in_loop(pipe_map, start_row, start_col)
 
-    return len(loop_tipes) // 2
+    return len(loop_tiles) // 2
 
 
 def part2(pipe_map, start_row, start_col):
