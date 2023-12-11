@@ -2,7 +2,7 @@
 ## https://adventofcode.com/2023
 ## day 10
 
-from enum import Enum, auto, nonmember
+from enum import Enum, auto, StrEnum
 
 
 class Direction(Enum):
@@ -12,50 +12,15 @@ class Direction(Enum):
     WEST = auto()
 
 
-class Pipe(Enum):
-    GROUND = auto()
-    START = auto()
-    VERTICAL = auto()
-    HORIZONTAL = auto()
-    L_BEND = auto()
-    J_BEND = auto()
-    SEVEN_BEND = auto()
-    F_BEND = auto()
-
-    PIPES_BY_CHAR: dict[str, "Pipe"] = nonmember(
-        {
-            ".": GROUND,
-            "S": START,
-            "|": VERTICAL,
-            "-": HORIZONTAL,
-            "L": L_BEND,
-            "J": J_BEND,
-            "7": SEVEN_BEND,
-            "F": F_BEND,
-        }
-    )
-
-    @classmethod
-    def for_char(cls, c) -> "Pipe":
-        match c:
-            case ".":
-                return Pipe.GROUND
-            case "S":
-                return Pipe.START
-            case "|":
-                return Pipe.VERTICAL
-            case "-":
-                return Pipe.HORIZONTAL
-            case "L":
-                return Pipe.L_BEND
-            case "J":
-                return Pipe.J_BEND
-            case "7":
-                return Pipe.SEVEN_BEND
-            case "F":
-                return Pipe.F_BEND
-            case _:
-                raise ValueError(f"bad char: {c}")
+class Pipe(StrEnum):
+    GROUND = "."
+    START = "S"
+    VERTICAL = "|"
+    HORIZONTAL = "-"
+    L_BEND = "L"
+    J_BEND = "J"
+    SEVEN_BEND = "7"
+    F_BEND = "F"
 
     def next_direction(self, heading=Direction) -> Direction:
         ve = ValueError(f"can't be coming from {heading} into {self}")
@@ -160,7 +125,7 @@ def parse_input(lines) -> ([[Pipe]], int, int):
         map_row = []
 
         for col, c in enumerate(l):
-            map_row.append(Pipe.for_char(c))
+            map_row.append(Pipe(c))
 
             if c == "S":
                 start_row = row
@@ -221,3 +186,47 @@ def part1(pipe_map, start_row, start_col):
 
 def part2(pipe_map, start_row, start_col):
     loop_tiles = tiles_in_loop(pipe_map, start_row, start_col)
+
+    tile_symbols = []
+
+    for r, row in enumerate(pipe_map):
+        symbols = []
+
+        for c, pipe in enumerate(row):
+            if not (r, c) in loop_tiles:
+                symbols.append("*")
+            else:
+                symbols.append(str(pipe))
+
+        tile_symbols.append(symbols)
+
+    for r, _ in enumerate(tile_symbols):
+        for c, symbol in enumerate(tile_symbols[r]):
+            if symbol != "*" and symbol != " ":
+                break
+            tile_symbols[r][c] = " "
+
+    for r, _ in enumerate(tile_symbols):
+        for c, symbol in enumerate(reversed(tile_symbols[r])):
+            if symbol != "*" and symbol != " ":
+                break
+            tile_symbols[r][-c - 1] = " "
+
+    for c, _ in enumerate(tile_symbols[0]):
+        for r, symbol in enumerate(row[c] for row in tile_symbols):
+            if symbol != "*" and symbol != " ":
+                break
+            tile_symbols[r][c] = " "
+
+    for c, _ in enumerate(tile_symbols[0]):
+        for r, symbol in enumerate(reversed([row[c] for row in tile_symbols])):
+            print(r, c, symbol)
+            if symbol != "*" and symbol != " ":
+                break
+            tile_symbols[-r - 1][c] = " "
+
+    for row in tile_symbols:
+        print("".join(c for c in row))
+
+    # 704 is too high
+    return sum(1 for row in tile_symbols for c in row if c == "*")
