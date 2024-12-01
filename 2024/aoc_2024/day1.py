@@ -20,11 +20,7 @@ if __name__ == "__main__":
         l1.append(int(n1))
         l2.append(int(n2))
 
-    zipped = zip(sorted(l1), sorted(l2))
-    diffs = [abs(b - a) for a, b in zipped]
-
-    print(f"part 1: {sum(diffs)}")
+    print(f"part 1: {sum([abs(b - a) for a, b in zip(sorted(l1), sorted(l2))])}")
 
     l2_counter = Counter(l2)
-
     print(f"part 2: {sum([l * l2_counter[l] for l in l1])}")
