@@ -115,12 +115,10 @@ MXMXAXMASX"""
 
     word_search = problem_input
 
-    input_width = len(word_search[0])
-
     xmases = 0
 
     for row in range(len(word_search)):
-        for col in range(input_width):
+        for col in range(len(word_search[row])):
             if word_search[row][col] == "X":
                 xmases += sum(
                     1
@@ -142,7 +140,7 @@ MXMXAXMASX"""
     x_mases = 0
 
     for row in range(len(word_search)):
-        for col in range(input_width):
+        for col in range(len(word_search[row])):
             if x_mas(word_search, row, col):
                 x_mases += 1
 
