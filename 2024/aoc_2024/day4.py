@@ -28,7 +28,7 @@ def xmas_left(input, row, col):
     if col < 3:
         return False
 
-    return (input[row][col - 3 : col + 1][::-1]) == "XMAS"
+    return (input[row][col - 3 : col + 1]) == "SAMX"
 
 
 def xmas_right(input, row, col):
