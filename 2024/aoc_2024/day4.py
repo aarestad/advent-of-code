@@ -3,10 +3,11 @@ def xmas_up(input, row, col):
         return False
 
     return (
-        input[row][col] == "X"
-        and input[row - 1][col] == "M"
-        and input[row - 2][col] == "A"
-        and input[row - 3][col] == "S"
+        input[row][col]
+        + input[row - 1][col]
+        + input[row - 2][col]
+        + input[row - 3][col]
+        == "XMAS"
     )
 
 
@@ -15,10 +16,11 @@ def xmas_down(input, row, col):
         return False
 
     return (
-        input[row][col] == "X"
-        and input[row + 1][col] == "M"
-        and input[row + 2][col] == "A"
-        and input[row + 3][col] == "S"
+        input[row][col]
+        + input[row + 1][col]
+        + input[row + 2][col]
+        + input[row + 3][col]
+        == "XMAS"
     )
 
 
@@ -26,9 +28,7 @@ def xmas_left(input, row, col):
     if col < 3:
         return False
 
-    return (
-        input[row][col::-1] if col == 3 else input[row][col : col - 4 : -1]
-    ) == "XMAS"
+    return (input[row][col - 3 : col + 1][::-1]) == "XMAS"
 
 
 def xmas_right(input, row, col):
@@ -43,10 +43,11 @@ def xmas_nw(input, row, col):
         return False
 
     return (
-        input[row][col] == "X"
-        and input[row - 1][col - 1] == "M"
-        and input[row - 2][col - 2] == "A"
-        and input[row - 3][col - 3] == "S"
+        input[row][col]
+        + input[row - 1][col - 1]
+        + input[row - 2][col - 2]
+        + input[row - 3][col - 3]
+        == "XMAS"
     )
 
 
@@ -55,10 +56,11 @@ def xmas_ne(input, row, col):
         return False
 
     return (
-        input[row][col] == "X"
-        and input[row - 1][col + 1] == "M"
-        and input[row - 2][col + 2] == "A"
-        and input[row - 3][col + 3] == "S"
+        input[row][col]
+        + input[row - 1][col + 1]
+        + input[row - 2][col + 2]
+        + input[row - 3][col + 3]
+        == "XMAS"
     )
 
 
@@ -67,10 +69,11 @@ def xmas_sw(input, row, col):
         return False
 
     return (
-        input[row][col] == "X"
-        and input[row + 1][col - 1] == "M"
-        and input[row + 2][col - 2] == "A"
-        and input[row + 3][col - 3] == "S"
+        input[row][col]
+        + input[row + 1][col - 1]
+        + input[row + 2][col - 2]
+        + input[row + 3][col - 3]
+        == "XMAS"
     )
 
 
@@ -79,10 +82,11 @@ def xmas_se(input, row, col):
         return False
 
     return (
-        input[row][col] == "X"
-        and input[row + 1][col + 1] == "M"
-        and input[row + 2][col + 2] == "A"
-        and input[row + 3][col + 3] == "S"
+        input[row][col]
+        + input[row + 1][col + 1]
+        + input[row + 2][col + 2]
+        + input[row + 3][col + 3]
+        == "XMAS"
     )
 
 
