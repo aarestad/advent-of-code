@@ -17,7 +17,7 @@ class PageOrdering:
 
 
 def fixed_order(po: List[int]) -> List[int]:
-    return [1, 2, 3]
+    return po
 
 
 orderings_by_page_before = defaultdict(list)
@@ -81,10 +81,8 @@ if __name__ == "__main__":
                 not in orderings_by_page_after[following_page]
                 for following_page in po[idx + 1 :]
             ):
-                fixed_print_order = fixed_order(po)
-                fixed_middle_page_number_sum += fixed_print_order[
-                    len(fixed_print_order) // 2
-                ]
+                fixed_middle_page_number_sum += fixed_order(po)[len(po) // 2]
+
                 break
         else:
             ok_middle_page_number_sum += po[len(po) // 2]
