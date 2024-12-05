@@ -16,12 +16,26 @@ class PageOrdering:
         return PageOrdering(before, after)
 
 
-def fixed_order(po: List[int]) -> List[int]:
-    return po
-
-
 orderings_by_page_before = defaultdict(list)
 orderings_by_page_after = defaultdict(list)
+
+
+def fixed_order(print_order: List[int]) -> List[int]:
+    correct_order = [0] * len(print_order)
+
+    for page in print_order:
+        correct_order[
+            len(
+                [
+                    o
+                    for o in orderings_by_page_after[page]
+                    if o.page_before in print_order
+                ]
+            )
+        ] = page
+
+    return correct_order
+
 
 if __name__ == "__main__":
     example = """47|53
