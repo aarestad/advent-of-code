@@ -57,11 +57,12 @@ if __name__ == "__main__":
         problem_input = [i.strip() for i in input.readlines()]
 
     empty_line_idx = problem_input.index("")
-    pages = problem_input[empty_line_idx + 1 :]
-
-    print_orders = [[int(p) for p in l.split(",")] for l in pages]
 
     page_orderings = [PageOrdering.from_str(o) for o in problem_input[:empty_line_idx]]
+
+    print_orders = [
+        [int(p) for p in l.split(",")] for l in problem_input[empty_line_idx + 1 :]
+    ]
 
     for p, orderings in groupby(
         sorted(page_orderings, key=lambda po: po.page_before), lambda po: po.page_before
