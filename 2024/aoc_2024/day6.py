@@ -111,13 +111,11 @@ if __name__ == "__main__":
 
     obstruction_locs = 0
 
-    print(f"total chars in map: {len(map) * len(map[0])}")
-
     for r in range(len(map)):
         for c in range(len(map[r])):
             char_no = r * len(map) + c
             if char_no % 1000 == 0:
-                print(f"char_no {char_no}")
+                print(f"location {char_no} of {len(map) * len(map[0])}")
 
             if map[r][c] != "#":
                 looped, _ = traverse_map_with_possible_obstacle(
