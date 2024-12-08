@@ -80,9 +80,9 @@ if __name__ == "__main__":
     part_2_sum = 0
 
     for l in problem_input:
-        result, operands = l.split(":")
+        result, operands = l.split(": ")
         result = int(result)
-        operands = [int(o) for o in operands.strip().split()]
+        operands = [int(o) for o in operands.split()]
 
         if part_1_calibration_passes(result, operands):
             part_1_sum += result
