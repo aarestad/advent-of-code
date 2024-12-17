@@ -21,10 +21,6 @@ uint64_t execute(int64_t n)
 int main()
 {
     uint64_t expected_answer = 2411751503435530;
-    uint64_t reg_a = 0;
-    uint64_t reg_b = 0;
-    uint64_t reg_c = 0;
-    uint64_t output = 0;
 
     // sanity check!
     assert(execute(56256477) == 415315357);
