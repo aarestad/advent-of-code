@@ -10,9 +10,9 @@ uint64_t execute(int64_t n)
     do
     {
         uint64_t octal = reg_a & 7;
-        uint64_t va = octal ^ 4;
-        uint64_t vb = reg_a >> (octal ^ 1);
-        output = 10 * output + ((va ^ vb) & 7);
+        uint64_t va = octal ^ 4;                  // low three bits of reg_a, highest flipped
+        uint64_t vb = (reg_a >> (octal ^ 1)) & 7; // bits of reg_a; if va is even, (reg_a+1..reg_a+4) else (reg_a..reg_a+3)
+        output = 10 * output + (va ^ vb);
     } while (reg_a >>= 3, reg_a != 0);
 
     return output;
