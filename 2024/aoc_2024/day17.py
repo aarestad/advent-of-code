@@ -24,6 +24,9 @@ class ThreeBitVM:
     reg_c: int = 0
     pc: int = 0
 
+    def __str__(self):
+        return self._state()
+
     def _combo_operand_value(self, operand) -> int:
         match operand:
             case 0 | 1 | 2 | 3:
@@ -40,7 +43,7 @@ class ThreeBitVM:
                 raise f"illegal operand: {operand}"
 
     def _state(self) -> str:
-        return f"a={self.reg_a};b={self.reg_b};c={self.reg_c};pc={self.pc}"
+        return f"a={oct(self.reg_a)}\t{"\t" if self.reg_a < 0o777 else ""}b={oct(self.reg_b)}\t{"\t" if self.reg_b < 0o777 else ""}c={oct(self.reg_c)}\t{"\t" if self.reg_c < 0o777 else ""}pc={self.pc}"
 
     def _debug(self, opcode, operand) -> str:
         return f"opcode={Opcode(opcode)};operand={operand};value={self._combo_operand_value(operand)}"
@@ -80,8 +83,8 @@ class ThreeBitVM:
                 case _:
                     raise f"illegal operand: {opcode}"
 
-            # print(f"after: {self._state()}")
-            # print(f"output: {output}")
+            print(self, end="")
+            print(f"\toutput: {output}")
             # print()
 
         return output
@@ -89,16 +92,36 @@ class ThreeBitVM:
     def execute_optimized(self) -> List[int]:
         output = []
 
+        print(self, end="")
+        print(f"\tout={output}")
+
         while self.reg_a != 0:
             self.reg_b = self.reg_a & 7
+            print(self, end="")
+            print(f"\tout={output}")
             self.reg_b ^= 1
+            print(self, end="")
+            print(f"\tout={output}")
             self.reg_c = self.reg_a >> self.reg_b
+            print(self, end="")
+            print(f"\tout={output}")
             self.reg_b ^= 5
+            print(self, end="")
+            print(f"\tout={output}")
             self.reg_a >>= 3
+            print(self, end="")
+            print(f"\tout={output}")
             self.reg_b ^= self.reg_c
+            print(self, end="")
+            print(f"\tout={output}")
             output.append(self.reg_b & 7)
+            print(self, end="")
+            print(f"\tout={output}")
 
         return output
+
+    def execute_reverse_optimized(self) -> List[int]:
+        pass
 
 
 if __name__ == "__main__":
