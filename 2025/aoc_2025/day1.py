@@ -15,7 +15,7 @@ def part_1_and_2(rotations):
             new_pos = (pos - distance) % 100
             clicks = distance // 100
 
-            if (pos != 0 and new_pos > pos) or new_pos == 0:
+            if pos != 0 and (new_pos > pos or new_pos == 0):
                 clicks += 1
 
             print(f"{clicks} clicks")
@@ -25,7 +25,7 @@ def part_1_and_2(rotations):
             new_pos = (pos + distance) % 100
             clicks = distance // 100
 
-            if (pos != 0 and new_pos < pos) or new_pos == 0:
+            if pos != 0 and (new_pos < pos or new_pos == 0):
                 clicks += 1
 
             print(f"{clicks} clicks")
