@@ -1,0 +1,11 @@
+{
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "python.formatting.provider": "none",
+  "files.associations": {
+    "assert.h": "c",
+    "_assert.h": "c",
+    "cdefs.h": "c"
+  }
+}
