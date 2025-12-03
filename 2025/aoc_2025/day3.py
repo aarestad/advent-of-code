@@ -34,7 +34,7 @@ def best_joltage_4(line, num_batteries):
 
     start_at = 0
 
-    for i in range(12):
+    for i in range(num_batteries):
         next_best = best_battery_remaining(line[start_at:], num_batteries - i - 1) + start_at
         indices.append(next_best)
         start_at = next_best + 1
