@@ -13,11 +13,12 @@ def part2(input):
 
     for line in input:
         print(f"calculating for line {line}")
-        # lol no - for 100-battery lines, this is 1,050,421,051,106,700 iterations
         joltage += best_joltage_4(line, 12)
 
     return joltage
 
+
+# part 2: lolno = 100c12 = 1,050,421,051,106,700
 def best_joltage_for(line, num_batteries):
     best = 0
 
