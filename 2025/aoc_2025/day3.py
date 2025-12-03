@@ -4,7 +4,7 @@ def part1(input):
     joltage = 0
 
     for line in input:
-        joltage += best_joltage_for(line, 2)
+        joltage += best_joltage_4(line, 2)
 
     return joltage
 
@@ -18,7 +18,7 @@ def part2(input):
     return joltage
 
 
-# part 2: lolno = 100c12 = 1,050,421,051,106,700
+# part 2: lolno, 100c12 = 1,050,421,051,106,700
 def best_joltage_for(line, num_batteries):
     best = 0
 
@@ -40,7 +40,6 @@ def best_joltage_4(line, num_batteries):
         indices.append(next_best)
         start_at = next_best + 1
 
-    print(''.join(line[ix] for ix in indices))
     return int(''.join(line[ix] for ix in indices))
 
 def best_battery_remaining(line, num_batteries_remaining):
