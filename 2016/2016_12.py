@@ -1,29 +1,29 @@
-regs = { 'a':0, 'b':0, 'c':1, 'd':0 }
+regs = {"a": 0, "b": 0, "c": 1, "d": 0}
 
 pc = 0
 
 instructions = []
 
-with open('input_12.txt') as insts:
+with open("input_12.txt") as insts:
     for i in insts:
         instructions.append(i.strip().split())
 
 while pc < len(instructions):
     inst = instructions[pc]
 
-    if inst[0] == 'cpy':
-        if inst[1] in regs: # register name
+    if inst[0] == "cpy":
+        if inst[1] in regs:  # register name
             regs[inst[2]] = regs[inst[1]]
-        else: # immediate
+        else:  # immediate
             regs[inst[2]] = int(inst[1])
         pc += 1
-    elif inst[0] == 'inc':
+    elif inst[0] == "inc":
         regs[inst[1]] += 1
         pc += 1
-    elif inst[0] == 'dec':
+    elif inst[0] == "dec":
         regs[inst[1]] -= 1
         pc += 1
-    elif inst[0] == 'jnz':
+    elif inst[0] == "jnz":
         if inst[1] in regs:
             do_jump = regs[inst[1]] != 0
         else:
@@ -37,6 +37,6 @@ while pc < len(instructions):
         else:
             pc += 1
     else:
-        raise Error('unknown: ' + inst)
+        raise Error("unknown: " + inst)
 
 print(regs)

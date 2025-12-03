@@ -2,11 +2,14 @@
 ## https://adventofcode.com/2021
 ## day 18
 
+
 def parse_input(lines):
     pass
 
+
 def part1(data):
     pass
+
 
 def part2(data):
     pass

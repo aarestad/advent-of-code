@@ -12,9 +12,9 @@ class ParamMode(Enum):
 
 # noinspection PyUnusedLocal
 class IntcodeMachine:
-    def __init__(self, program: str, name='Intcode'):
+    def __init__(self, program: str, name="Intcode"):
         self.name = name
-        self.memory: List[int] = [int(x) for x in program.split(',')]
+        self.memory: List[int] = [int(x) for x in program.split(",")]
         self.pc: int = 0
         self.relative_base = 0
         self.trace = False
@@ -29,10 +29,10 @@ class IntcodeMachine:
             def debug_wrapper(*args, **kwargs):
                 if self.supertrace:
                     print()
-                    print('pc: {}'.format(self.pc))
-                    print('mem: {}'.format(self.memory))
-                    print('relative base: {}'.format(self.relative_base))
-                    print('{}: {}'.format(func.__name__, args))
+                    print("pc: {}".format(self.pc))
+                    print("mem: {}".format(self.memory))
+                    print("relative base: {}".format(self.relative_base))
+                    print("{}: {}".format(func.__name__, args))
 
                 func(*args, **kwargs)
 
@@ -46,12 +46,14 @@ class IntcodeMachine:
             elif mode == ParamMode.RELATIVE:
                 adjusted += self.relative_base
             else:
-                raise ValueError('bad ParamMode: {}'.format(mode))
+                raise ValueError("bad ParamMode: {}".format(mode))
 
             if adjusted < 0:
                 raise ValueError(
-                    'negative memory address: {} (orig={}, relative_base={})'.format(adjusted, address,
-                                                                                     self.relative_base))
+                    "negative memory address: {} (orig={}, relative_base={})".format(
+                        adjusted, address, self.relative_base
+                    )
+                )
 
             return adjusted
 
@@ -76,7 +78,14 @@ class IntcodeMachine:
                 self.memory[address] = val
 
         @debug_input
-        def op_add(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int, c: int):
+        def op_add(
+            a_mode: ParamMode,
+            b_mode: ParamMode,
+            c_mode: ParamMode,
+            a: int,
+            b: int,
+            c: int,
+        ):
             addend_a = fetch(a, a_mode)
             addend_b = fetch(b, b_mode)
             store(addend_a + addend_b, c, c_mode)
@@ -84,7 +93,14 @@ class IntcodeMachine:
             self.pc += 4
 
         @debug_input
-        def op_mul(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int, c: int):
+        def op_mul(
+            a_mode: ParamMode,
+            b_mode: ParamMode,
+            c_mode: ParamMode,
+            a: int,
+            b: int,
+            c: int,
+        ):
             mul_a = fetch(a, a_mode)
             mul_b = fetch(b, b_mode)
             store(mul_a * mul_b, c, c_mode)
@@ -102,19 +118,30 @@ class IntcodeMachine:
             self.pc += 2
 
         @debug_input
-        def op_jit(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int):
+        def op_jit(
+            a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int
+        ):
             target = fetch(a, a_mode)
             dest_addr = fetch(b, b_mode)
             self.pc = dest_addr if target != 0 else self.pc + 3
 
         @debug_input
-        def op_jif(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int):
+        def op_jif(
+            a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int
+        ):
             target = fetch(a, a_mode)
             dest_addr = fetch(b, b_mode)
             self.pc = dest_addr if target == 0 else self.pc + 3
 
         @debug_input
-        def op_lt(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int, c: int):
+        def op_lt(
+            a_mode: ParamMode,
+            b_mode: ParamMode,
+            c_mode: ParamMode,
+            a: int,
+            b: int,
+            c: int,
+        ):
             a_cmp = fetch(a, a_mode)
             b_cmp = fetch(b, b_mode)
             store(1 if a_cmp < b_cmp else 0, c, c_mode)
@@ -122,7 +149,14 @@ class IntcodeMachine:
             self.pc += 4
 
         @debug_input
-        def op_eq(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int, c: int):
+        def op_eq(
+            a_mode: ParamMode,
+            b_mode: ParamMode,
+            c_mode: ParamMode,
+            a: int,
+            b: int,
+            c: int,
+        ):
             a_cmp = fetch(a, a_mode)
             b_cmp = fetch(b, b_mode)
             store(1 if a_cmp == b_cmp else 0, c, c_mode)
@@ -145,7 +179,7 @@ class IntcodeMachine:
             7: (op_lt, 3),
             8: (op_eq, 3),
             9: (op_arb, 1),
-            99: None
+            99: None,
         }
 
     def send(self, value):
@@ -186,7 +220,7 @@ class IntcodeMachine:
             try:
                 op = self.ops[opcode]
             except KeyError:
-                raise ValueError('invalid opcode: {}'.format(opcode))
+                raise ValueError("invalid opcode: {}".format(opcode))
 
             if opcode == 3 and not self.input:
                 if self.trace:
@@ -195,7 +229,7 @@ class IntcodeMachine:
 
             if op:
                 num_params = op[1]
-                params = self.memory[self.pc + 1:self.pc + num_params + 1]
+                params = self.memory[self.pc + 1 : self.pc + num_params + 1]
                 # print('pc={}, original_op={}, args={}'.format(self.pc, opcode_and_modes, params))
 
                 op[0](a_mode, b_mode, c_mode, *params)
@@ -212,16 +246,16 @@ class IntcodeMachine:
         disassembly_pc = 0
 
         ops = {
-            1: 'ADD',
-            2: 'MUL',
-            3: 'INP',
-            4: 'OTP',
-            5: 'JT',
-            6: 'JF',
-            7: 'LT',
-            8: 'EQ',
-            9: 'ARB',
-            99: 'HLT'
+            1: "ADD",
+            2: "MUL",
+            3: "INP",
+            4: "OTP",
+            5: "JT",
+            6: "JF",
+            7: "LT",
+            8: "EQ",
+            9: "ARB",
+            99: "HLT",
         }
 
         while disassembly_pc < len(self.memory):
@@ -235,41 +269,59 @@ class IntcodeMachine:
             try:
                 op = self.ops[opcode]
             except KeyError:
-                print('{}: invalid opcode: {}'.format(disassembly_pc, opcode))
+                print("{}: invalid opcode: {}".format(disassembly_pc, opcode))
                 num_params = 0
             else:
                 if op is not None:
                     num_params = op[1]
-                    params = self.memory[self.pc + 1:self.pc + num_params + 1]
+                    params = self.memory[self.pc + 1 : self.pc + num_params + 1]
 
                     params_formatted = [
-                        str(params[0]) if a_mode == ParamMode.IMMEDIATE
-                        else '[{}]'.format(params[0]) if a_mode == ParamMode.INDIRECT
-                        else '{{{}}}'.format(params[0])
+                        (
+                            str(params[0])
+                            if a_mode == ParamMode.IMMEDIATE
+                            else (
+                                "[{}]".format(params[0])
+                                if a_mode == ParamMode.INDIRECT
+                                else "{{{}}}".format(params[0])
+                            )
+                        )
                     ]
 
                     if len(params) > 1:
                         params_formatted.append(
-                            str(params[1]) if b_mode == ParamMode.IMMEDIATE
-                            else '[{}]'.format(params[1]) if b_mode == ParamMode.INDIRECT
-                            else '{{{}}}'.format(params[1])
+                            str(params[1])
+                            if b_mode == ParamMode.IMMEDIATE
+                            else (
+                                "[{}]".format(params[1])
+                                if b_mode == ParamMode.INDIRECT
+                                else "{{{}}}".format(params[1])
+                            )
                         )
 
                     if len(params) > 2:
                         params_formatted.append(
-                            str(params[2]) if c_mode == ParamMode.IMMEDIATE
-                            else '[{}]'.format(params[2]) if c_mode == ParamMode.INDIRECT
-                            else '{{{}}}'.format(params[2])
+                            str(params[2])
+                            if c_mode == ParamMode.IMMEDIATE
+                            else (
+                                "[{}]".format(params[2])
+                                if c_mode == ParamMode.INDIRECT
+                                else "{{{}}}".format(params[2])
+                            )
                         )
                 else:
                     params_formatted = []
                     num_params = 0
 
-                print('{}: {} {}'.format(disassembly_pc, ops[opcode], ', '.join(params_formatted)))
+                print(
+                    "{}: {} {}".format(
+                        disassembly_pc, ops[opcode], ", ".join(params_formatted)
+                    )
+                )
 
             disassembly_pc += 1 + num_params
 
 
-if __name__ == '__main__':
-    with open('11_input.txt') as program_file:
+if __name__ == "__main__":
+    with open("11_input.txt") as program_file:
         IntcodeMachine(program_file.readline()).disassemble()

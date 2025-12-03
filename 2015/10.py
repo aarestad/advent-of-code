@@ -1,7 +1,7 @@
 def look_and_say(input_str):
-    out = ''
+    out = ""
 
-    char_run = ''
+    char_run = ""
     char_run_count = 0
 
     for i in range(len(input_str)):
@@ -16,7 +16,7 @@ def look_and_say(input_str):
     return out
 
 
-start = '1113122113'
+start = "1113122113"
 
 for _ in range(50):
     start = look_and_say(start)

@@ -1,5 +1,6 @@
 from operator import itemgetter
 
+
 def solve(lines, reverse):
     letter_counts = [None] * 8
 
@@ -18,12 +19,15 @@ def solve(lines, reverse):
     message = []
 
     for counter in letter_counts:
-        message.append(sorted(counter.items(), key=itemgetter(1), reverse=reverse)[0][0])
+        message.append(
+            sorted(counter.items(), key=itemgetter(1), reverse=reverse)[0][0]
+        )
 
-    return ''.join(message)
+    return "".join(message)
 
-with open('input_6.txt') as lines:
+
+with open("input_6.txt") as lines:
     message_lines = lines.readlines()
 
-print(solve(message_lines, True)) # part 1
-print(solve(message_lines, False)) # part 2
+print(solve(message_lines, True))  # part 1
+print(solve(message_lines, False))  # part 2

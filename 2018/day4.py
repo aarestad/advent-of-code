@@ -82,9 +82,11 @@ if __name__ == "__main__":
         type = (
             LogEntryType.FALL_ASLEEP
             if message == "falls asleep"
-            else LogEntryType.WAKE_UP
-            if message == "wakes up"
-            else LogEntryType.DUTY_START
+            else (
+                LogEntryType.WAKE_UP
+                if message == "wakes up"
+                else LogEntryType.DUTY_START
+            )
         )
 
         guard_id = None

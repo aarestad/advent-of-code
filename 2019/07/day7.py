@@ -11,9 +11,9 @@ class ParamMode(Enum):
 
 # noinspection PyUnusedLocal
 class IntcodeMachine:
-    def __init__(self, program: str, name='Intcode'):
+    def __init__(self, program: str, name="Intcode"):
         self.name = name
-        self.memory: List[int] = [int(x) for x in program.split(',')]
+        self.memory: List[int] = [int(x) for x in program.split(",")]
         self.pc: int = 0
         self.trace = True
         self.input = None
@@ -51,7 +51,14 @@ class IntcodeMachine:
                 self.memory[address] = val
 
         @debug_input
-        def op_add(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int, c: int):
+        def op_add(
+            a_mode: ParamMode,
+            b_mode: ParamMode,
+            c_mode: ParamMode,
+            a: int,
+            b: int,
+            c: int,
+        ):
             addend_a = fetch(a, a_mode)
             addend_b = fetch(b, b_mode)
             store(addend_a + addend_b, c, c_mode)
@@ -59,7 +66,14 @@ class IntcodeMachine:
             self.pc += 4
 
         @debug_input
-        def op_mul(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int, c: int):
+        def op_mul(
+            a_mode: ParamMode,
+            b_mode: ParamMode,
+            c_mode: ParamMode,
+            a: int,
+            b: int,
+            c: int,
+        ):
             mul_a = fetch(a, a_mode)
             mul_b = fetch(b, b_mode)
             store(mul_a * mul_b, c, c_mode)
@@ -78,19 +92,30 @@ class IntcodeMachine:
             self.pc += 2
 
         @debug_input
-        def op_jit(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int):
+        def op_jit(
+            a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int
+        ):
             target = fetch(a, a_mode)
             dest_addr = fetch(b, b_mode)
             self.pc = dest_addr if target != 0 else self.pc + 3
 
         @debug_input
-        def op_jif(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int):
+        def op_jif(
+            a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int
+        ):
             target = fetch(a, a_mode)
             dest_addr = fetch(b, b_mode)
             self.pc = dest_addr if target == 0 else self.pc + 3
 
         @debug_input
-        def op_lt(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int, c: int):
+        def op_lt(
+            a_mode: ParamMode,
+            b_mode: ParamMode,
+            c_mode: ParamMode,
+            a: int,
+            b: int,
+            c: int,
+        ):
             a_cmp = fetch(a, a_mode)
             b_cmp = fetch(b, b_mode)
             store(1 if a_cmp < b_cmp else 0, c, c_mode)
@@ -98,7 +123,14 @@ class IntcodeMachine:
             self.pc += 4
 
         @debug_input
-        def op_eq(a_mode: ParamMode, b_mode: ParamMode, c_mode: ParamMode, a: int, b: int, c: int):
+        def op_eq(
+            a_mode: ParamMode,
+            b_mode: ParamMode,
+            c_mode: ParamMode,
+            a: int,
+            b: int,
+            c: int,
+        ):
             a_cmp = fetch(a, a_mode)
             b_cmp = fetch(b, b_mode)
             store(1 if a_cmp == b_cmp else 0, c, c_mode)
@@ -114,7 +146,7 @@ class IntcodeMachine:
             6: (op_jif, 2),
             7: (op_lt, 3),
             8: (op_eq, 3),
-            99: None
+            99: None,
         }
 
     def send(self, value):
@@ -155,7 +187,7 @@ class IntcodeMachine:
             try:
                 op = self.ops[opcode]
             except KeyError:
-                raise ValueError('invalid opcode: {}'.format(opcode))
+                raise ValueError("invalid opcode: {}".format(opcode))
 
             if opcode == 3 and self.input is None:
                 if self.trace:
@@ -164,7 +196,7 @@ class IntcodeMachine:
 
             if op:
                 num_params = op[1]
-                params = self.memory[self.pc + 1:self.pc + num_params + 1]
+                params = self.memory[self.pc + 1 : self.pc + num_params + 1]
                 # print('pc={}, original_op={}, args={}'.format(self.pc, opcode_and_modes, params))
 
                 op[0](a_mode, b_mode, c_mode, *params)
@@ -178,8 +210,8 @@ class IntcodeMachine:
                 break
 
 
-if __name__ == '__main__':
-    names = 'ABCDE'
+if __name__ == "__main__":
+    names = "ABCDE"
 
     def generate_amps(phases, program):
         amps = {}
@@ -197,7 +229,7 @@ if __name__ == '__main__':
 
         return amps
 
-    with open('07_input.txt') as f:
+    with open("07_input.txt") as f:
         program = f.readline()
 
         max_signal = 0

@@ -17,29 +17,29 @@ class TileType(Enum):
 
 
 def paint_screen(current_score, tiles, window: curses.window):
-    window.addstr(0, 0, '==== score: {:>5} ===='.format(current_score))
+    window.addstr(0, 0, "==== score: {:>5} ====".format(current_score))
 
     for y in range(23):
         for x in range(42):
             tile_type = tiles.get(Point(x, y), TileType.EMPTY)
 
             if tile_type == TileType.WALL:
-                window.addch(y + 1, x, '-' if y == 0 else '|', curses.color_pair(1))
+                window.addch(y + 1, x, "-" if y == 0 else "|", curses.color_pair(1))
             elif tile_type == TileType.BLOCK:
-                window.addch(y + 1, x, '*', curses.color_pair(2))
+                window.addch(y + 1, x, "*", curses.color_pair(2))
             elif tile_type == TileType.PADDLE:
-                window.addch(y + 1, x, '_', curses.color_pair(3))
+                window.addch(y + 1, x, "_", curses.color_pair(3))
             elif tile_type == TileType.BALL:
-                window.addch(y + 1, x, 'O', curses.color_pair(4))
+                window.addch(y + 1, x, "O", curses.color_pair(4))
             else:
-                window.addch(y + 1, x, ' ')
+                window.addch(y + 1, x, " ")
 
     window.refresh()
-    time.sleep(1/250)
+    time.sleep(1 / 250)
 
 
 def main(std_scr):
-    with open('aoc_2019/13_input.txt') as intcode_input:
+    with open("aoc_2019/13_input.txt") as intcode_input:
         machine = IntcodeMachine(intcode_input.readline().strip())
 
     curses.init_pair(1, curses.COLOR_WHITE, 0)
@@ -66,7 +66,11 @@ def main(std_scr):
             paddle_ball_diff = current_ball_pos.x - current_paddle_pos.x
             machine.send(0 if paddle_ball_diff == 0 else copysign(1, paddle_ball_diff))
 
-        (tile_x, tile_y, tile_type) = (machine.receive(), machine.receive(), machine.receive())
+        (tile_x, tile_y, tile_type) = (
+            machine.receive(),
+            machine.receive(),
+            machine.receive(),
+        )
 
         if any((tile_x is None, tile_y is None, tile_type is None)):
             num_steps = step
@@ -75,10 +79,10 @@ def main(std_scr):
         if tile_x == -1 and tile_y == 0:
             current_score = tile_type
             continue
-        
+
         if tile_x > max_x:
             max_x = tile_x
-            
+
         if tile_y > max_y:
             max_y = tile_y
 
@@ -99,5 +103,5 @@ def main(std_scr):
     return current_score, num_steps
 
 
-if __name__ == '__main__':
-    print('final score: {} ({} steps)'.format(*curses.wrapper(main)))
+if __name__ == "__main__":
+    print("final score: {} ({} steps)".format(*curses.wrapper(main)))

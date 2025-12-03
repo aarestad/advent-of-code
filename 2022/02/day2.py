@@ -2,48 +2,48 @@ part_1_score = 0
 part_2_score = 0
 
 game_scores = {
-    'A': {
-        'X': 3,
-        'Y': 6,
-        'Z': 0,
+    "A": {
+        "X": 3,
+        "Y": 6,
+        "Z": 0,
     },
-    'B': {
-        'X': 0,
-        'Y': 3,
-        'Z': 6,
+    "B": {
+        "X": 0,
+        "Y": 3,
+        "Z": 6,
     },
-    'C': {
-        'X': 6,
-        'Y': 0,
-        'Z': 3,
+    "C": {
+        "X": 6,
+        "Y": 0,
+        "Z": 3,
     },
 }
 
 choices = {
-    'A': {
-        'X': 'Z',
-        'Y': 'X',
-        'Z': 'Y',
+    "A": {
+        "X": "Z",
+        "Y": "X",
+        "Z": "Y",
     },
-    'B': {
-        'X': 'X',
-        'Y': 'Y',
-        'Z': 'Z',
+    "B": {
+        "X": "X",
+        "Y": "Y",
+        "Z": "Z",
     },
-    'C': {
-        'X': 'Y',
-        'Y': 'Z',
-        'Z': 'X',
+    "C": {
+        "X": "Y",
+        "Y": "Z",
+        "Z": "X",
     },
 }
 
 choice_scores = {
-    'X': 1,
-    'Y': 2,
-    'Z': 3,
+    "X": 1,
+    "Y": 2,
+    "Z": 3,
 }
 
-with open('day2.txt') as guide:
+with open("day2.txt") as guide:
     for line in guide:
         (opponent, response) = line.split()
         part_1_score += choice_scores[response]

@@ -22,12 +22,10 @@ class Module(ABC):
     receivers: List["Module"] = []
 
     @abstractmethod
-    def process(self, signal: Signal, sender: "Module"):
-        ...
+    def process(self, signal: Signal, sender: "Module"): ...
 
     @abstractmethod
-    def send(self):
-        ...
+    def send(self): ...
 
 
 class FlipFlop(Module):

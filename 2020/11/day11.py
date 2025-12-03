@@ -3,9 +3,9 @@ from enum import Enum
 
 
 class Space(Enum):
-    FLOOR = '.'
-    EMPTY = 'L'
-    FILLED = '#'
+    FLOOR = "."
+    EMPTY = "L"
+    FILLED = "#"
 
     def __repr__(self):
         return self.value
@@ -16,14 +16,14 @@ def valid_coords(deck, y, x):
 
 
 def count_occupied_neighbors(x, y, deck):
-    nw = [y-1, x-1]
-    n = [y-1, x]
-    ne = [y-1, x+1]
-    w = [y, x-1]
-    e = [y, x+1]
-    sw = [y+1, x-1]
-    s = [y+1, x]
-    se = [y+1, x+1]
+    nw = [y - 1, x - 1]
+    n = [y - 1, x]
+    ne = [y - 1, x + 1]
+    w = [y, x - 1]
+    e = [y, x + 1]
+    sw = [y + 1, x - 1]
+    s = [y + 1, x]
+    se = [y + 1, x + 1]
 
     neighbors = []
 
@@ -102,7 +102,7 @@ def count_occupied_neighbors(x, y, deck):
     return sum(1 for n in neighbors if n == Space.FILLED)
 
 
-example = '''L.LL.LL.LL
+example = """L.LL.LL.LL
 LLLLLLL.LL
 L.L.L..L..
 LLLL.LL.LL
@@ -111,14 +111,14 @@ L.LLLLL.LL
 ..L.L.....
 LLLLLLLLLL
 L.LLLLLL.L
-L.LLLLL.LL'''
+L.LLLLL.LL"""
 
 if __name__ == "__main__":
     deck = []
 
-    with open('input/day11.txt') as input:
+    with open("input/day11.txt") as input:
         # for line in input:
-        for line in example.split('\n'):
+        for line in example.split("\n"):
             deck.append([Space(c) for c in line.strip()])
 
     while True:
@@ -147,7 +147,11 @@ if __name__ == "__main__":
                 else:
                     new_row.append(Space.FLOOR)
 
-        if all(new_deck[i][j] == deck[i][j] for i in range(len(new_deck)) for j in range(len(new_deck[i]))):
+        if all(
+            new_deck[i][j] == deck[i][j]
+            for i in range(len(new_deck))
+            for j in range(len(new_deck[i]))
+        ):
             break
 
         deck = new_deck
@@ -155,4 +159,11 @@ if __name__ == "__main__":
     for row in deck:
         print(row)
 
-    print(sum(1 for i in range(len(deck)) for j in range(len(deck[i])) if deck[i][j] == Space.FILLED))
+    print(
+        sum(
+            1
+            for i in range(len(deck))
+            for j in range(len(deck[i]))
+            if deck[i][j] == Space.FILLED
+        )
+    )

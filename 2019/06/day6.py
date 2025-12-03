@@ -2,11 +2,13 @@ from typing import Optional, List
 
 
 class OrbitingNode:
-    def __init__(self, label: str, parent_label: Optional[str], parent: 'Optional[OrbitingNode]'):
+    def __init__(
+        self, label: str, parent_label: Optional[str], parent: "Optional[OrbitingNode]"
+    ):
         self.label = label
         self.parent_label = parent_label
         self.parent = parent
-        self.children: 'List[OrbitingNode]' = []
+        self.children: "List[OrbitingNode]" = []
 
     @property
     def parents(self):
@@ -23,14 +25,12 @@ class OrbitingNode:
         return self.label == other.label
 
 
-if __name__ == '__main__':
-    planets = {
-        'COM': OrbitingNode('COM', None, None)
-    }
+if __name__ == "__main__":
+    planets = {"COM": OrbitingNode("COM", None, None)}
 
-    with open('06_input.txt') as orbits:
+    with open("06_input.txt") as orbits:
         for orbit in orbits:
-            (parent_label, new_label) = orbit.strip().split(')')
+            (parent_label, new_label) = orbit.strip().split(")")
 
             parent = planets.get(parent_label, None)
             new_planet = OrbitingNode(new_label, parent_label, parent)
@@ -45,10 +45,11 @@ if __name__ == '__main__':
                     p.parent = new_planet
                     new_planet.children.append(p)
 
-    common_parents = sorted([p for p in planets['YOU'].parents
-                             if p in planets['SAN'].parents],
-                            key=lambda p: len(p.parents))
+    common_parents = sorted(
+        [p for p in planets["YOU"].parents if p in planets["SAN"].parents],
+        key=lambda p: len(p.parents),
+    )
 
     # recompute parents relative to the closest common parents
     common_parents[-1].parent = None
-    print(len(planets['YOU'].parents) + len(planets['SAN'].parents) - 2)
+    print(len(planets["YOU"].parents) + len(planets["SAN"].parents) - 2)

@@ -11,11 +11,20 @@ class Bot:
 
     def __repr__(self):
 
-        return 'bot %s (%s in, low -> %s, high -> %s)' % (
+        return "bot %s (%s in, low -> %s, high -> %s)" % (
             self.id,
             self.values,
-            'Bot %s' % self.low_out.id if type(self.low_out) == Bot else 'Output %s' % self.low_out,
-            'Bot %s' % self.high_out.id if type(self.high_out) == Bot else 'Output %s' % self.high_out)
+            (
+                "Bot %s" % self.low_out.id
+                if type(self.low_out) == Bot
+                else "Output %s" % self.low_out
+            ),
+            (
+                "Bot %s" % self.high_out.id
+                if type(self.high_out) == Bot
+                else "Output %s" % self.high_out
+            ),
+        )
 
 
 class Output:
@@ -24,12 +33,15 @@ class Output:
         self.value = v
 
     def __repr__(self):
-        return 'Output %s=%s' % (self.id, self.value)
+        return "Output %s=%s" % (self.id, self.value)
 
-input_re = re.compile(r'value (\d+) goes to bot (\d+)')
-bot_re = re.compile(r'bot (\d+) gives low to (bot|output) (\d+) and high to (bot|output) (\d+)')
 
-with open('input_10.txt') as description:
+input_re = re.compile(r"value (\d+) goes to bot (\d+)")
+bot_re = re.compile(
+    r"bot (\d+) gives low to (bot|output) (\d+) and high to (bot|output) (\d+)"
+)
+
+with open("input_10.txt") as description:
     connections = [c.strip() for c in description.readlines()]
 
 bots = {}
@@ -45,7 +57,7 @@ for connection in connections:
         if bot_id in bots:
             bots[bot_id].values.append(int(value))
             if 61 in bots[bot_id].values and 17 in bots[bot_id].values:
-                print('HEY BOT %s IS THE ANSWER' % bot_id)
+                print("HEY BOT %s IS THE ANSWER" % bot_id)
         else:
             bots[bot_id] = Bot(bot_id, int(value))
 
@@ -64,7 +76,7 @@ for connection in connections:
             bot = Bot(bot_input_id)
             bots[bot_input_id] = bot
 
-        if low_bot_or_output == 'output':
+        if low_bot_or_output == "output":
             bot.low_out = Output(low_out_id)
             outputs[low_out_id] = bot.low_out
         else:
@@ -74,7 +86,7 @@ for connection in connections:
                 bot.low_out = Bot(low_out_id)
                 bots[low_out_id] = bot.low_out
 
-        if high_bot_or_output == 'output':
+        if high_bot_or_output == "output":
             bot.high_out = Output(high_out_id)
             outputs[high_out_id] = bot.low_out
         else:
@@ -102,8 +114,8 @@ while True:
 
             bot.values = []
 
-    if outputs['0'].value and outputs['1'].value and outputs['2'].value:
-        print(outputs['0'].value * outputs['1'].value * outputs['2'].value)
+    if outputs["0"].value and outputs["1"].value and outputs["2"].value:
+        print(outputs["0"].value * outputs["1"].value * outputs["2"].value)
         print(outputs.values())
         print(bots.values())
         sys.exit(0)

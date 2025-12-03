@@ -1,25 +1,28 @@
 from hashlib import md5
 
+
 def solve_part_1(door_id):
     idx = 0
 
     password = []
 
     while len(password) < 8:
-        if idx % 1000000 == 0: print(idx)
+        if idx % 1000000 == 0:
+            print(idx)
 
         m = md5()
         m.update(door_id)
-        m.update(bytearray(str(idx), 'utf-8'))
+        m.update(bytearray(str(idx), "utf-8"))
         digest = m.hexdigest()
 
-        if digest[:5] == '00000':
-            print('***' + digest[5])
+        if digest[:5] == "00000":
+            print("***" + digest[5])
             password.append(digest[5])
 
         idx += 1
 
-    return ''.join(password)
+    return "".join(password)
+
 
 def solve_part_2(door_id):
     idx = 0
@@ -27,14 +30,15 @@ def solve_part_2(door_id):
     password = [None] * 8
 
     while len(list(filter(lambda x: x is None, password))) > 0:
-        if idx % 1000000 == 0: print(idx)
+        if idx % 1000000 == 0:
+            print(idx)
 
         m = md5()
         m.update(door_id)
-        m.update(bytearray(str(idx), 'utf-8'))
+        m.update(bytearray(str(idx), "utf-8"))
         digest = m.hexdigest()
 
-        if digest[:5] == '00000':
+        if digest[:5] == "00000":
             password_idx = 9
 
             try:
@@ -43,13 +47,14 @@ def solve_part_2(door_id):
                 pass
 
             if password_idx <= 7 and password[password_idx] is None:
-                print('index ' + digest[5])
-                print('letter ' + digest[6])
+                print("index " + digest[5])
+                print("letter " + digest[6])
                 password[password_idx] = digest[6]
 
         idx += 1
 
-    return ''.join(password)
+    return "".join(password)
 
-print(solve_part_1(b'abbhdwsy'))
-#print(solve_part_2('abbhdwsy'))
+
+print(solve_part_1(b"abbhdwsy"))
+# print(solve_part_2('abbhdwsy'))

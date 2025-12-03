@@ -1,5 +1,6 @@
 from itertools import combinations
 
+
 def part1(input):
     joltage = 0
 
@@ -7,6 +8,7 @@ def part1(input):
         joltage += best_joltage_4(line, 2)
 
     return joltage
+
 
 def part2(input):
     joltage = 0
@@ -23,12 +25,13 @@ def best_joltage_for(line, num_batteries):
     best = 0
 
     for j in combinations(line, num_batteries):
-        joltage = int(''.join(j))
+        joltage = int("".join(j))
 
         if joltage > best:
             best = joltage
 
     return best
+
 
 def best_joltage_4(line, num_batteries):
     indices = []
@@ -36,16 +39,19 @@ def best_joltage_4(line, num_batteries):
     start_at = 0
 
     for i in range(num_batteries):
-        next_best = best_battery_remaining(line[start_at:], num_batteries - i - 1) + start_at
+        next_best = (
+            best_battery_remaining(line[start_at:], num_batteries - i - 1) + start_at
+        )
         indices.append(next_best)
         start_at = next_best + 1
 
-    return int(''.join(line[ix] for ix in indices))
+    return int("".join(line[ix] for ix in indices))
+
 
 def best_battery_remaining(line, num_batteries_remaining):
     best_idx = -1
     best_val = 0
-    substr = line[:len(line) - num_batteries_remaining]
+    substr = line[: len(line) - num_batteries_remaining]
 
     for idx, b in enumerate(substr):
         val = int(b)

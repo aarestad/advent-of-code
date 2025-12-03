@@ -1,5 +1,5 @@
-ord_of_a = ord('a')
-ord_of_z = ord('z')
+ord_of_a = ord("a")
+ord_of_z = ord("z")
 
 
 def increment_password(pw):
@@ -14,15 +14,17 @@ def increment_password(pw):
             i -= 1
 
             if i < 0:  # we have a big ol' string of 'a's at this point
-                return 'a' + ''.join(map(chr, pw_chars))
+                return "a" + "".join(map(chr, pw_chars))
         else:
-            return ''.join(map(chr, pw_chars))
+            return "".join(map(chr, pw_chars))
 
 
 def password_valid(pw):
-    return contains_ascending_sequence(pw) and \
-           not contains_forbidden_letter(pw) and \
-           contains_two_repeating_pairs_of_letters(pw)
+    return (
+        contains_ascending_sequence(pw)
+        and not contains_forbidden_letter(pw)
+        and contains_two_repeating_pairs_of_letters(pw)
+    )
 
 
 def contains_ascending_sequence(pw):
@@ -39,14 +41,16 @@ def contains_forbidden_letter(pw):
     # - Passwords may not contain the letters i, o, or l, as these letters can be
     # mistaken for other characters and are therefore confusing.
     import re
-    return re.search('i|o|l', pw) is not None
+
+    return re.search("i|o|l", pw) is not None
 
 
 def contains_two_repeating_pairs_of_letters(pw):
     # - Passwords must contain at least two different, non-overlapping pairs of
     # letters, like aa, bb, or zz.
     import re
-    letter_pair_matcher = re.compile(r'(.)\1')
+
+    letter_pair_matcher = re.compile(r"(.)\1")
 
     first_pair_match = letter_pair_matcher.search(pw)
 
@@ -56,7 +60,7 @@ def contains_two_repeating_pairs_of_letters(pw):
     return letter_pair_matcher.search(pw, first_pair_match.end()) is not None
 
 
-original_password = 'hepxxzaa'
+original_password = "hepxxzaa"
 
 while not password_valid(original_password):
     original_password = increment_password(original_password)

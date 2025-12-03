@@ -1,4 +1,5 @@
-input = """26
+input = (
+    """26
 97
 31
 7
@@ -91,7 +92,9 @@ input = """26
 44
 39
 3
-72"""''
+72"""
+    ""
+)
 
 example_one = """16
 10
@@ -125,7 +128,7 @@ if __name__ == "__main__":
         elif difference == 3:
             num_three_jolt_diffs += 1
         else:
-            print(f'unexpected diff: {difference}')
+            print(f"unexpected diff: {difference}")
 
-    print('part one:')
+    print("part one:")
     print(num_one_jolt_diffs * num_three_jolt_diffs)

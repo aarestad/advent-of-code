@@ -1,7 +1,7 @@
 def biodiversity_rating(board):
-    board = ''.join([''.join(line) for line in board])
+    board = "".join(["".join(line) for line in board])
 
-    return sum(2 ** i for i in range(len(board)) if board[i] == '#')
+    return sum(2**i for i in range(len(board)) if board[i] == "#")
 
 
 def next_boards(boards):
@@ -9,18 +9,26 @@ def next_boards(boards):
     new_boards = [[[] for _ in range(5)] for __ in range(len(boards) + 2)]
 
     # add dummy blank outer and inner boards
-    boards.insert(0, [['.' for _ in range(5)] for __ in range(5)])
-    boards.append([['.' for _ in range(5)] for __ in range(5)])
+    boards.insert(0, [["." for _ in range(5)] for __ in range(5)])
+    boards.append([["." for _ in range(5)] for __ in range(5)])
 
     for idx, new_board in enumerate(new_boards):
-        outer_board = boards[idx - 1] if idx - 1 >= 0 else [['.' for _ in range(5)] for __ in range(5)]
+        outer_board = (
+            boards[idx - 1]
+            if idx - 1 >= 0
+            else [["." for _ in range(5)] for __ in range(5)]
+        )
         current_board = boards[idx]
-        inner_board = boards[idx + 1] if idx + 1 < len(boards) else [['.' for _ in range(5)] for __ in range(5)]
+        inner_board = (
+            boards[idx + 1]
+            if idx + 1 < len(boards)
+            else [["." for _ in range(5)] for __ in range(5)]
+        )
 
         for y in range(5):
             for x in range(5):
                 if y == 2 and x == 2:
-                    new_board[y].append('.')
+                    new_board[y].append(".")
                     continue
 
                 neighbors = []
@@ -61,22 +69,22 @@ def next_boards(boards):
                 else:
                     neighbors.append(current_board[y][x + 1])
 
-                live_neighbors = sum(1 for n in neighbors if n == '#')
+                live_neighbors = sum(1 for n in neighbors if n == "#")
 
                 current_space = current_board[y][x]
 
-                if current_space == '#':
-                    new_board[y].append('#' if live_neighbors == 1 else '.')
+                if current_space == "#":
+                    new_board[y].append("#" if live_neighbors == 1 else ".")
                 else:
-                    new_board[y].append('#' if live_neighbors in (1, 2) else '.')
+                    new_board[y].append("#" if live_neighbors in (1, 2) else ".")
 
     return new_boards
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     boards = []
 
-    with open('24_input.txt') as gol_input:
+    with open("24_input.txt") as gol_input:
         init_board = []
 
         for board_line in gol_input:
@@ -85,12 +93,12 @@ if __name__ == '__main__':
         boards.append(init_board)
 
     for _ in range(200):
-        print(f'iteration {_}')
+        print(f"iteration {_}")
         boards = next_boards(boards)
 
     total_bugs = 0
 
     for board in boards:
-        total_bugs += sum(1 for line in board for c in line if c == '#')
+        total_bugs += sum(1 for line in board for c in line if c == "#")
 
     print(total_bugs)

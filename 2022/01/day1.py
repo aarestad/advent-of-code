@@ -13,15 +13,15 @@ test_input = """1000
 
 10000"""
 
-with open('day1.txt') as inp:
+with open("day1.txt") as inp:
     input = inp.read()
 
 calorie_counts = [0]
 
 current_elf = 0
 
-for line in input.split('\n'):
-    if line == '':
+for line in input.split("\n"):
+    if line == "":
         calorie_counts.append(0)
         current_elf += 1
         continue

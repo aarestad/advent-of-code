@@ -8,12 +8,12 @@ class Node:
 
 
 num_elves = 3001330
-#num_elves = 5
+# num_elves = 5
 
 first_elf = Node(1)
 prev_elf = first_elf
 
-for i in range(2, num_elves+1):
+for i in range(2, num_elves + 1):
     next_elf = Node(i)
     prev_elf.next = next_elf
     prev_elf = next_elf
@@ -28,7 +28,7 @@ while num_left > 1:
     if num_left % 2 == 0:
         across = num_left // 2
     else:
-        across =  (num_left - 1) // 2
+        across = (num_left - 1) // 2
 
     curr = curr_elf
 

@@ -4,13 +4,13 @@ def calculate_checksum(s):
 
     i = 0
 
-    checksum = ''
+    checksum = ""
 
     while i < len(s):
-        if s[i:i+2] == '00' or s[i:i+2] == '11':
-            checksum += '1'
+        if s[i : i + 2] == "00" or s[i : i + 2] == "11":
+            checksum += "1"
         else:
-            checksum += '0'
+            checksum += "0"
         i += 2
 
     if len(checksum) % 2 != 0:
@@ -23,20 +23,21 @@ def dragon_curve(s):
     a = s
     a_rev = a[::-1]
 
-    b = ''
+    b = ""
 
     for c in a_rev:
-        if c == '1':
-            b += '0'
+        if c == "1":
+            b += "0"
         else:
-            b += '1'
+            b += "1"
 
-    return a + '0' + b
+    return a + "0" + b
 
-#required_len = 272
+
+# required_len = 272
 required_len = 35651584
 
-overwrite_str = '01111010110010011'
+overwrite_str = "01111010110010011"
 
 while len(overwrite_str) < required_len:
     overwrite_str = dragon_curve(overwrite_str)

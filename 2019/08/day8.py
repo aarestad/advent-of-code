@@ -1,9 +1,9 @@
 from itertools import chain
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     layers = []
 
-    with open('08_input.txt') as img_input:
+    with open("08_input.txt") as img_input:
         img_data = img_input.readline().strip()
 
     for idx, c in enumerate(img_data):
@@ -37,4 +37,4 @@ if __name__ == '__main__':
             image[row].append(non_transparent_pixel_layer.__next__())
 
     for line in image:
-        print(''.join(' ' if x == 0 else '*' for x in line))
+        print("".join(" " if x == 0 else "*" for x in line))

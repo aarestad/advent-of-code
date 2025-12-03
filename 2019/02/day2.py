@@ -9,16 +9,26 @@ class IntcodeOp(NamedTuple):
 
 class IntcodeMachine:
     def __init__(self, program: str):
-        self.memory: List[int] = [int(x) for x in program.split(',')]
+        self.memory: List[int] = [int(x) for x in program.split(",")]
         self.pc: int = 0
 
         self.ops: Dict[int, IntcodeOp] = {
             # ADD a, b, dest
-            1: IntcodeOp(3, lambda a, b, dest: setitem(self.memory, dest, self.memory[a] + self.memory[b])),
+            1: IntcodeOp(
+                3,
+                lambda a, b, dest: setitem(
+                    self.memory, dest, self.memory[a] + self.memory[b]
+                ),
+            ),
             # MUL a, b, dest
-            2: IntcodeOp(3, lambda a, b, dest: setitem(self.memory, dest, self.memory[a] * self.memory[b])),
+            2: IntcodeOp(
+                3,
+                lambda a, b, dest: setitem(
+                    self.memory, dest, self.memory[a] * self.memory[b]
+                ),
+            ),
             # HLT
-            99: None
+            99: None,
         }
 
     def run(self) -> None:
@@ -28,18 +38,18 @@ class IntcodeMachine:
             try:
                 op = self.ops[opcode]
             except KeyError:
-                raise ValueError('invalid opcode: {}'.format(opcode))
+                raise ValueError("invalid opcode: {}".format(opcode))
 
             if op:
-                params = self.memory[self.pc + 1:self.pc + op.params + 1]
+                params = self.memory[self.pc + 1 : self.pc + op.params + 1]
                 op.op(*params)
                 self.pc += 1 + len(params)
             else:
                 break
 
 
-if __name__ == '__main__':
-    with open('02_input.txt') as program:
+if __name__ == "__main__":
+    with open("02_input.txt") as program:
         program_text = program.readline().strip()
 
     for noun in range(100):

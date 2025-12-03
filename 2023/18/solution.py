@@ -34,7 +34,7 @@ def part1(directions):
     for dir, distance, color in directions:
         match dir:
             case Direction.RIGHT:
-                current_loc[]
+                pass
 
 
 def part2(data):

@@ -22,7 +22,9 @@ def angle_rotated_90_deg_clockwise(origination: Point, dest: Point) -> float:
 
 def compute_blocked_spots(source: Point, blocker: Point, maxima: Point) -> List[Point]:
     if source == blocker:
-        raise ValueError('source {} and blocker {} are on top of each other!'.format(source, blocker))
+        raise ValueError(
+            "source {} and blocker {} are on top of each other!".format(source, blocker)
+        )
 
     row_diff = blocker.row - source.row
     col_diff = blocker.col - source.col
@@ -51,20 +53,28 @@ def compute_blocked_spots(source: Point, blocker: Point, maxima: Point) -> List[
     return blocked_spots
 
 
-def visible_asteroids_from(asteroid: Point, maxima: Point, other_asteroids: List[Point]) -> List[Point]:
-    blocked_spots = set(chain.from_iterable(
-        compute_blocked_spots(asteroid, other, maxima) for other in other_asteroids))
+def visible_asteroids_from(
+    asteroid: Point, maxima: Point, other_asteroids: List[Point]
+) -> List[Point]:
+    blocked_spots = set(
+        chain.from_iterable(
+            compute_blocked_spots(asteroid, other, maxima) for other in other_asteroids
+        )
+    )
 
     return [other for other in other_asteroids if other not in blocked_spots]
 
 
-if __name__ == '__main__':
-    with open('10_input.txt') as map_input:
+if __name__ == "__main__":
+    with open("10_input.txt") as map_input:
         map = [line.strip() for line in map_input.readlines()]
 
-    asteroids = set(Point(row, col) for row in range(len(map))
-                    for col in range(len(map[row]))
-                    if map[row][col] == '#')
+    asteroids = set(
+        Point(row, col)
+        for row in range(len(map))
+        for col in range(len(map[row]))
+        if map[row][col] == "#"
+    )
 
     maxima = Point(len(map), len(map[0]))
 
@@ -78,7 +88,9 @@ if __name__ == '__main__':
             if p not in asteroids:
                 continue
 
-            num_visible = len(visible_asteroids_from(p, maxima, [a for a in asteroids if a != p]))
+            num_visible = len(
+                visible_asteroids_from(p, maxima, [a for a in asteroids if a != p])
+            )
 
             if num_visible > best_num_visible:
                 best_num_visible = num_visible
@@ -88,13 +100,19 @@ if __name__ == '__main__':
     most_recent_angle = None
 
     while True:
-        other_asteroids = [a for a in asteroids if a != base_location and a not in removed]
-        visible_asteroids = visible_asteroids_from(base_location, maxima, other_asteroids)
+        other_asteroids = [
+            a for a in asteroids if a != base_location and a not in removed
+        ]
+        visible_asteroids = visible_asteroids_from(
+            base_location, maxima, other_asteroids
+        )
 
-        for a in sorted(visible_asteroids,
-                        key=lambda a: angle_rotated_90_deg_clockwise(base_location, a),
-                        reverse=True):
-            print('vaporizing {}'.format(a))
+        for a in sorted(
+            visible_asteroids,
+            key=lambda a: angle_rotated_90_deg_clockwise(base_location, a),
+            reverse=True,
+        ):
+            print("vaporizing {}".format(a))
             removed.add(a)
             most_recent_angle = angle_rotated_90_deg_clockwise(base_location, a)
 

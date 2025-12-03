@@ -3,6 +3,7 @@ import re
 LEFT = re.compile(r"L(\d+)")
 RIGHT = re.compile(r"R(\d+)")
 
+
 def part_1_and_2(rotations):
     pos = 50
     num_zeros = 0
@@ -41,6 +42,7 @@ def part_1_and_2(rotations):
 
     return num_zeros, num_clicks
 
+
 if __name__ == "__main__":
     example = """L68
 L30
@@ -57,10 +59,7 @@ L82"""
 
     print(f"example: zeroes and clicks={part_1_and_2(example_input)}")
 
-
     with open("input/day1.txt") as input:
         problem_input = [i.strip() for i in input.readlines()]
 
         print(f"input: zeroes and clicks={part_1_and_2(problem_input)}")
-
-

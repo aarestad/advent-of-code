@@ -17,16 +17,14 @@ class Color(Enum):
     WHITE = 1
 
 
-if __name__ == '__main__':
-    with open('11_input.txt') as program:
+if __name__ == "__main__":
+    with open("11_input.txt") as program:
         machine = IntcodeMachine(program.readline().strip())
 
     current_pos = Point(0, 0)
     current_orientation = Direction.UP
 
-    painted_tiles = {
-        current_pos: Color.WHITE
-    }
+    painted_tiles = {current_pos: Color.WHITE}
 
     while True:
         try:
@@ -50,7 +48,9 @@ if __name__ == '__main__':
             break
 
         # noinspection PyTypeChecker
-        current_orientation = Direction((current_orientation.value + (-1 if rotation == 0 else 1)) % 4)
+        current_orientation = Direction(
+            (current_orientation.value + (-1 if rotation == 0 else 1)) % 4
+        )
 
         if current_orientation == Direction.UP:
             current_pos = Point(current_pos.x, current_pos.y + 1)
@@ -61,7 +61,7 @@ if __name__ == '__main__':
         elif current_orientation == Direction.LEFT:
             current_pos = Point(current_pos.x - 1, current_pos.y)
         else:
-            raise ValueError('unknown direction: {}'.format(current_orientation))
+            raise ValueError("unknown direction: {}".format(current_orientation))
 
     max_x = max(p.x for p in painted_tiles.keys())
     min_x = min(p.x for p in painted_tiles.keys())
@@ -71,16 +71,16 @@ if __name__ == '__main__':
     canvas = []
 
     for _ in range(max_y - min_y + 1):
-        canvas.append(list(repeat(' ', max_x - min_x + 1)))
+        canvas.append(list(repeat(" ", max_x - min_x + 1)))
 
     for tile, color in painted_tiles.items():
         if color == Color.WHITE:
             y = tile.y - min_y
             x = tile.x - min_x
-            canvas[y][x] = '#'
+            canvas[y][x] = "#"
 
-    canvas[-min_y][-min_x] = '@'
+    canvas[-min_y][-min_x] = "@"
 
     # turn it upside down!
     for line in reversed(canvas):
-        print(''.join(reversed(line)))
+        print("".join(reversed(line)))

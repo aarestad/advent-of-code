@@ -57,19 +57,33 @@ grid_height = 100
 
 
 def evaluate_lights_on(lights_always_on):
-    with open('input_18.txt') as f:
-        lights_on = {(x, y) for y, line in enumerate(f) for x, char in enumerate(line.strip()) if '#' == char}
+    with open("input_18.txt") as f:
+        lights_on = {
+            (x, y)
+            for y, line in enumerate(f)
+            for x, char in enumerate(line.strip())
+            if "#" == char
+        }
         lights_on |= lights_always_on
 
     def count_neighbors_on(x, y):
-        return sum((xx, yy) in lights_on for xx in range(x - 1, x + 2) for yy in range(y - 1, y + 2) if (xx, yy) != (x, y))
+        return sum(
+            (xx, yy) in lights_on
+            for xx in range(x - 1, x + 2)
+            for yy in range(y - 1, y + 2)
+            if (xx, yy) != (x, y)
+        )
 
     for _ in range(steps):
-        lights_on = {(x, y) for x in range(grid_width) for y in range(grid_height)
-                     if
-                     (x, y) in lights_on and count_neighbors_on(x, y) in (2, 3)
-                     or
-                     (x, y) not in lights_on and count_neighbors_on(x, y) == 3}
+        lights_on = {
+            (x, y)
+            for x in range(grid_width)
+            for y in range(grid_height)
+            if (x, y) in lights_on
+            and count_neighbors_on(x, y) in (2, 3)
+            or (x, y) not in lights_on
+            and count_neighbors_on(x, y) == 3
+        }
         lights_on |= lights_always_on
 
     return lights_on

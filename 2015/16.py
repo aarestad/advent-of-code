@@ -1,21 +1,21 @@
 present_analysis = {
-    'children': 3,
-    'cats': 7,
-    'samoyeds': 2,
-    'pomeranians': 3,
-    'akitas': 0,
-    'vizslas': 0,
-    'goldfish': 5,
-    'trees': 3,
-    'cars': 2,
-    'perfumes': 1
+    "children": 3,
+    "cats": 7,
+    "samoyeds": 2,
+    "pomeranians": 3,
+    "akitas": 0,
+    "vizslas": 0,
+    "goldfish": 5,
+    "trees": 3,
+    "cars": 2,
+    "perfumes": 1,
 }
 
 import re
 
-parser = re.compile(r'Sue (\d+): (\w+): (\d+), (\w+): (\d+), (\w+): (\d+)')
+parser = re.compile(r"Sue (\d+): (\w+): (\d+), (\w+): (\d+), (\w+): (\d+)")
 
-with open('input_16.txt') as aunts:
+with open("input_16.txt") as aunts:
     for aunt in aunts:
         matched_aunt = parser.match(aunt)
         aunt_number = matched_aunt.group(1)
@@ -38,20 +38,26 @@ with open('input_16.txt') as aunts:
 
 print(obj, obj_num, present_analysis[obj])
 
-if obj == 'cats' or obj == 'trees':
-    print('checking underread: %s should be greater than %s' % (obj_num, present_analysis[obj]))
+if obj == "cats" or obj == "trees":
+    print(
+        "checking underread: %s should be greater than %s"
+        % (obj_num, present_analysis[obj])
+    )
 
 if present_analysis[obj] >= int(obj_num):
     found_aunt = False
     break
-elif obj == 'pomeranians' or obj == 'goldfish':
-    print('checking overread: %s should be fewer than %s' % (obj_num, present_analysis[obj]))
+elif obj == "pomeranians" or obj == "goldfish":
+    print(
+        "checking overread: %s should be fewer than %s"
+        % (obj_num, present_analysis[obj])
+    )
 
 if present_analysis[obj] <= int(obj_num):
     found_aunt = False
     break
 else:
-    print('checking normal read')
+    print("checking normal read")
 
 if present_analysis[obj] != int(obj_num):
     found_aunt = False

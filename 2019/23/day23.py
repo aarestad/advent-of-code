@@ -4,8 +4,8 @@ from typing import Dict
 
 from aoc_2019.intcode import IntcodeMachine
 
-if __name__ == '__main__':
-    with open('23_input.txt') as nic_program_file:
+if __name__ == "__main__":
+    with open("23_input.txt") as nic_program_file:
         nic_program = nic_program_file.readline().strip()
 
     nics = {}
@@ -20,7 +20,7 @@ if __name__ == '__main__':
     nic_add = 0
 
     while True:
-        print(f'checking machine {nic_add}')
+        print(f"checking machine {nic_add}")
         nic = nics[nic_add]
 
         if not input_queues[nic_add]:

@@ -34,10 +34,10 @@ def part_2_module_fuel(mass):
     return total_module_fuel
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     total_fuel = 0
 
-    with open('01_input.txt') as module_weights:
+    with open("01_input.txt") as module_weights:
         for module_weight in module_weights:
             total_fuel += part_2_module_fuel(int(module_weight.strip()))
 

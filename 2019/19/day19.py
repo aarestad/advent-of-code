@@ -1,7 +1,7 @@
 from aoc_2019.intcode import IntcodeMachine
 import sys
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     with open(sys.argv[1]) as intcode_program:
         prog = intcode_program.readline().strip()
 
@@ -9,7 +9,7 @@ if __name__ == '__main__':
     answer = 0
 
     for y in range(1000, 1100):
-        print(f'{y}: ', end='')
+        print(f"{y}: ", end="")
         last_x_affected = None
         num_x_affected = 0
 
@@ -35,7 +35,7 @@ if __name__ == '__main__':
                 machine.send(double_check_y)
                 num_y_affected += machine.receive()
 
-            print(f'{num_y_affected} affected')
+            print(f"{num_y_affected} affected")
 
             if num_y_affected == 100:
                 answer = first_x_affected * 10_000 + y

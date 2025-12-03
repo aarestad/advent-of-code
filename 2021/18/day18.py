@@ -19,13 +19,13 @@ def parse_number_pair(num_pair_str: str, level: int = -1) -> NumberPair:
             case "[":
                 level += 1
                 return parse_number_pair(num_pair_str[i + 1 :], level)
-        case c.isdigit():
-            if not left:
-                left = int(c)
-            else:
-                right = int(c)
-        if c == "]":
-            return NumberPair(left, right, level)
+            case c.isdigit():
+                if not left:
+                    left = int(c)
+                else:
+                    right = int(c)
+            case "]":
+                return NumberPair(left, right, level)
 
         raise ValueError(f"Invalid character {c}")
 

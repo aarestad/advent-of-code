@@ -1,4 +1,4 @@
-with open('input_6.txt') as light_rows:
+with open("input_6.txt") as light_rows:
     light_row = [0] * 1000
 
     lights = []
@@ -8,27 +8,27 @@ with open('input_6.txt') as light_rows:
 
     for line in light_rows:
         tokens = line.split()
-        if tokens[0] == 'turn':
+        if tokens[0] == "turn":
             verb = tokens[1]
             start = tokens[2]
             stop = tokens[4]
         else:
-            verb = 'toggle'
+            verb = "toggle"
             start = tokens[1]
             stop = tokens[3]
 
-        (start_x, start_y) = map(int, start.split(','))
-        (stop_x, stop_y) = map(int, stop.split(','))
+        (start_x, start_y) = map(int, start.split(","))
+        (stop_x, stop_y) = map(int, stop.split(","))
 
         print(verb, start_x, start_y, stop_x, stop_y)
 
         for x in range(start_x, stop_x + 1):
             for y in range(start_y, stop_y + 1):
-                if verb == 'on':
+                if verb == "on":
                     lights[x][y] += 1
-                elif verb == 'off' and lights[x][y] > 0:
+                elif verb == "off" and lights[x][y] > 0:
                     lights[x][y] -= 1
-                elif verb == 'toggle':
+                elif verb == "toggle":
                     lights[x][y] += 2
 
     total_brightness = 0

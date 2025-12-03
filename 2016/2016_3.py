@@ -9,6 +9,7 @@ def solve_part_one(triangles):
 
     return num_possible_triangles
 
+
 # part 1
 # with open('input_3.txt') as triangles:
 #     triangles_parsed = []
@@ -19,7 +20,7 @@ def solve_part_one(triangles):
 #     print(solve_part_one(triangles_parsed))
 
 # part 2
-with open('input_3.txt') as triangle_cols:
+with open("input_3.txt") as triangle_cols:
     triangles_parsed = []
 
     t1 = []

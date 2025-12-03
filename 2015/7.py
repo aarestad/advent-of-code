@@ -17,7 +17,7 @@ NOT y -> i
         problem_input = [i.strip() for i in input.readlines()]
 
     wires = problem_input[:]
-    values = {'b': 3176}
+    values = {"b": 3176}
 
     while len(wires):
         skipped_wires = []
@@ -42,7 +42,7 @@ NOT y -> i
             else:
                 raise ValueError(f"unrecognized connection: {wire}")
 
-            if dest == 'b':  # b is hard-wired for part 2
+            if dest == "b":  # b is hard-wired for part 2
                 continue
 
             match operation:

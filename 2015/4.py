@@ -3,7 +3,7 @@ import threading
 import sys
 import time
 
-prefix = 'iwrupvqb'
+prefix = "iwrupvqb"
 
 stopped = False
 
@@ -19,7 +19,7 @@ def dohash(suffix_start):
         m = hashlib.md5()
         new_str = prefix + str(suffix)
         m.update(new_str.encode())
-        if m.hexdigest()[0:6] == '000000':
+        if m.hexdigest()[0:6] == "000000":
             print(suffix)
             stopped = True
             break
@@ -37,9 +37,10 @@ for n in range(1, num_threads + 1):
     threads.append(t)
 
 try:
-    for t in threads: t.join()
+    for t in threads:
+        t.join()
     time.sleep(100)
 except (KeyboardInterrupt, SystemExit):
-    print('\n! Received keyboard interrupt, quitting threads.\n')
+    print("\n! Received keyboard interrupt, quitting threads.\n")
     stopped = True
     sys.exit()
