@@ -3,15 +3,16 @@ def part1(input):
 
     for y, l in enumerate(input):
         for x, c in enumerate(l):
-            if c == '@' and surrounding_roll_count(input, x, y) < 4:
+            if c == "@" and surrounding_roll_count(input, x, y) < 4:
                 num_accessible += 1
-                print("x", end='')
+                print("x", end="")
             else:
-                print(c, end='')
+                print(c, end="")
 
         print()
 
     return num_accessible
+
 
 def part2(input):
     editable_board = [list(l) for l in input]
@@ -23,13 +24,13 @@ def part2(input):
 
         for y, l in enumerate(editable_board):
             for x, c in enumerate(l):
-                if c == '@' and surrounding_roll_count(editable_board, x, y) < 4:
+                if c == "@" and surrounding_roll_count(editable_board, x, y) < 4:
                     editable_board[y][x] = "x"
                     num_removed += 1
                     roll_removed = True
-                    print("x", end='')
+                    print("x", end="")
                 else:
-                    print(c, end='')
+                    print(c, end="")
 
             print()
 
@@ -40,33 +41,35 @@ def part2(input):
 
     return num_removed
 
+
 def surrounding_roll_count(input, x, y):
     count = 0
 
     if y > 0:
         if x > 0:
-            count += 1 if input[y-1][x-1] == '@' else 0
+            count += 1 if input[y - 1][x - 1] == "@" else 0
 
-        count += 1 if input[y-1][x] == '@' else 0
-
-        if x < len(input[y-1])-1:
-            count += 1 if input[y-1][x+1] == '@' else 0
-
-    if x > 0:
-        count += 1 if input[y][x-1] == '@' else 0
-    if x < len(input[y])-1:
-        count += 1 if input[y][x+1] == '@' else 0
-
-    if y < len(input)-1:
-        if x > 0:
-            count += 1 if input[y + 1][x - 1] == '@' else 0
-
-        count += 1 if input[y + 1][x] == '@' else 0
+        count += 1 if input[y - 1][x] == "@" else 0
 
         if x < len(input[y - 1]) - 1:
-            count += 1 if input[y + 1][x + 1] == '@' else 0
+            count += 1 if input[y - 1][x + 1] == "@" else 0
+
+    if x > 0:
+        count += 1 if input[y][x - 1] == "@" else 0
+    if x < len(input[y]) - 1:
+        count += 1 if input[y][x + 1] == "@" else 0
+
+    if y < len(input) - 1:
+        if x > 0:
+            count += 1 if input[y + 1][x - 1] == "@" else 0
+
+        count += 1 if input[y + 1][x] == "@" else 0
+
+        if x < len(input[y - 1]) - 1:
+            count += 1 if input[y + 1][x + 1] == "@" else 0
 
     return count
+
 
 if __name__ == "__main__":
     example = """..@@.@@@@.
