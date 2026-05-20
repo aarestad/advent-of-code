@@ -6,20 +6,24 @@ def score_groups(stream: str) -> tuple[int, int]:
     score = 0
     garbage_chars = 0
 
+    non_garbage = []
+
     for c in stream:
         if not skip_next:
             if c == '!':
                 skip_next = True
             elif not cancelling:
-                if c == '{':
-                    nest_level += 1
-                elif c == '}':
-                    if nest_level < 1:
-                        raise ValueError('nesting would go negative!')
-                    score += nest_level
-                    nest_level -= 1
-                elif c == '<' :
-                    cancelling = True
+                if c == '<' :
+                  cancelling = True
+                else:
+                    non_garbage.append(c)
+                    if c == '{':
+                        nest_level += 1
+                    elif c == '}':
+                        if nest_level < 1:
+                            raise ValueError('nesting would go negative!')
+                        score += nest_level
+                        nest_level -= 1
             elif c == '>':
                 cancelling = False
             else:
@@ -30,6 +34,7 @@ def score_groups(stream: str) -> tuple[int, int]:
     if nest_level != 0:
         raise ValueError('unbalanced groups')
 
+    print(''.join(non_garbage))
     return score, garbage_chars
 
 if __name__ == "__main__":
