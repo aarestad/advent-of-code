@@ -1,4 +1,4 @@
-def score_groups(stream: str) -> (int, int):
+def score_groups(stream: str) -> tuple[int, int]:
     nest_level = 0
     cancelling = False
     skip_next = False
